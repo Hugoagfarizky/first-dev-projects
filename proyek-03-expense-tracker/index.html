@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker — Catatan keuangan pribadi</title>
+  <meta
+    name="description"
+    content="Expense Tracker adalah aplikasi pencatatan pemasukan dan pengeluaran pribadi yang menyimpan data secara lokal di browser."
+  />
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23173e2c'/%3E%3Cpath d='M28 36h44M28 50h30M28 64h38' fill='none' stroke='%23f7f4eb' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='72' cy='66' r='9' fill='%23d9a441'/%3E%3C/svg%3E"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#main-content" aria-label="Expense Tracker — kembali ke atas">
+        Expense<span class="brand-accent">Tracker</span><span class="brand-dot">.</span>
+      </a>
+
+      <nav class="top-nav" aria-label="Navigasi utama">
+        <a href="#ringkasan">Ringkasan</a>
+        <a href="#riwayat">Riwayat</a>
+      </nav>
+
+      <div class="header-actions">
+        <p class="today-label" id="today-label">Hari ini</p>
+        <button class="button button-primary" id="new-transaction-button" type="button">
+          <span aria-hidden="true">+</span> Catat Transaksi
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main" id="main-content">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="intro-copy">
+        <p class="eyebrow">Keuangan pribadi</p>
+        <h1 id="page-title">Uang Anda,<br /><em>lebih terlihat.</em></h1>
+      </div>
+      <p class="intro-note">
+        Catat pemasukan dan pengeluaran, pahami ke mana uang pergi, dan lihat
+        kondisi keuangan Anda dalam satu tempat yang tenang.
+      </p>
+    </section>
+
+    <div class="storage-banner" id="storage-banner" role="alert" hidden>
+      <div>
+        <strong>Penyimpanan bermasalah</strong>
+        <p id="storage-message"></p>
+      </div>
+    </div>
+
+    <div class="sample-banner" id="sample-banner" role="region" aria-label="Informasi data contoh" hidden>
+      <div>
+        <strong>Data contoh</strong>
+        <p>Beberapa transaksi contoh disiapkan agar Anda bisa melihat cara kerja Expense Tracker. Hapus kapan saja saat siap memakai data sendiri.</p>
+      </div>
+      <button class="button button-quiet button-small" id="remove-samples" type="button">
+        Hapus Data Contoh
+      </button>
+    </div>
+
+    <section class="summary-grid" id="ringkasan" aria-label="Ringkasan keuangan">
+      <article class="summary-card balance-card">
+        <div class="card-top">
+          <span class="card-label">Saldo bersih</span>
+          <span class="balance-status" id="balance-status">Seimbang</span>
+        </div>
+        <p class="balance-value" id="stat-balance">Rp0</p>
+        <div class="balance-breakdown">
+          <span>Masuk <strong id="balance-income">Rp0</strong></span>
+          <span>Keluar <strong id="balance-expense">Rp0</strong></span>
+        </div>
+        <p class="balance-note">Pemasukan dikurangi pengeluaran.</p>
+      </article>
+
+      <article class="summary-card income-card">
+        <div class="card-top">
+          <span class="card-label">Total pemasukan</span>
+          <span class="stat-icon stat-icon-income" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 4v16M6 10l6-6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        </div>
+        <p class="stat-value" id="stat-income">Rp0</p>
+        <p class="stat-meta"><span id="stat-income-count">0 transaksi</span> · sepanjang waktu</p>
+      </article>
+
+      <article class="summary-card expense-card">
+        <div class="card-top">
+          <span class="card-label">Total pengeluaran</span>
+          <span class="stat-icon stat-icon-expense" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 4v16M6 14l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        </div>
+        <p class="stat-value" id="stat-expense">Rp0</p>
+        <p class="stat-meta"><span id="stat-expense-count">0 transaksi</span> · sepanjang waktu</p>
+      </article>
+    </section>
+
+    <section class="analytics-grid" aria-label="Analisis keuangan">
+      <article class="panel chart-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Analisis</p>
+            <h2>Pengeluaran per kategori</h2>
+          </div>
+          <span class="panel-pill">Semua waktu</span>
+        </div>
+
+        <div class="chart-content">
+          <div class="donut-wrap">
+            <svg
+              class="donut"
+              id="expense-chart"
+              viewBox="0 0 120 120"
+              role="img"
+              aria-labelledby="chart-title"
+            >
+              <title id="chart-title">Pengeluaran per kategori</title>
+              <circle class="donut-track" cx="60" cy="60" r="46"></circle>
+              <g id="donut-segments"></g>
+            </svg>
+            <div class="donut-center">
+              <span>Total keluar</span>
+              <strong id="chart-total">Rp0</strong>
+            </div>
+          </div>
+
+          <div class="chart-details">
+            <ul class="chart-legend" id="chart-legend"></ul>
+            <p class="chart-summary" id="chart-summary">Belum ada pengeluaran untuk divisualisasikan.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel recent-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Terbaru</p>
+            <h2>Transaksi terakhir</h2>
+          </div>
+          <a class="text-link" href="#riwayat">Lihat riwayat</a>
+        </div>
+        <ul class="recent-list" id="recent-list"></ul>
+        <p class="recent-empty" id="recent-empty">Belum ada transaksi. Mulai dengan mencatat pemasukan atau pengeluaran pertama Anda.</p>
+      </article>
+    </section>
+
+    <section class="history-section" id="riwayat" aria-labelledby="history-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Catatan</p>
+          <h2 id="history-title">Riwayat transaksi</h2>
+          <p class="history-summary" id="history-summary" role="status" aria-live="polite">0 transaksi</p>
+        </div>
+        <button class="button button-danger-quiet" id="clear-all-button" type="button" hidden>
+          Hapus semua
+        </button>
+      </div>
+
+      <div class="filters" role="search" aria-label="Filter transaksi">
+        <div class="filters-grid">
+          <div class="filter-field filter-search">
+            <label for="search-input">Pencarian</label>
+            <div class="search-control">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5" stroke-linecap="round"></path>
+              </svg>
+              <input
+                id="search-input"
+                type="search"
+                placeholder="Cari deskripsi transaksi..."
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </div>
+          </div>
+
+          <div class="filter-field">
+            <label for="filter-type">Jenis</label>
+            <select id="filter-type">
+              <option value="all">Semua jenis</option>
+              <option value="income">Pemasukan</option>
+              <option value="expense">Pengeluaran</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="filter-category">Kategori</label>
+            <select id="filter-category">
+              <option value="all">Semua kategori</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="filter-from">Dari tanggal</label>
+            <input id="filter-from" type="date" />
+          </div>
+
+          <div class="filter-field">
+            <label for="filter-to">Sampai tanggal</label>
+            <input id="filter-to" type="date" />
+          </div>
+
+          <div class="filter-field">
+            <label for="filter-sort">Urutan</label>
+            <select id="filter-sort">
+              <option value="newest">Tanggal terbaru</option>
+              <option value="oldest">Tanggal terlama</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filters-foot">
+          <p class="filter-error" id="filter-error" role="alert"></p>
+          <button class="button button-quiet button-small" id="clear-filters" type="button">
+            Hapus Filter
+          </button>
+        </div>
+      </div>
+
+      <div class="tx-table" id="transaction-table">
+        <div class="tx-head" aria-hidden="true">
+          <span>Tanggal</span>
+          <span>Deskripsi</span>
+          <span>Kategori</span>
+          <span>Jenis</span>
+          <span class="tx-head-amount">Nominal</span>
+          <span class="tx-head-actions">Aksi</span>
+        </div>
+        <ul class="tx-list" id="transaction-list" aria-labelledby="history-title"></ul>
+      </div>
+
+      <div class="empty-state" id="history-empty" hidden>
+        <div class="empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5v-9Z"></path>
+            <path d="M4 9h16M8 13h4" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <h3 id="empty-title">Belum ada transaksi</h3>
+        <p id="empty-message">Catat pemasukan atau pengeluaran pertama Anda untuk mulai melihat ringkasan keuangan.</p>
+        <button class="button button-primary" id="empty-action" type="button" data-mode="create">
+          Catat Transaksi
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Expense Tracker · Data tersimpan lokal di browser Anda.</p>
+    <p>Dibuat untuk latihan vibecoding. Tanpa akun, backend, atau layanan finansial.</p>
+  </footer>
+
+  <dialog class="modal" id="transaction-dialog" aria-labelledby="transaction-dialog-title">
+    <form class="modal-card" id="transaction-form" novalidate>
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Transaksi</p>
+          <h2 id="transaction-dialog-title">Transaksi Baru</h2>
+        </div>
+        <button class="icon-button" id="close-transaction-dialog" type="button" aria-label="Tutup dialog">
+          &times;
+        </button>
+      </div>
+
+      <fieldset class="type-fieldset" aria-describedby="transaction-type-error">
+        <legend>Jenis transaksi</legend>
+        <div class="type-switch">
+          <label class="type-option" for="type-expense">
+            <input id="type-expense" type="radio" name="type" value="expense" checked />
+            <span>Pengeluaran</span>
+          </label>
+          <label class="type-option" for="type-income">
+            <input id="type-income" type="radio" name="type" value="income" />
+            <span>Pemasukan</span>
+          </label>
+        </div>
+        <p class="field-error" id="transaction-type-error" role="alert"></p>
+      </fieldset>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="amount">Nominal <span class="required" aria-hidden="true">*</span></label>
+          <div class="amount-control">
+            <span aria-hidden="true">Rp</span>
+            <input
+              id="amount"
+              name="amount"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              placeholder="0"
+              aria-describedby="amount-error"
+            />
+          </div>
+          <p class="field-error" id="amount-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="category">Kategori</label>
+          <select id="category" name="category" aria-describedby="category-error"></select>
+          <p class="field-error" id="category-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="transaction-date">Tanggal</label>
+          <input id="transaction-date" name="date" type="date" aria-describedby="date-error" />
+          <p class="field-error" id="date-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="description">Deskripsi <span class="optional">(opsional)</span></label>
+          <input
+            id="description"
+            name="description"
+            type="text"
+            maxlength="120"
+            autocomplete="off"
+            placeholder="Misalnya: makan siang bersama tim"
+            aria-describedby="description-hint description-error"
+          />
+          <p class="field-hint" id="description-hint">Maksimal 120 karakter.</p>
+          <p class="field-error" id="description-error" role="alert"></p>
+        </div>
+      </div>
+
+      <p class="form-note">Data hanya tersimpan di browser ini dan tidak dikirim ke mana pun.</p>
+
+      <div class="modal-actions">
+        <button class="button button-quiet" id="cancel-transaction" type="button">Batal</button>
+        <button class="button button-primary" id="save-transaction" type="submit">Simpan Transaksi</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+    <div class="modal-card modal-card-small">
+      <p class="eyebrow">Konfirmasi</p>
+      <h2 id="confirm-title">Hapus transaksi?</h2>
+      <p class="modal-text" id="confirm-message"></p>
+      <div class="modal-actions">
+        <button class="button button-quiet" id="cancel-confirm" type="button">Batal</button>
+        <button class="button button-danger" id="confirm-action" type="button">Hapus Transaksi</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <noscript>
+    <p class="noscript">Expense Tracker memerlukan JavaScript untuk mencatat, mengubah, dan menyimpan transaksi.</p>
+  </noscript>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

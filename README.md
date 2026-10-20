@@ -10,6 +10,7 @@ Hari pertama belajar vibecoding dan GitHub
 | --- | --- | --- |
 | [Proyek 01 — Halo, Vibecoding!](proyek-01-halo/) | Halaman web statis pertama dengan tombol interaktif | HTML, CSS, JavaScript |
 | [Proyek 02 — TaskFlow](proyek-02-taskflow/) | Aplikasi pengelola tugas pribadi dengan penyimpanan lokal | HTML, CSS, JavaScript, localStorage |
+| [Proyek 03 — Expense Tracker](proyek-03-expense-tracker/) | Aplikasi pencatatan pemasukan dan pengeluaran pribadi | HTML, CSS, JavaScript, localStorage |
 
 ## Proyek 02 — TaskFlow
 
@@ -29,6 +30,24 @@ TaskFlow adalah aplikasi pengelola tugas pribadi yang berjalan sepenuhnya di bro
 
 Dokumentasi lengkap: [proyek-02-taskflow/README.md](proyek-02-taskflow/README.md)
 
+## Proyek 03 — Expense Tracker
+
+Expense Tracker adalah aplikasi pencatatan pemasukan dan pengeluaran pribadi yang berjalan sepenuhnya di browser. Aplikasi menampilkan ringkasan saldo, riwayat transaksi yang dapat difilter, dan visualisasi pengeluaran per kategori.
+
+**Fitur utama:**
+
+- Ringkasan total pemasukan, total pengeluaran, dan saldo bersih dalam Rupiah.
+- Tambah, ubah, dan hapus transaksi dengan konfirmasi.
+- Kategori pemasukan dan pengeluaran yang sesuai dengan jenis transaksi.
+- Pencarian deskripsi, filter jenis, kategori, rentang tanggal, dan pengurutan tanggal.
+- Grafik donat pengeluaran per kategori beserta ringkasan tekstual.
+- Penyimpanan otomatis di `localStorage`, penanganan data rusak, dan transaksi contoh.
+- Antarmuka Indonesia yang responsif, aksesibel, dan mendukung `prefers-reduced-motion`.
+
+**Teknologi:** HTML5, CSS3, vanilla JavaScript, `localStorage`, dan SVG.
+
+Dokumentasi lengkap: [proyek-03-expense-tracker/README.md](proyek-03-expense-tracker/README.md)
+
 ## Cara Menjalankan
 
 1. Buka folder [`proyek-01-halo`](proyek-01-halo/).
@@ -38,6 +57,8 @@ Dokumentasi lengkap: [proyek-02-taskflow/README.md](proyek-02-taskflow/README.md
 Tidak perlu instalasi atau server khusus.
 
 Untuk TaskFlow, buka [`proyek-02-taskflow/index.html`](proyek-02-taskflow/index.html) di browser dengan cara yang sama. Aplikasi ini juga tidak memerlukan instalasi atau server khusus.
+
+Untuk Expense Tracker, buka [`proyek-03-expense-tracker/index.html`](proyek-03-expense-tracker/index.html) di browser dengan cara yang sama. Aplikasi ini juga tidak memerlukan instalasi atau server khusus.
 
 ## Catatan Belajar
 
