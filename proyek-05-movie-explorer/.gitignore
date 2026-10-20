@@ -1,0 +1,3 @@
+# Konfigurasi lokal yang berisi API key TMDB.
+# Jangan pernah commit file ini.
+config.js
