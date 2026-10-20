@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow — Pengelola tugas pribadi</title>
+  <meta
+    name="description"
+    content="TaskFlow adalah aplikasi pengelola tugas pribadi yang menyimpan data secara lokal di browser, dibangun dengan HTML semantik, CSS modern, dan JavaScript vanilla."
+  />
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231f4fe0'/%3E%3Cpath d='M28 52l14 14 30-30' fill='none' stroke='%23ffffff' stroke-width='10' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a class="brand" href="#main-content" aria-label="TaskFlow — kembali ke atas">
+          Task<span class="brand-accent">Flow</span><span class="brand-dot">.</span>
+        </a>
+        <p class="brand-sub">Pengelola tugas pribadi</p>
+      </div>
+
+      <nav class="side-nav" aria-label="Filter tugas">
+        <button class="nav-item is-active" type="button" data-filter="all" aria-current="page">
+          <span>Semua Tugas</span>
+          <span class="nav-count" id="count-all">0</span>
+        </button>
+        <button class="nav-item" type="button" data-filter="active">
+          <span>Aktif</span>
+          <span class="nav-count" id="count-active">0</span>
+        </button>
+        <button class="nav-item" type="button" data-filter="completed">
+          <span>Selesai</span>
+          <span class="nav-count" id="count-completed">0</span>
+        </button>
+        <button class="nav-item" type="button" data-filter="high">
+          <span>Prioritas Tinggi</span>
+          <span class="nav-count" id="count-high">0</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>Data tersimpan lokal. Tanpa akun.</span>
+      </div>
+    </aside>
+
+    <main class="main" id="main-content">
+      <div class="main-inner">
+        <header class="topbar">
+          <div class="topbar-copy">
+            <p class="eyebrow" id="today-label">Hari ini</p>
+            <h1>Hari Anda, <span class="accent-word">lebih tertata</span>.</h1>
+            <p class="subtitle">
+              Tempat sederhana untuk mencatat hal-hal penting. Tambahkan tugas,
+              tentukan prioritas, lalu selesaikan satu per satu.
+            </p>
+          </div>
+          <button class="button button-primary" id="new-task-button" type="button">
+            <span aria-hidden="true">+</span> Tambah Tugas
+          </button>
+        </header>
+
+        <section class="stats" aria-label="Ringkasan tugas">
+          <article class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Total Tugas</span>
+              <span class="stat-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M4 6h16M4 12h16M4 18h10" stroke-linecap="round" />
+                </svg>
+              </span>
+            </div>
+            <p class="stat-value" id="stat-total">0</p>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Aktif</span>
+              <span class="stat-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="12" cy="12" r="8" />
+                  <path d="M12 8v4l3 2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </div>
+            <p class="stat-value" id="stat-active">0</p>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Selesai</span>
+              <span class="stat-icon stat-icon-success" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="12" cy="12" r="8" />
+                  <path d="m8.5 12 2.5 2.5 5-5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </div>
+            <p class="stat-value" id="stat-completed">0</p>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Prioritas Tinggi</span>
+              <span class="stat-icon stat-icon-high" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M6 21V4m0 1h10l-2 3 2 3H6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </div>
+            <p class="stat-value" id="stat-high">0</p>
+          </article>
+        </section>
+
+        <div class="banner banner-danger" id="storage-banner" role="alert" hidden>
+          <div class="banner-copy">
+            <strong>Masalah Penyimpanan</strong>
+            <p id="storage-message"></p>
+          </div>
+        </div>
+
+        <div class="banner banner-info" id="sample-banner" hidden>
+          <div class="banner-copy">
+            <strong>Tugas Contoh</strong>
+            <p>Contoh ini menunjukkan cara kerja TaskFlow. Hapus kapan saja saat Anda siap memakai daftar sendiri.</p>
+          </div>
+          <button class="button button-ghost button-small" id="remove-samples" type="button">
+            Hapus Contoh
+          </button>
+        </div>
+
+        <section class="workspace" aria-labelledby="list-title">
+          <div class="list-header">
+            <div class="list-heading">
+              <h2 id="list-title">Semua Tugas</h2>
+              <p class="list-summary" id="list-summary" role="status" aria-live="polite">0 tugas</p>
+            </div>
+
+            <div class="search-box" role="search">
+              <label class="sr-only" for="search-input">Cari tugas berdasarkan judul</label>
+              <svg
+                class="search-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" stroke-linecap="round" />
+              </svg>
+              <input
+                id="search-input"
+                type="search"
+                placeholder="Cari berdasarkan judul..."
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button
+                class="search-clear"
+                id="clear-search"
+                type="button"
+                aria-label="Hapus pencarian"
+                hidden
+              >&times;</button>
+            </div>
+          </div>
+
+          <div class="task-list" id="task-list"></div>
+
+          <section class="empty-state" id="empty-state" aria-labelledby="empty-title" hidden>
+            <div class="empty-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="4" y="4" width="16" height="16" rx="4" />
+                <path d="m8.5 12 2.3 2.3 4.7-4.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h3 id="empty-title">Belum ada tugas</h3>
+            <p id="empty-message">Tambahkan tugas pertama Anda agar hari ini lebih terarah.</p>
+            <button class="button button-primary" id="empty-action" type="button" data-mode="create">
+              Buat Tugas
+            </button>
+          </section>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog class="modal" id="task-dialog" aria-labelledby="task-dialog-title">
+    <form class="modal-card" id="task-form" novalidate>
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Detail Tugas</p>
+          <h2 id="task-dialog-title">Tugas Baru</h2>
+        </div>
+        <button class="icon-button" id="close-task-dialog" type="button" aria-label="Tutup dialog">
+          &times;
+        </button>
+      </div>
+
+      <div class="field">
+        <label for="task-title">Judul <span class="required" aria-hidden="true">*</span></label>
+        <input
+          id="task-title"
+          name="title"
+          type="text"
+          maxlength="120"
+          autocomplete="off"
+          placeholder="Apa yang perlu diselesaikan?"
+          aria-describedby="title-error"
+        />
+        <p class="field-error" id="title-error" role="alert"></p>
+      </div>
+
+      <div class="field">
+        <label for="task-description">Deskripsi <span class="optional">(opsional)</span></label>
+        <textarea
+          id="task-description"
+          name="description"
+          rows="3"
+          maxlength="500"
+          placeholder="Tambahkan konteks singkat..."
+        ></textarea>
+        <p class="field-hint"><span id="desc-count">0</span>/500 karakter</p>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="task-priority">Prioritas</label>
+          <select id="task-priority" name="priority">
+            <option value="low">Rendah</option>
+            <option value="medium" selected>Sedang</option>
+            <option value="high">Tinggi</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="task-due">Tenggat <span class="optional">(opsional)</span></label>
+          <input id="task-due" name="dueDate" type="date" />
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="button button-ghost" id="cancel-task" type="button">Batal</button>
+        <button class="button button-primary" id="save-task" type="submit">Tambah Tugas</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="delete-dialog" aria-labelledby="delete-title" aria-describedby="delete-message">
+    <div class="modal-card modal-card-small">
+      <p class="eyebrow">Konfirmasi</p>
+      <h2 id="delete-title">Hapus tugas ini?</h2>
+      <p class="modal-text" id="delete-message"></p>
+      <div class="modal-actions">
+        <button class="button button-ghost" id="cancel-delete" type="button">Batal</button>
+        <button class="button button-danger" id="confirm-delete" type="button">Hapus Tugas</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <noscript>
+    <p class="noscript">TaskFlow memerlukan JavaScript untuk menambah, mengedit, dan menyimpan tugas.</p>
+  </noscript>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
