@@ -1,0 +1,16 @@
+# Editor & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Log
+*.log
+
+# Rahasia (jangan pernah di-commit)
+.env
+.env.*
+
+# Dependensi
+node_modules/

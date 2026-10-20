@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hugo.dev — Exploring the web</title>
+  <meta name="description" content="A minimalist interactive landing page and the first project in my vibecoding journey." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="#home" aria-label="Hugo.dev — home">Hugo<span class="brand-dot">.</span>dev</a>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#hello">Hello</a></li>
+        <li><a href="#experiments">Experiments</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero container" id="home" aria-labelledby="hero-title">
+      <p class="eyebrow reveal">Project 01 · Vibecoding journey</p>
+      <h1 id="hero-title" class="reveal">
+        Hello, I'm <span class="accent-word">exploring</span> the web.
+      </h1>
+      <p class="hero-lead reveal">
+        A small experiment in design and code. Built with plain HTML, CSS, and a little
+        JavaScript — no frameworks, no shortcuts.
+      </p>
+      <div class="hero-actions reveal">
+        <a class="button button-primary" href="#hello">
+          Say hello <span aria-hidden="true">→</span>
+        </a>
+        <a class="button button-ghost" href="#experiments">See experiments</a>
+      </div>
+      <dl class="hero-meta reveal">
+        <div>
+          <dt>Focus</dt>
+          <dd>Design &amp; frontend</dd>
+        </div>
+        <div>
+          <dt>Stack</dt>
+          <dd>HTML · CSS · JS</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd>Learning in public</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="section container" id="hello" aria-labelledby="greeting-title">
+      <div class="section-heading">
+        <p class="eyebrow">Interactive / 01</p>
+        <h2 id="greeting-title">A small hello.</h2>
+      </div>
+
+      <article class="greeting-card">
+        <div class="greeting-copy">
+          <h3>Say it back</h3>
+          <p>
+            Click the button and I'll say something back. It's the same friendly
+            button from version one — with a new coat of paint.
+          </p>
+        </div>
+        <div class="greeting-action">
+          <button id="greet-button" class="button button-primary" type="button">
+            Say hello <span aria-hidden="true">→</span>
+          </button>
+          <p id="greeting" class="greeting" role="status" aria-live="polite">
+            Your greeting will appear here.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section container" id="experiments" aria-labelledby="experiments-title">
+      <div class="section-heading section-heading-split">
+        <div>
+          <p class="eyebrow">Experiments / 03</p>
+          <h2 id="experiments-title">Three things I'm exploring.</h2>
+        </div>
+        <p class="section-note">
+          Small, deliberate steps. Each one teaches me something new about the web.
+        </p>
+      </div>
+
+      <div class="experiment-grid">
+        <article class="experiment-card">
+          <p class="card-index" aria-hidden="true">01</p>
+          <h3>Design</h3>
+          <p>Structure, spacing, and type. Learning why the simplest things feel right.</p>
+          <p class="tag">Interface</p>
+        </article>
+
+        <article class="experiment-card">
+          <p class="card-index" aria-hidden="true">02</p>
+          <h3>Code</h3>
+          <p>Semantic HTML, modern CSS, and just enough JavaScript to make things move.</p>
+          <p class="tag">Frontend</p>
+        </article>
+
+        <article class="experiment-card">
+          <p class="card-index" aria-hidden="true">03</p>
+          <h3>Explore</h3>
+          <p>Testing small ideas in public, one project and one commit at a time.</p>
+          <p class="tag">Process</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>Project 01 — vibecoding-journey</p>
+      <p>&copy; <span id="year">2026</span> Hugo.dev · Built with HTML, CSS &amp; JS</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
