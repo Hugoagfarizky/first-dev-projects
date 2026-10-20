@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Cuaca Kita adalah dashboard cuaca aktual dan prakiraan tujuh hari dengan data Open-Meteo." />
+  <meta name="theme-color" content="#f3f0e7" />
+  <title>Cuaca Kita — Dashboard cuaca harian</title>
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23175c4f'/%3E%3Ccircle cx='26' cy='25' r='9' fill='%23f4c35f'/%3E%3Cpath d='M20 46h25a8 8 0 0 0 1-15.9A11 11 0 0 0 25 32a7 7 0 0 0-5 14Z' fill='%23fffaf0'/%3E%3C/svg%3E"
+  />
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
+  <div class="ambient" aria-hidden="true">
+    <span class="ambient-orb ambient-sun"></span>
+    <span class="ambient-orb ambient-sky"></span>
+    <span class="ambient-orb ambient-mint"></span>
+  </div>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#main-content" aria-label="Cuaca Kita — kembali ke atas">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><use href="#icon-partly-day"></use></svg>
+        </span>
+        <span class="brand-copy">
+          <strong>Cuaca Kita</strong>
+          <span>Dashboard cuaca harian</span>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <button
+          id="my-location-button"
+          class="button button-light"
+          type="button"
+          aria-label="Gunakan lokasi saya"
+        >
+          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-pin"></use></svg>
+          <span>Lokasi saya</span>
+        </button>
+        <button
+          id="reset-location-button"
+          class="button button-outline"
+          type="button"
+          aria-label="Kembali ke lokasi awal, Jakarta"
+        >
+          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+          <span>Kembali ke awal</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell main-content">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="intro-copy">
+        <p class="eyebrow">Prakiraan dari Open-Meteo</p>
+        <h1 id="page-title">Cuaca hari ini,<br /><span>tanpa tebak-tebakan.</span></h1>
+        <p class="intro-lead">
+          Suhu, angin, kelembapan, dan prakiraan tujuh hari dalam satu tampilan yang tenang.
+          Cari kota mana pun untuk mulai membaca langitnya.
+        </p>
+      </div>
+
+      <div class="search-card">
+        <form id="search-form" novalidate>
+          <label for="city-input">Cari kota atau lokasi</label>
+          <div class="search-row">
+            <div class="search-input-wrap">
+              <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-search"></use></svg>
+              <input
+                id="city-input"
+                name="city"
+                type="search"
+                placeholder="Contoh: Bandung, Tokyo, London"
+                autocomplete="off"
+                maxlength="80"
+                aria-describedby="search-hint search-error"
+              />
+            </div>
+            <button id="search-button" class="button button-primary" type="submit">Cari cuaca</button>
+          </div>
+          <p id="search-hint" class="field-hint">
+            Gunakan nama kota dalam bahasa Indonesia atau Inggris. Hasil pencarian berasal dari Open-Meteo.
+          </p>
+          <p id="search-error" class="field-error" role="alert" hidden></p>
+        </form>
+
+        <div id="search-results" class="search-results" hidden aria-labelledby="search-results-title">
+          <div class="results-head">
+            <p id="search-results-title">Pilih lokasi yang sesuai</p>
+            <span id="search-results-count" class="results-count"></span>
+          </div>
+          <ul id="search-results-list" class="results-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="loading-panel" class="state-panel loading-panel" hidden role="status" aria-live="polite">
+      <span class="spinner" aria-hidden="true"></span>
+      <div class="state-copy">
+        <h2 id="loading-title">Memuat data cuaca...</h2>
+        <p id="loading-message">Menghubungi layanan cuaca Open-Meteo.</p>
+      </div>
+      <div class="loading-skeleton" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+    </section>
+
+    <section id="error-panel" class="state-panel error-panel" hidden role="alert" aria-labelledby="error-title">
+      <span class="state-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><use href="#icon-alert"></use></svg>
+      </span>
+      <div class="state-copy">
+        <p class="eyebrow">Langit belum bisa dibaca</p>
+        <h2 id="error-title">Data cuaca belum bisa dimuat</h2>
+        <p id="error-message"></p>
+      </div>
+      <button id="retry-button" class="button button-primary" type="button" hidden>Coba lagi</button>
+    </section>
+
+    <div id="dashboard" class="dashboard" hidden>
+      <section class="weather-grid" aria-label="Kondisi cuaca saat ini">
+        <article id="current-card" class="current-card" data-theme="cloudy-day">
+          <span class="current-glow" aria-hidden="true"></span>
+
+          <div class="current-head">
+            <div class="location-block">
+              <p class="hero-kicker">Cuaca saat ini</p>
+              <h2 id="location-name">Jakarta</h2>
+              <p id="location-region" class="location-region">DKI Jakarta, Indonesia</p>
+            </div>
+            <p id="day-badge" class="day-badge">Siang</p>
+          </div>
+
+          <div class="current-body">
+            <div id="current-icon" class="current-icon" aria-hidden="true"></div>
+            <div class="current-reading">
+              <p class="current-temperature">
+                <span id="current-temperature">--</span><span class="temperature-unit">°C</span>
+              </p>
+              <p id="current-description" class="current-description">Memuat kondisi...</p>
+              <p id="observation-time" class="observation-time">Waktu pengamatan belum tersedia.</p>
+            </div>
+          </div>
+
+          <dl class="hero-facts">
+            <div>
+              <dt>Terasa seperti</dt>
+              <dd id="feels-like">--</dd>
+            </div>
+            <div>
+              <dt>Kelembapan</dt>
+              <dd id="humidity">--</dd>
+            </div>
+            <div>
+              <dt>Angin</dt>
+              <dd id="wind-speed">--</dd>
+            </div>
+          </dl>
+        </article>
+
+        <aside class="detail-card" aria-labelledby="details-title">
+          <div class="detail-head">
+            <p class="eyebrow">Ringkasan</p>
+            <h2 id="details-title">Detail hari ini</h2>
+          </div>
+
+          <dl class="detail-grid">
+            <div class="detail-item">
+              <dt>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-droplet"></use></svg>
+                Curah hujan
+              </dt>
+              <dd id="precipitation">--</dd>
+            </div>
+            <div class="detail-item">
+              <dt>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-sunrise"></use></svg>
+                Matahari terbit
+              </dt>
+              <dd id="sunrise">--</dd>
+            </div>
+            <div class="detail-item">
+              <dt>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-sunset"></use></svg>
+                Matahari terbenam
+              </dt>
+              <dd id="sunset">--</dd>
+            </div>
+            <div class="detail-item detail-timezone">
+              <dt>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-clock"></use></svg>
+                Zona waktu
+              </dt>
+              <dd id="timezone-label">--</dd>
+            </div>
+          </dl>
+
+          <p id="updated-at" class="updated-at"></p>
+        </aside>
+      </section>
+
+      <section class="panel hourly-panel" aria-labelledby="hourly-title">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Per jam</p>
+            <h2 id="hourly-title">Prakiraan 24 jam</h2>
+          </div>
+          <p class="panel-sub">Waktu setempat · geser untuk melihat semua</p>
+        </div>
+        <ul
+          id="hourly-list"
+          class="hourly-list"
+          tabindex="0"
+          aria-label="Prakiraan cuaca per jam, dapat digeser"
+        ></ul>
+      </section>
+
+      <section class="panel daily-panel" aria-labelledby="daily-title">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Seminggu ke depan</p>
+            <h2 id="daily-title">Prakiraan 7 hari</h2>
+          </div>
+          <p class="panel-sub">Suhu minimum dan maksimum · peluang hujan</p>
+        </div>
+        <ul id="daily-list" class="daily-list"></ul>
+      </section>
+
+      <p class="source-note">
+        Sumber data: <a href="https://open-meteo.com/" rel="noopener noreferrer">Open-Meteo</a>.
+        Perkiraan cuaca dapat berubah dan bukan peringatan resmi.
+      </p>
+    </div>
+
+    <p id="sr-status" class="visually-hidden" role="status" aria-live="polite"></p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>Cuaca Kita <span aria-hidden="true">·</span> dibaca dari data terbuka Open-Meteo.</p>
+      <p>Dibuat untuk latihan vibecoding.</p>
+    </div>
+  </footer>
+
+  <noscript>
+    <p class="noscript-message">
+      Cuaca Kita memerlukan JavaScript untuk mengambil data cuaca. Aktifkan JavaScript di browser Anda.
+    </p>
+  </noscript>
+
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-clear-day" viewBox="0 0 64 64">
+      <circle cx="32" cy="30" r="10.5" fill="#f4c35f" />
+      <g stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity="0.92">
+        <path d="M32 8v6M32 46v6M10 30h6M48 30h6M16.5 14.5l4.2 4.2M43.3 41.3l4.2 4.2M47.5 14.5l-4.2 4.2M20.7 41.3l-4.2 4.2" />
+      </g>
+    </symbol>
+    <symbol id="icon-clear-night" viewBox="0 0 64 64">
+      <path d="M39 12a18 18 0 1 0 13 28.5A19.5 19.5 0 0 1 39 12Z" fill="#f4c35f" />
+      <circle cx="45" cy="16" r="2" fill="currentColor" opacity="0.8" />
+      <circle cx="51" cy="27" r="1.4" fill="currentColor" opacity="0.65" />
+      <circle cx="40" cy="7" r="1.2" fill="currentColor" opacity="0.6" />
+    </symbol>
+    <symbol id="icon-partly-day" viewBox="0 0 64 64">
+      <circle cx="24" cy="23" r="9" fill="#f4c35f" />
+      <g stroke="currentColor" stroke-width="2.6" stroke-linecap="round" opacity="0.85">
+        <path d="M24 7v4M24 35v3M8 23h4M36 23h3M12.5 11.5l3 3M32.5 31.5l2.8 2.8M35.5 11.5l-3 3M15.5 31.5l-2.8 2.8" />
+      </g>
+      <path d="M18 48h27a9 9 0 0 0 1-17.9A12.5 12.5 0 0 0 22 31.8 8.2 8.2 0 0 0 18 48Z" fill="currentColor" />
+    </symbol>
+    <symbol id="icon-partly-night" viewBox="0 0 64 64">
+      <path d="M34 11a15 15 0 1 0 11.5 24.4A16.5 16.5 0 0 1 34 11Z" fill="#f4c35f" />
+      <circle cx="43" cy="12" r="1.8" fill="currentColor" opacity="0.7" />
+      <path d="M18 48h27a9 9 0 0 0 1-17.9A12.5 12.5 0 0 0 22 31.8 8.2 8.2 0 0 0 18 48Z" fill="currentColor" />
+    </symbol>
+    <symbol id="icon-cloudy" viewBox="0 0 64 64">
+      <path d="M12 28a8.5 8.5 0 0 1 16.4-3 9.5 9.5 0 0 1 16.5 5.7A7 7 0 0 1 43 44H18a9 9 0 0 1-6-16Z" fill="currentColor" opacity="0.48" />
+      <path d="M20 49h27a9 9 0 0 0 1-17.9A12.5 12.5 0 0 0 24 32.8 8.2 8.2 0 0 0 20 49Z" fill="currentColor" />
+    </symbol>
+    <symbol id="icon-fog" viewBox="0 0 64 64">
+      <path d="M17 39h31a8.5 8.5 0 0 0 1-16.9A12 12 0 0 0 26 22a8 8 0 0 0-9 17Z" fill="currentColor" opacity="0.72" />
+      <g stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity="0.75">
+        <path d="M13 47h38M19 54h27M25 33h17" />
+      </g>
+    </symbol>
+    <symbol id="icon-drizzle" viewBox="0 0 64 64">
+      <path d="M17 42h30a9 9 0 0 0 1-17.9A12.5 12.5 0 0 0 22 27.8 8.2 8.2 0 0 0 17 42Z" fill="currentColor" />
+      <g stroke="#7dcdf2" stroke-width="3" stroke-linecap="round">
+        <path d="M24 48l-1.5 4M35 48l-1.5 4M46 48l-1.5 4" />
+      </g>
+    </symbol>
+    <symbol id="icon-rain" viewBox="0 0 64 64">
+      <path d="M17 40h30a9 9 0 0 0 1-17.9A12.5 12.5 0 0 0 22 25.8 8.2 8.2 0 0 0 17 40Z" fill="currentColor" />
+      <g stroke="#74c6ee" stroke-width="3.2" stroke-linecap="round">
+        <path d="M23 46l-2 7M34 46l-2 7M45 46l-2 7" />
+      </g>
+    </symbol>
+    <symbol id="icon-snow" viewBox="0 0 64 64">
+      <path d="M17 40h30a9 9 0 0 0 1-17.9A12.5 12.5 0 0 0 22 25.8 8.2 8.2 0 0 0 17 40Z" fill="currentColor" />
+      <g stroke="#b8e8ff" stroke-width="2.2" stroke-linecap="round">
+        <path d="M23 48v7M20 50l6 3M26 50l-6 3M41 48v7M38 50l6 3M44 50l-6 3" />
+      </g>
+    </symbol>
+    <symbol id="icon-thunder" viewBox="0 0 64 64">
+      <path d="M17 38h30a9 9 0 0 0 1-17.9A12.5 12.5 0 0 0 22 23.8 8.2 8.2 0 0 0 17 38Z" fill="currentColor" />
+      <path d="M34 41h7l-5 9h5l-11 9 3-8h-5l6-10Z" fill="#f4c35f" />
+    </symbol>
+    <symbol id="icon-unknown" viewBox="0 0 64 64">
+      <path d="M18 43h28a9 9 0 0 0 1-17.9A12.5 12.5 0 0 0 23 28.8 8.2 8.2 0 0 0 18 43Z" fill="currentColor" opacity="0.78" />
+      <circle cx="32" cy="51" r="2.2" fill="currentColor" />
+      <path d="M27 54h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+    <symbol id="icon-pin" viewBox="0 0 24 24">
+      <path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z" fill="none" stroke="currentColor" stroke-width="1.8" />
+      <circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8" />
+    </symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24">
+      <path d="M20 11a8 8 0 0 0-14.8-4M4 5v5h5M4 13a8 8 0 0 0 14.8 4M20 19v-5h-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="10.8" cy="10.8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.8" />
+      <path d="m15.6 15.6 4.1 4.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+    </symbol>
+    <symbol id="icon-droplet" viewBox="0 0 24 24">
+      <path d="M12 3.5s5.5 6.1 5.5 10.2a5.5 5.5 0 0 1-11 0C6.5 9.6 12 3.5 12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+    </symbol>
+    <symbol id="icon-sunrise" viewBox="0 0 24 24">
+      <path d="M4 18h16M7 18a5 5 0 0 1 10 0M12 3v3M5.6 7.6l2.1 2.1M18.4 7.6l-2.1 2.1M2 13h2M20 13h2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <path d="m9 5 3-3 3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+    <symbol id="icon-sunset" viewBox="0 0 24 24">
+      <path d="M4 18h16M7 18a5 5 0 0 1 10 0M12 3v3M5.6 7.6l2.1 2.1M18.4 7.6l-2.1 2.1M2 13h2M20 13h2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <path d="m9 7 3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.8" />
+      <path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+    <symbol id="icon-alert" viewBox="0 0 24 24">
+      <path d="m12 3 9 17H3L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+      <path d="M12 9v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <circle cx="12" cy="17" r="1" fill="currentColor" />
+    </symbol>
+  </svg>
+</body>
+</html>
