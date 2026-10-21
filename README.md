@@ -14,6 +14,7 @@ Hari pertama belajar vibecoding dan GitHub
 | [Proyek 04 — Weather Dashboard](proyek-04-weather-dashboard/) | Dashboard cuaca aktual dan prakiraan tujuh hari dengan Open-Meteo | HTML, CSS, JavaScript, Open-Meteo API |
 | [Proyek 05 — Movie Explorer](proyek-05-movie-explorer/) | Aplikasi penemuan film dengan pencarian, filter, detail, dan favorit dari TMDB | HTML, CSS, JavaScript, TMDB API, localStorage |
 | [Proyek 06 — Kanban Board](proyek-06-kanban-board/) | Papan tugas tiga kolom dengan CRUD, drag-and-drop, filter, statistik, dan penyimpanan lokal | HTML, CSS, JavaScript, localStorage |
+| [Proyek 07 — Ritme Habit Tracker](proyek-07-habit-tracker/) | Pelacak kebiasaan harian dan mingguan dengan dashboard, kalender, streak, dan statistik | HTML, CSS, JavaScript, localStorage |
 
 ## Proyek 02 — TaskFlow
 
