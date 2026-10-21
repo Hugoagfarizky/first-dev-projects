@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Neraca, dashboard keuangan pribadi untuk mencatat transaksi, memantau arus kas, dan mengelola anggaran bulanan.">
+  <meta name="color-scheme" content="light">
+  <title>Neraca — Personal Finance Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231b4d3f'/%3E%3Cpath d='M18 27h28v19H18z' fill='none' stroke='%23f6f3e9' stroke-width='3'/%3E%3Cpath d='M24 27v-5a4 4 0 0 1 4-4h18' fill='none' stroke='%23f6f3e9' stroke-width='3'/%3E%3Ccircle cx='40' cy='36.5' r='2' fill='%23d6b26a'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-logo" viewBox="0 0 24 24">
+      <path d="M3.5 8.5h17v11h-17z"></path>
+      <path d="M6.5 8.5V6a2 2 0 0 1 2-2h10"></path>
+      <path d="M16.5 14h1.5"></path>
+    </symbol>
+    <symbol id="icon-dashboard" viewBox="0 0 24 24">
+      <rect x="3.5" y="3.5" width="7" height="7" rx="1.5"></rect>
+      <rect x="13.5" y="3.5" width="7" height="4.5" rx="1.5"></rect>
+      <rect x="3.5" y="13.5" width="7" height="7" rx="1.5"></rect>
+      <rect x="13.5" y="11" width="7" height="9.5" rx="1.5"></rect>
+    </symbol>
+    <symbol id="icon-receipt" viewBox="0 0 24 24">
+      <path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"></path>
+      <path d="M9 8h6M9 11.5h6M9 15h3.5"></path>
+    </symbol>
+    <symbol id="icon-target" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"></circle>
+      <circle cx="12" cy="12" r="4.5"></circle>
+      <circle cx="12" cy="12" r="1"></circle>
+    </symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24">
+      <path d="M12 5v14M5 12h14"></path>
+    </symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24">
+      <path d="M19 12H5M11 18l-6-6 6-6"></path>
+    </symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+      <path d="M5 12h14M13 6l6 6-6 6"></path>
+    </symbol>
+    <symbol id="icon-chevron-right" viewBox="0 0 24 24">
+      <path d="M9 5l7 7-7 7"></path>
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="10.5" cy="10.5" r="6.5"></circle>
+      <path d="M15.5 15.5L20 20"></path>
+    </symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24">
+      <path d="M12 4v11M7.5 10.5L12 15l4.5-4.5"></path>
+      <path d="M4.5 18.5h15"></path>
+    </symbol>
+    <symbol id="icon-edit" viewBox="0 0 24 24">
+      <path d="M4 20h4.5L20 8.5 15.5 4 4 15.5z"></path>
+      <path d="M13.5 6l4.5 4.5"></path>
+    </symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24">
+      <path d="M4.5 7h15M9 7V4.5h6V7M6.5 7l.8 12.5h9.4L17.5 7"></path>
+      <path d="M10 11v5M14 11v5"></path>
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="M6 6l12 12M18 6L6 18"></path>
+    </symbol>
+    <symbol id="icon-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"></circle>
+      <path d="M12 10.5v5.5M12 7.5v.5"></path>
+    </symbol>
+    <symbol id="icon-alert" viewBox="0 0 24 24">
+      <path d="M12 4l9 16H3z"></path>
+      <path d="M12 9v4.5M12 17v.5"></path>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24">
+      <path d="M4.5 12.5l5 5 10-11"></path>
+    </symbol>
+    <symbol id="icon-wallet" viewBox="0 0 24 24">
+      <path d="M4 7.5h16v11.5H4z"></path>
+      <path d="M4 7.5V6a2 2 0 0 1 2-2h11"></path>
+      <path d="M16 13h1.5"></path>
+    </symbol>
+    <symbol id="icon-trend-up" viewBox="0 0 24 24">
+      <path d="M4 17l6-6 4 4 6-7"></path>
+      <path d="M15 8h5v5"></path>
+    </symbol>
+    <symbol id="icon-trend-down" viewBox="0 0 24 24">
+      <path d="M4 7l6 6 4-4 6 7"></path>
+      <path d="M15 16h5v-5"></path>
+    </symbol>
+    <symbol id="icon-filter" viewBox="0 0 24 24">
+      <path d="M4 5h16l-6.2 7.2V19l-3.6 1.5v-8.3z"></path>
+    </symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24">
+      <rect x="4" y="5.5" width="16" height="14.5" rx="2"></rect>
+      <path d="M8 3.5v4M16 3.5v4M4 10h16"></path>
+    </symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24">
+      <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+      <path d="M8.5 10V7a3.5 3.5 0 0 1 7 0v3"></path>
+    </symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24">
+      <path d="M20 8a8 8 0 1 0 .5 7"></path>
+      <path d="M20 4v4.5h-4.5"></path>
+    </symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24">
+      <path d="M4 20h16"></path>
+      <path d="M7 17V9M12 17V5M17 17v-6"></path>
+    </symbol>
+  </svg>
+
+  <header class="site-header">
+    <div class="header-inner shell">
+      <a class="brand" href="#dashboard" aria-label="Neraca, buka dashboard">
+        <span class="brand-mark" aria-hidden="true">
+          <svg class="icon"><use href="#icon-logo"></use></svg>
+        </span>
+        <span class="brand-copy">
+          <span class="brand-name">Neraca</span>
+          <span class="brand-sub">Keuangan pribadi</span>
+        </span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Navigasi utama">
+        <a class="nav-link" href="#dashboard" data-view="dashboard">
+          <svg class="icon" aria-hidden="true"><use href="#icon-dashboard"></use></svg>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-link" href="#transactions" data-view="transactions">
+          <svg class="icon" aria-hidden="true"><use href="#icon-receipt"></use></svg>
+          <span>Transaksi</span>
+        </a>
+        <a class="nav-link" href="#budgets" data-view="budgets">
+          <svg class="icon" aria-hidden="true"><use href="#icon-target"></use></svg>
+          <span>Anggaran</span>
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <span class="save-state" id="save-state" data-state="loading" role="status" aria-live="polite">
+          <span class="save-dot" aria-hidden="true"></span>
+          <span id="save-state-text">Memuat…</span>
+        </span>
+        <button class="button button-primary header-add" id="new-transaction-button" type="button" aria-label="Tambah transaksi">
+          <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+          <span>Tambah transaksi</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-shell shell">
+    <div class="storage-banner" id="storage-banner" role="alert" hidden>
+      <span class="storage-banner-icon" aria-hidden="true">
+        <svg class="icon"><use href="#icon-alert"></use></svg>
+      </span>
+      <div class="storage-banner-copy">
+        <strong id="storage-banner-title">Perlu perhatian</strong>
+        <p id="storage-banner-message"></p>
+      </div>
+      <div class="storage-banner-actions">
+        <button class="button button-secondary" id="download-raw-button" type="button" hidden>
+          <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+          Unduh data mentah
+        </button>
+        <button class="button button-danger-ghost" id="reset-storage-button" type="button" hidden>
+          Reset data
+        </button>
+      </div>
+    </div>
+
+    <main id="main-content" tabindex="-1">
+      <section class="view" id="view-dashboard" aria-labelledby="dashboard-title">
+        <div class="page-head">
+          <div class="page-heading">
+            <p class="eyebrow">Dashboard</p>
+            <h1 id="dashboard-title">Kondisi keuanganmu</h1>
+            <p class="page-copy" id="dashboard-period-copy">Ringkasan periode berjalan.</p>
+          </div>
+          <div class="month-control" aria-label="Periode laporan dashboard">
+            <button class="icon-button" id="dashboard-prev-month" type="button" aria-label="Bulan sebelumnya">
+              <svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
+            </button>
+            <label class="visually-hidden" for="dashboard-month">Bulan laporan</label>
+            <input class="month-input" id="dashboard-month" type="month" min="1900-01" max="2200-12" aria-label="Bulan laporan">
+            <button class="icon-button" id="dashboard-next-month" type="button" aria-label="Bulan berikutnya">
+              <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+            </button>
+            <button class="text-button" id="dashboard-current-month" type="button">Bulan ini</button>
+          </div>
+        </div>
+
+        <div class="cumulative-strip">
+          <span class="cumulative-icon" aria-hidden="true">
+            <svg class="icon"><use href="#icon-wallet"></use></svg>
+          </span>
+          <div class="cumulative-copy">
+            <span class="cumulative-label">Saldo kumulatif sepanjang riwayat</span>
+            <strong class="cumulative-value" id="cumulative-net">Rp0</strong>
+            <p id="cumulative-meta">Belum ada transaksi sepanjang riwayat.</p>
+          </div>
+        </div>
+
+        <div class="stat-grid" aria-label="Ringkasan bulan terpilih">
+          <article class="stat-card stat-income">
+            <div class="stat-top">
+              <span class="stat-label">Total pemasukan</span>
+              <span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#icon-trend-up"></use></svg></span>
+            </div>
+            <strong class="stat-value" id="summary-income">Rp0</strong>
+            <p class="stat-comparison" id="summary-income-comparison"></p>
+          </article>
+          <article class="stat-card stat-expense">
+            <div class="stat-top">
+              <span class="stat-label">Total pengeluaran</span>
+              <span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#icon-trend-down"></use></svg></span>
+            </div>
+            <strong class="stat-value" id="summary-expense">Rp0</strong>
+            <p class="stat-comparison" id="summary-expense-comparison"></p>
+          </article>
+          <article class="stat-card stat-net">
+            <div class="stat-top">
+              <span class="stat-label">Arus kas bulan terpilih</span>
+              <span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#icon-wallet"></use></svg></span>
+            </div>
+            <strong class="stat-value" id="summary-net">Rp0</strong>
+            <p class="stat-comparison" id="summary-net-comparison"></p>
+          </article>
+          <article class="stat-card stat-count">
+            <div class="stat-top">
+              <span class="stat-label">Jumlah transaksi</span>
+              <span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#icon-receipt"></use></svg></span>
+            </div>
+            <strong class="stat-value" id="summary-count">0</strong>
+            <p class="stat-comparison" id="summary-count-comparison"></p>
+          </article>
+        </div>
+
+        <div class="empty-state dashboard-empty" id="dashboard-empty" hidden>
+          <span class="empty-icon" aria-hidden="true"><svg class="icon"><use href="#icon-wallet"></use></svg></span>
+          <div>
+            <h2>Belum ada transaksi pada periode ini</h2>
+            <p id="dashboard-empty-copy">Catat transaksi pertama untuk melihat ringkasan dan grafik.</p>
+          </div>
+          <button class="button button-primary" id="dashboard-empty-add" type="button">Tambah transaksi</button>
+        </div>
+
+        <div class="dashboard-grid dashboard-grid-charts">
+          <section class="panel" aria-labelledby="trend-title">
+            <div class="panel-head">
+              <div>
+                <h2 id="trend-title">Arus kas enam bulan</h2>
+                <p>Perbandingan pemasukan dan pengeluaran per bulan.</p>
+              </div>
+              <div class="chart-legend" aria-label="Legenda grafik">
+                <span><span class="legend-swatch legend-income" aria-hidden="true"></span>Masuk</span>
+                <span><span class="legend-swatch legend-expense" aria-hidden="true"></span>Keluar</span>
+              </div>
+            </div>
+            <div class="trend-chart" id="trend-chart" role="region" aria-label="Grafik arus kas enam bulan"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="category-title">
+            <div class="panel-head">
+              <div>
+                <h2 id="category-title">Pengeluaran per kategori</h2>
+                <p id="category-chart-period">Bulan terpilih</p>
+              </div>
+            </div>
+            <div class="category-chart" id="category-chart" role="region" aria-label="Grafik pengeluaran per kategori"></div>
+          </section>
+        </div>
+
+        <div class="dashboard-grid dashboard-grid-lower">
+          <section class="panel" aria-labelledby="recent-title">
+            <div class="panel-head">
+              <h2 id="recent-title">Transaksi terbaru</h2>
+              <a class="text-link" href="#transactions">Lihat semua</a>
+            </div>
+            <div class="recent-transactions" id="recent-transactions"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="snapshot-title">
+            <div class="panel-head">
+              <h2 id="snapshot-title">Anggaran bulan terpilih</h2>
+              <a class="text-link" href="#budgets">Kelola</a>
+            </div>
+            <div id="budget-snapshot"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="view-transactions" aria-labelledby="transactions-title" hidden>
+        <div class="page-head">
+          <div class="page-heading">
+            <p class="eyebrow">Transaksi</p>
+            <h1 id="transactions-title">Catatan transaksi</h1>
+            <p class="page-copy">Cari, filter, dan kelola seluruh pemasukan serta pengeluaranmu.</p>
+          </div>
+          <button class="button button-primary" id="transactions-page-add" type="button">
+            <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+            Tambah transaksi
+          </button>
+        </div>
+
+        <form class="filters-panel" id="transaction-filters" aria-label="Filter transaksi">
+          <div class="filter-grid">
+            <div class="field field-search">
+              <label for="filter-search">Cari deskripsi</label>
+              <div class="search-field">
+                <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+                <input id="filter-search" name="search" type="search" placeholder="Contoh: makan siang" autocomplete="off">
+              </div>
+            </div>
+            <div class="field">
+              <label for="filter-type">Jenis</label>
+              <select id="filter-type" name="type">
+                <option value="all">Semua jenis</option>
+                <option value="income">Pemasukan</option>
+                <option value="expense">Pengeluaran</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filter-category">Kategori</label>
+              <select id="filter-category" name="category">
+                <option value="all">Semua kategori</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filter-month">Bulan</label>
+              <select id="filter-month" name="month">
+                <option value="all">Semua bulan</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filter-from">Dari tanggal</label>
+              <input id="filter-from" name="from" type="date" min="1900-01-01" max="2200-12-31">
+            </div>
+            <div class="field">
+              <label for="filter-to">Sampai tanggal</label>
+              <input id="filter-to" name="to" type="date" min="1900-01-01" max="2200-12-31">
+            </div>
+            <div class="field">
+              <label for="filter-sort">Urutkan</label>
+              <select id="filter-sort" name="sort">
+                <option value="date-desc">Tanggal terbaru</option>
+                <option value="date-asc">Tanggal terlama</option>
+                <option value="amount-desc">Nominal terbesar</option>
+                <option value="amount-asc">Nominal terkecil</option>
+              </select>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <p class="filter-active-label" id="filter-active-label">Menampilkan seluruh transaksi.</p>
+            <button class="button button-secondary" id="reset-filters" type="button">Hapus filter</button>
+          </div>
+        </form>
+
+        <section class="table-panel" aria-labelledby="transaction-list-title">
+          <div class="table-head">
+            <div>
+              <h2 id="transaction-list-title">Daftar transaksi</h2>
+              <p id="transaction-filter-summary">0 transaksi</p>
+            </div>
+            <button class="button button-secondary" id="export-csv" type="button">
+              <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+              <span>Ekspor CSV</span>
+              <span class="button-note" id="export-count">Tidak ada data</span>
+            </button>
+          </div>
+
+          <div class="filtered-totals" id="filtered-totals" aria-label="Total transaksi sesuai filter"></div>
+
+          <div class="table-scroll" id="transactions-table-wrap">
+            <table class="transactions-table">
+              <caption class="visually-hidden">Transaksi sesuai filter aktif</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Tanggal</th>
+                  <th scope="col">Deskripsi</th>
+                  <th scope="col">Kategori</th>
+                  <th scope="col">Jenis</th>
+                  <th scope="col" class="align-right">Nominal</th>
+                  <th scope="col"><span class="visually-hidden">Aksi</span></th>
+                </tr>
+              </thead>
+              <tbody id="transactions-body"></tbody>
+            </table>
+          </div>
+
+          <div class="empty-state" id="transactions-empty" hidden>
+            <span class="empty-icon" aria-hidden="true"><svg class="icon"><use href="#icon-receipt"></use></svg></span>
+            <div>
+              <h3 id="transactions-empty-title">Belum ada transaksi</h3>
+              <p id="transactions-empty-copy">Mulai catat pemasukan dan pengeluaran.</p>
+            </div>
+            <div class="empty-actions">
+              <button class="button button-primary" id="transactions-empty-add" type="button">Tambah transaksi</button>
+              <button class="button button-secondary" id="transactions-empty-reset" type="button" hidden>Hapus filter</button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-budgets" aria-labelledby="budgets-title" hidden>
+        <div class="page-head">
+          <div class="page-heading">
+            <p class="eyebrow">Anggaran</p>
+            <h1 id="budgets-title">Rencana belanja bulanan</h1>
+            <p class="page-copy" id="budget-period-copy">Atur batas pengeluaran per kategori.</p>
+          </div>
+          <div class="page-head-actions">
+            <div class="month-control" aria-label="Periode laporan anggaran">
+              <button class="icon-button" id="budget-prev-month" type="button" aria-label="Bulan sebelumnya">
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
+              </button>
+              <label class="visually-hidden" for="budget-month">Bulan anggaran</label>
+              <input class="month-input" id="budget-month" type="month" min="1900-01" max="2200-12" aria-label="Bulan anggaran">
+              <button class="icon-button" id="budget-next-month" type="button" aria-label="Bulan berikutnya">
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+              </button>
+              <button class="text-button" id="budget-current-month" type="button">Bulan ini</button>
+            </div>
+            <button class="button button-primary" id="new-budget-button" type="button">
+              <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+              Atur anggaran
+            </button>
+          </div>
+        </div>
+
+        <div class="stat-grid budget-summary-grid">
+          <article class="stat-card">
+            <span class="stat-label">Total anggaran</span>
+            <strong class="stat-value" id="budget-limit-value">Rp0</strong>
+            <p class="stat-comparison" id="budget-summary-copy">Belum ada anggaran untuk bulan ini.</p>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Sudah terpakai</span>
+            <strong class="stat-value" id="budget-used-value">Rp0</strong>
+            <p class="stat-comparison">Dihitung dari transaksi pengeluaran pada kategori yang dianggarkan.</p>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Sisa anggaran</span>
+            <strong class="stat-value" id="budget-remaining-value">Rp0</strong>
+            <p class="stat-comparison">Batas perencanaan, bukan saldo yang dipisahkan otomatis.</p>
+          </article>
+        </div>
+
+        <div class="budget-note">
+          <svg class="icon" aria-hidden="true"><use href="#icon-info"></use></svg>
+          <p>Anggaran adalah batas perencanaan. Angka ini tidak memindahkan uang dari saldo dan tidak mengurangi saldo kumulatif. Pemakaian dihitung dari transaksi pengeluaran yang benar-benar tercatat.</p>
+        </div>
+
+        <div class="empty-state" id="budget-empty" hidden>
+          <span class="empty-icon" aria-hidden="true"><svg class="icon"><use href="#icon-target"></use></svg></span>
+          <div>
+            <h2>Belum ada anggaran bulan ini</h2>
+            <p>Pilih kategori pengeluaran dan tetapkan batas nominal. Kamu dapat mengubahnya kapan saja.</p>
+          </div>
+          <button class="button button-primary" id="budget-empty-add" type="button">Buat anggaran pertama</button>
+        </div>
+
+        <div class="budget-grid" id="budget-grid"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Neraca</strong>
+        <p>Data keuangan disimpan di localStorage browser ini. Tidak ada sinkronisasi cloud, autentikasi, atau koneksi ke rekening bank.</p>
+      </div>
+      <p class="footer-note">Dibuat dengan HTML, CSS, dan JavaScript tanpa framework.</p>
+    </footer>
+  </div>
+
+  <dialog class="modal" id="transaction-dialog" aria-labelledby="transaction-dialog-title">
+    <form class="modal-card" id="transaction-form" novalidate>
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Transaksi</p>
+          <h2 id="transaction-dialog-title">Tambah transaksi</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="transaction-dialog" aria-label="Tutup dialog transaksi">
+          <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <fieldset class="field field-type" aria-describedby="tx-type-error">
+          <legend>Jenis transaksi</legend>
+          <div class="type-options">
+            <label class="type-option">
+              <input type="radio" name="type" value="expense" checked>
+              <span class="type-option-content">
+                <span class="type-icon type-icon-expense" aria-hidden="true"><svg class="icon"><use href="#icon-trend-down"></use></svg></span>
+                <span>Pengeluaran</span>
+              </span>
+            </label>
+            <label class="type-option">
+              <input type="radio" name="type" value="income">
+              <span class="type-option-content">
+                <span class="type-icon type-icon-income" aria-hidden="true"><svg class="icon"><use href="#icon-trend-up"></use></svg></span>
+                <span>Pemasukan</span>
+              </span>
+            </label>
+          </div>
+          <p class="field-error" id="tx-type-error" data-error-for="type"></p>
+        </fieldset>
+
+        <div class="field">
+          <label for="tx-amount">Nominal</label>
+          <div class="amount-field">
+            <span class="amount-prefix" aria-hidden="true">Rp</span>
+            <input id="tx-amount" name="amount" type="text" inputmode="numeric" autocomplete="off" placeholder="0" aria-describedby="tx-amount-hint tx-amount-error">
+          </div>
+          <p class="field-hint" id="tx-amount-hint">Bilangan bulat rupiah, misalnya 250000 atau 250.000.</p>
+          <p class="field-error" id="tx-amount-error" data-error-for="amount"></p>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="tx-category">Kategori</label>
+            <select id="tx-category" name="categoryId" aria-describedby="tx-category-error"></select>
+            <p class="field-error" id="tx-category-error" data-error-for="categoryId"></p>
+          </div>
+          <div class="field">
+            <label for="tx-date">Tanggal</label>
+            <input id="tx-date" name="date" type="date" min="1900-01-01" max="2200-12-31" aria-describedby="tx-date-error">
+            <p class="field-error" id="tx-date-error" data-error-for="date"></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="tx-description">Deskripsi <span class="optional">(opsional)</span></label>
+          <textarea id="tx-description" name="description" rows="3" maxlength="160" aria-describedby="tx-description-hint tx-description-error"></textarea>
+          <div class="field-meta">
+            <span id="tx-description-hint">Contoh: makan siang bersama tim.</span>
+            <span id="tx-description-count">0/160</span>
+          </div>
+          <p class="field-error" id="tx-description-error" data-error-for="description"></p>
+        </div>
+
+        <p class="form-error" id="transaction-form-error" data-form-error role="alert" tabindex="-1" hidden></p>
+      </div>
+
+      <div class="modal-actions">
+        <button class="button button-secondary" type="button" data-close-dialog="transaction-dialog">Batal</button>
+        <button class="button button-primary" id="transaction-submit" type="submit">Simpan transaksi</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="budget-dialog" aria-labelledby="budget-dialog-title">
+    <form class="modal-card" id="budget-form" novalidate>
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Anggaran</p>
+          <h2 id="budget-dialog-title">Atur anggaran</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="budget-dialog" aria-label="Tutup dialog anggaran">
+          <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="field">
+          <label for="budget-category">Kategori pengeluaran</label>
+          <select id="budget-category" name="categoryId" aria-describedby="budget-category-error"></select>
+          <p class="field-error" id="budget-category-error" data-error-for="categoryId"></p>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="budget-form-month">Bulan</label>
+            <input id="budget-form-month" name="month" type="month" min="1900-01" max="2200-12" aria-describedby="budget-month-error">
+            <p class="field-error" id="budget-month-error" data-error-for="month"></p>
+          </div>
+          <div class="field">
+            <label for="budget-limit">Batas nominal</label>
+            <div class="amount-field">
+              <span class="amount-prefix" aria-hidden="true">Rp</span>
+              <input id="budget-limit" name="limit" type="text" inputmode="numeric" autocomplete="off" placeholder="0" aria-describedby="budget-limit-hint budget-limit-error">
+            </div>
+            <p class="field-error" id="budget-limit-error" data-error-for="limit"></p>
+          </div>
+        </div>
+        <p class="field-hint" id="budget-limit-hint">Batas harus bilangan bulat positif. Anggaran adalah perencanaan, bukan saldo terpisah.</p>
+
+        <p class="form-error" id="budget-form-error" data-form-error role="alert" tabindex="-1" hidden></p>
+      </div>
+
+      <div class="modal-actions">
+        <button class="button button-secondary" type="button" data-close-dialog="budget-dialog">Batal</button>
+        <button class="button button-primary" id="budget-submit" type="submit">Simpan anggaran</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal modal-small" id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+    <div class="modal-card">
+      <div class="confirm-symbol" id="confirm-symbol" aria-hidden="true">
+        <svg class="icon"><use href="#icon-trash"></use></svg>
+      </div>
+      <h2 id="confirm-title">Hapus data?</h2>
+      <p class="confirm-message" id="confirm-message">Tindakan ini tidak dapat dibatalkan.</p>
+      <div class="modal-actions">
+        <button class="button button-secondary" id="confirm-cancel" type="button">Batal</button>
+        <button class="button button-danger" id="confirm-submit" type="button">Hapus</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden>
+    <span class="toast-icon" aria-hidden="true">
+      <svg class="icon"><use id="toast-icon-use" href="#icon-check"></use></svg>
+    </span>
+    <span id="toast-message"></span>
+    <button class="icon-button toast-close" id="toast-close" type="button" aria-label="Tutup notifikasi">
+      <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+    </button>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
