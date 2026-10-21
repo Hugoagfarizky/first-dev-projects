@@ -27,6 +27,7 @@ try {
 const app = createApp({ db });
 const server = app.listen(port, host, () => {
   console.log(`TaskFlow API berjalan di http://${host}:${port}`);
+  console.log("Buka frontend hanya melalui alamat tersebut, bukan public/index.html langsung.");
   console.log(`Database SQLite: ${databasePath}`);
 });
 

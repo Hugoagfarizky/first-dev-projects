@@ -140,6 +140,10 @@ Alamat default:
 - Health check: `http://127.0.0.1:3000/api/health`
 - REST API: `http://127.0.0.1:3000/api/v1/tasks`
 
+> **Penting:** buka frontend melalui alamat server Express di atas. Jangan membuka `public/index.html` langsung (`file://`) atau memakai Live Server/server statis lain. Frontend memakai URL API relatif (`/api/health` dan `/api/v1/tasks`) dan API tidak membuka CORS. Jika halaman disajikan dari origin lain, request API akan menuju origin tersebut, gagal, dan indikator menampilkan **“API terputus”**.
+>
+> Jika indikator tersebut muncul, pastikan `npm start` masih berjalan, lalu buka `http://127.0.0.1:3000` (atau alamat sesuai `HOST`/`PORT` yang dipakai). Hentikan Live Server/server statis yang mungkin membuka proyek ini di port lain.
+
 Konfigurasi melalui environment variable:
 
 | Variable | Default | Keterangan |
