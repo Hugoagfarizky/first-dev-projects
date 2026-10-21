@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TaskFlow API — kelola tugas dengan frontend vanilla JavaScript, REST API Express, dan database SQLite.">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#0f766e">
+  <title>TaskFlow API — Manajemen Tugas</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%230f766e'/%3E%3Cpath d='M18 33l9 9 19-22' fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-logo" viewBox="0 0 24 24">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+      <path d="M7.5 12.5l3 3 6-7"></path>
+    </symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24">
+      <path d="M12 5v14M5 12h14"></path>
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="10.5" cy="10.5" r="6.5"></circle>
+      <path d="M15.5 15.5L20 20"></path>
+    </symbol>
+    <symbol id="icon-edit" viewBox="0 0 24 24">
+      <path d="M4 20h4.5L20 8.5 15.5 4 4 15.5z"></path>
+      <path d="M13.5 6l4.5 4.5"></path>
+    </symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24">
+      <path d="M4.5 7h15M9 7V4.5h6V7M6.5 7l.8 12.5h9.4L17.5 7"></path>
+      <path d="M10 11v5M14 11v5"></path>
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="M6 6l12 12M18 6L6 18"></path>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24">
+      <path d="M4.5 12.5l5 5 10-11"></path>
+    </symbol>
+    <symbol id="icon-alert" viewBox="0 0 24 24">
+      <path d="M12 4l9 16H3z"></path>
+      <path d="M12 9v4.5M12 17v.5"></path>
+    </symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24">
+      <path d="M20 8a8 8 0 1 0 .5 7"></path>
+      <path d="M20 4v4.5h-4.5"></path>
+    </symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24">
+      <rect x="4" y="5.5" width="16" height="14.5" rx="2"></rect>
+      <path d="M8 3.5v4M16 3.5v4M4 10h16"></path>
+    </symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"></circle>
+      <path d="M12 7v5.5l3.5 2"></path>
+    </symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24">
+      <path d="M19 12H5M11 18l-6-6 6-6"></path>
+    </symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+      <path d="M5 12h14M13 6l6 6-6 6"></path>
+    </symbol>
+    <symbol id="icon-tasks" viewBox="0 0 24 24">
+      <path d="M9 6.5h11M9 12h11M9 17.5h11"></path>
+      <path d="M4 6.5l1 1 2-2M4 12l1 1 2-2M4 17.5l1 1 2-2"></path>
+    </symbol>
+    <symbol id="icon-loader" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"></circle>
+      <path d="M12 3.5v5"></path>
+    </symbol>
+    <symbol id="icon-inbox" viewBox="0 0 24 24">
+      <path d="M4 13.5L7 5h10l3 8.5V19H4z"></path>
+      <path d="M4 13.5h4l1.5 3h5l1.5-3h4"></path>
+    </symbol>
+    <symbol id="icon-database" viewBox="0 0 24 24">
+      <ellipse cx="12" cy="5.5" rx="7.5" ry="3"></ellipse>
+      <path d="M4.5 5.5v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6"></path>
+      <path d="M4.5 11.5v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6"></path>
+    </symbol>
+  </svg>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="/" aria-label="TaskFlow API, muat ulang halaman">
+        <span class="brand-mark" aria-hidden="true">
+          <svg class="icon"><use href="#icon-logo"></use></svg>
+        </span>
+        <span class="brand-copy">
+          <span class="brand-name">TaskFlow</span>
+          <span class="brand-sub">API workspace</span>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <span class="api-chip" id="api-chip" data-state="loading" role="status" aria-live="polite">
+          <span class="api-dot" aria-hidden="true"></span>
+          <span id="api-status-text">Menghubungkan…</span>
+        </span>
+        <button class="button button-primary" id="new-task-button" type="button" aria-label="Tambah tugas baru">
+          <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+          <span>Tugas baru</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell" id="main-content" tabindex="-1">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">REST API + SQLite</p>
+        <h1 id="page-title">Kerja rapi, data tetap tersimpan.</h1>
+        <p class="hero-description">
+          Kelola tugas dari antarmuka yang terhubung langsung ke Express API dan database SQLite.
+          Setiap perubahan benar-benar tersimpan di server.
+        </p>
+      </div>
+      <div class="hero-meta" aria-label="Teknologi aplikasi">
+        <span class="meta-pill">
+          <svg class="icon" aria-hidden="true"><use href="#icon-database"></use></svg>
+          SQLite
+        </span>
+        <span class="meta-pill">
+          <svg class="icon" aria-hidden="true"><use href="#icon-tasks"></use></svg>
+          Express 5
+        </span>
+      </div>
+    </section>
+
+    <section class="summary-grid" aria-label="Ringkasan tugas">
+      <article class="summary-card summary-total">
+        <div class="summary-top">
+          <span class="summary-label">Total tugas</span>
+          <span class="summary-icon" aria-hidden="true"><svg class="icon"><use href="#icon-tasks"></use></svg></span>
+        </div>
+        <strong class="summary-value" id="summary-total">—</strong>
+        <p class="summary-note">Seluruh tugas di database</p>
+      </article>
+      <article class="summary-card summary-todo">
+        <div class="summary-top">
+          <span class="summary-label">Belum mulai</span>
+          <span class="summary-icon" aria-hidden="true"><svg class="icon"><use href="#icon-inbox"></use></svg></span>
+        </div>
+        <strong class="summary-value" id="summary-todo">—</strong>
+        <p class="summary-note">Berstatus todo</p>
+      </article>
+      <article class="summary-card summary-progress">
+        <div class="summary-top">
+          <span class="summary-label">Dikerjakan</span>
+          <span class="summary-icon" aria-hidden="true"><svg class="icon"><use href="#icon-loader"></use></svg></span>
+        </div>
+        <strong class="summary-value" id="summary-progress">—</strong>
+        <p class="summary-note">Sedang berjalan</p>
+      </article>
+      <article class="summary-card summary-done">
+        <div class="summary-top">
+          <span class="summary-label">Selesai</span>
+          <span class="summary-icon" aria-hidden="true"><svg class="icon"><use href="#icon-check"></use></svg></span>
+        </div>
+        <strong class="summary-value" id="summary-done">—</strong>
+        <p class="summary-note">Sudah diselesaikan</p>
+      </article>
+    </section>
+
+    <section class="workspace" id="workspace" aria-labelledby="workspace-title">
+      <div class="workspace-head">
+        <div>
+          <p class="eyebrow">Ruang kerja</p>
+          <h2 id="workspace-title">Daftar tugas</h2>
+          <p class="result-summary" id="result-summary" aria-live="polite">Memuat tugas…</p>
+        </div>
+        <button class="text-button" id="reset-filters" type="button" hidden>
+          <svg class="icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+          Reset filter
+        </button>
+      </div>
+
+      <form class="filters" id="filters-form" role="search" aria-label="Cari dan filter tugas">
+        <div class="field field-search">
+          <label for="search-input">Cari judul</label>
+          <div class="search-control">
+            <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+            <input id="search-input" name="q" type="search" placeholder="Contoh: laporan bulanan" autocomplete="off" maxlength="100">
+          </div>
+        </div>
+        <div class="field">
+          <label for="status-filter">Status</label>
+          <select id="status-filter" name="status">
+            <option value="">Semua status</option>
+            <option value="todo">Belum mulai</option>
+            <option value="in_progress">Dikerjakan</option>
+            <option value="done">Selesai</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="priority-filter">Prioritas</label>
+          <select id="priority-filter" name="priority">
+            <option value="">Semua prioritas</option>
+            <option value="high">Tinggi</option>
+            <option value="medium">Sedang</option>
+            <option value="low">Rendah</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="sort-select">Urutkan</label>
+          <select id="sort-select" name="sort">
+            <option value="created_at:desc">Terbaru dibuat</option>
+            <option value="created_at:asc">Terlama dibuat</option>
+            <option value="priority:desc">Prioritas tertinggi</option>
+            <option value="priority:asc">Prioritas terendah</option>
+            <option value="due_date:asc">Tenggat terdekat</option>
+            <option value="due_date:desc">Tenggat terjauh</option>
+          </select>
+        </div>
+      </form>
+
+      <div class="task-panel" id="task-panel">
+        <div class="state-panel loading-panel" id="loading-state" aria-live="polite">
+          <div class="loading-heading">
+            <span class="spinner" aria-hidden="true"><svg class="icon"><use href="#icon-loader"></use></svg></span>
+            <span>Memuat tugas dari server…</span>
+          </div>
+          <div class="skeleton-grid" aria-hidden="true">
+            <div class="skeleton-card"><span></span><span></span><span></span></div>
+            <div class="skeleton-card"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+
+        <div class="state-panel error-panel" id="error-state" role="alert" hidden>
+          <span class="state-icon" aria-hidden="true"><svg class="icon"><use href="#icon-alert"></use></svg></span>
+          <div class="state-copy">
+            <h3>Tidak dapat memuat tugas</h3>
+            <p id="error-message">Server tidak merespons. Periksa koneksi lalu coba lagi.</p>
+          </div>
+          <button class="button button-secondary" id="retry-button" type="button">
+            <svg class="icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+            Coba lagi
+          </button>
+        </div>
+
+        <div class="state-panel empty-panel" id="empty-state" hidden>
+          <span class="state-icon" aria-hidden="true"><svg class="icon"><use href="#icon-inbox"></use></svg></span>
+          <div class="state-copy">
+            <h3 id="empty-title">Belum ada tugas</h3>
+            <p id="empty-copy">Tambahkan tugas pertama untuk mulai mengatur pekerjaan.</p>
+          </div>
+          <div class="empty-actions">
+            <button class="button button-primary" id="empty-add-button" type="button">
+              <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+              Tambah tugas
+            </button>
+            <button class="button button-secondary" id="empty-reset-button" type="button" hidden>
+              Reset filter
+            </button>
+          </div>
+        </div>
+
+        <div class="task-grid" id="task-list" role="list" hidden></div>
+
+        <nav class="pagination" id="pagination" aria-label="Navigasi halaman tugas" hidden>
+          <p class="pagination-summary" id="pagination-summary"></p>
+          <div class="pagination-controls">
+            <button class="page-button page-arrow" id="pagination-prev" type="button" aria-label="Halaman sebelumnya">
+              <svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
+            </button>
+            <div class="page-numbers" id="page-buttons"></div>
+            <button class="page-button page-arrow" id="pagination-next" type="button" aria-label="Halaman berikutnya">
+              <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p><strong>TaskFlow API</strong> — frontend vanilla JavaScript, Express, dan SQLite.</p>
+      <p class="footer-note">Data tersimpan di server lokal. Tidak ada akun, sinkronisasi cloud, atau autentikasi.</p>
+    </div>
+  </footer>
+
+  <dialog class="modal" id="task-dialog" aria-labelledby="task-dialog-title">
+    <form class="modal-card" id="task-form" novalidate>
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow" id="task-dialog-eyebrow">Tugas baru</p>
+          <h2 id="task-dialog-title">Tambah tugas</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="task-dialog" aria-label="Tutup formulir tugas">
+          <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="field">
+          <label for="task-title">Judul <span class="required-mark" aria-hidden="true">*</span></label>
+          <input id="task-title" name="title" type="text" maxlength="200" required autocomplete="off" aria-describedby="task-title-error">
+          <p class="field-error" id="task-title-error" data-error-for="title"></p>
+        </div>
+
+        <div class="field">
+          <label for="task-description">Deskripsi <span class="optional">(opsional)</span></label>
+          <textarea id="task-description" name="description" rows="4" maxlength="2000" aria-describedby="task-description-hint task-description-error"></textarea>
+          <div class="field-meta">
+            <span id="task-description-hint">Konteks singkat agar tugas mudah dikerjakan.</span>
+            <span id="description-count">0/2000</span>
+          </div>
+          <p class="field-error" id="task-description-error" data-error-for="description"></p>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="task-status">Status</label>
+            <select id="task-status" name="status" aria-describedby="task-status-error">
+              <option value="todo">Belum mulai</option>
+              <option value="in_progress">Dikerjakan</option>
+              <option value="done">Selesai</option>
+            </select>
+            <p class="field-error" id="task-status-error" data-error-for="status"></p>
+          </div>
+          <div class="field">
+            <label for="task-priority">Prioritas</label>
+            <select id="task-priority" name="priority" aria-describedby="task-priority-error">
+              <option value="low">Rendah</option>
+              <option value="medium" selected>Sedang</option>
+              <option value="high">Tinggi</option>
+            </select>
+            <p class="field-error" id="task-priority-error" data-error-for="priority"></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="task-due-date">Tenggat <span class="optional">(opsional)</span></label>
+          <input id="task-due-date" name="due_date" type="date" min="1900-01-01" max="2200-12-31" aria-describedby="task-due-date-error">
+          <p class="field-hint">Disimpan sebagai tanggal kalender lokal, bukan timestamp.</p>
+          <p class="field-error" id="task-due-date-error" data-error-for="due_date"></p>
+        </div>
+
+        <p class="form-error" id="task-form-error" data-form-error role="alert" tabindex="-1" hidden></p>
+      </div>
+
+      <div class="modal-actions">
+        <button class="button button-secondary" type="button" data-close-dialog="task-dialog">Batal</button>
+        <button class="button button-primary" id="task-submit" type="submit">Simpan tugas</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal modal-small" id="delete-dialog" aria-labelledby="delete-title" aria-describedby="delete-copy">
+    <div class="modal-card">
+      <div class="delete-symbol" aria-hidden="true">
+        <svg class="icon"><use href="#icon-trash"></use></svg>
+      </div>
+      <h2 id="delete-title">Hapus tugas?</h2>
+      <p class="delete-copy" id="delete-copy">Tugas ini akan dihapus permanen dari database.</p>
+      <p class="form-error" id="delete-error" role="alert" hidden></p>
+      <div class="modal-actions">
+        <button class="button button-secondary" id="delete-cancel" type="button">Batal</button>
+        <button class="button button-danger" id="delete-confirm" type="button">Hapus tugas</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden>
+    <span class="toast-icon" aria-hidden="true">
+      <svg class="icon"><use id="toast-icon-use" href="#icon-check"></use></svg>
+    </span>
+    <p id="toast-message"></p>
+    <button class="icon-button toast-close" id="toast-close" type="button" aria-label="Tutup notifikasi">
+      <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+    </button>
+  </div>
+
+  <noscript>
+    <div class="noscript">TaskFlow membutuhkan JavaScript untuk terhubung ke API.</div>
+  </noscript>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

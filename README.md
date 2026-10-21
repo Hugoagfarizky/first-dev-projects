@@ -16,6 +16,7 @@ Hari pertama belajar vibecoding dan GitHub
 | [Proyek 06 — Kanban Board](proyek-06-kanban-board/) | Papan tugas tiga kolom dengan CRUD, drag-and-drop, filter, statistik, dan penyimpanan lokal | HTML, CSS, JavaScript, localStorage |
 | [Proyek 07 — Ritme Habit Tracker](proyek-07-habit-tracker/) | Pelacak kebiasaan harian dan mingguan dengan dashboard, kalender, streak, dan statistik | HTML, CSS, JavaScript, localStorage |
 | [Proyek 08 — Neraca](proyek-08-personal-finance/) | Dashboard keuangan pribadi dengan transaksi, anggaran bulanan, grafik arus kas, dan ekspor CSV | HTML, CSS, JavaScript, localStorage, SVG |
+| [Proyek 09 — TaskFlow API](proyek-09-taskflow-api/) | Aplikasi manajemen tugas dengan REST API, database SQLite, pencarian, filter, pengurutan, dan pagination | Node.js, Express, SQLite, HTML, CSS, JavaScript |
 
 ## Proyek 02 — TaskFlow
 
