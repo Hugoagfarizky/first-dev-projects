@@ -576,6 +576,7 @@ svg {
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
 }
 
 .hero-actions {
@@ -911,6 +912,7 @@ svg {
   overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .movie-card-title-button {
@@ -1806,6 +1808,7 @@ svg {
   .hero-overview {
     font-size: 0.88rem;
     -webkit-line-clamp: 4;
+    line-clamp: 4;
   }
 
   .hero-actions .button {
