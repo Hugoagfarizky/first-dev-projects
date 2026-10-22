@@ -63,6 +63,12 @@ Unit yang diminta dan ditampilkan:
 
 Tidak ada API key. Aplikasi hanya mengirim permintaan ke kedua host Open-Meteo di atas dan tidak memakai CDN, font eksternal, layanan analitik, atau dependensi frontend tambahan.
 
+## Prasyarat
+
+- Browser modern yang mendukung JavaScript dan `fetch`.
+- Koneksi internet untuk mengakses Open-Meteo.
+- Tidak ada API key, dependency, atau proses build.
+
 ## Cara Menjalankan
 
 Aplikasi tidak memerlukan instalasi, build, atau API key.
@@ -79,7 +85,7 @@ Aplikasi tidak memerlukan instalasi, build, atau API key.
 
 Static server lokal direkomendasikan, terutama untuk menguji geolokasi. Beberapa browser membatasi geolokasi pada halaman `file://`, meskipun halaman tersebut dapat dibuka langsung. Aplikasi tetap dapat digunakan lewat pencarian kota tanpa geolokasi.
 
-## Struktur File
+## Struktur Direktori
 
 ```text
 proyek-04-weather-dashboard/
@@ -99,7 +105,24 @@ Tidak ada gambar atau aset eksternal. Ikon cuaca disimpan sebagai sprite SVG di 
 4. Respons divalidasi sebelum dirender. Jika respons tidak lengkap, kosong, atau gagal, aplikasi menampilkan error dan tidak menampilkan data pengganti.
 5. Prakiraan per jam dimulai dari jam pengamatan saat ini. Prakiraan harian menampilkan maksimal tujuh hari.
 
-## Batasan dan Izin Geolokasi
+## Pengujian
+
+Repository ini tidak menyertakan suite pengujian otomatis. Pemeriksaan manual yang disarankan:
+
+1. Buka aplikasi dan pastikan cuaca Jakarta tampil sebagai lokasi awal.
+2. Cari kota, pilih hasil geocoding, lalu periksa prakiraan 24 jam dan 7 hari.
+3. Coba tombol **Gunakan lokasi saya** dengan izin diberikan, ditolak, dan timeout.
+4. Putuskan koneksi atau blokir request untuk memeriksa error state dan tombol coba lagi.
+5. Uji tombol **Kembali ke awal** serta layout desktop dan ponsel.
+6. Periksa navigasi keyboard dan `prefers-reduced-motion`.
+
+Pembaruan dokumentasi ini tidak menjalankan pengujian browser atau integrasi API live.
+
+## Sumber Data
+
+Data cuaca dan geocoding berasal dari [Open-Meteo](https://open-meteo.com/), melalui [Geocoding API](https://open-meteo.com/en/docs/geocoding-api) dan [Forecast API](https://open-meteo.com/en/docs). Aplikasi tidak memerlukan API key dan tidak menyimpan riwayat cuaca atau lokasi pengguna.
+
+## Batasan dan Catatan
 
 - Aplikasi memerlukan koneksi internet untuk mengakses Open-Meteo.
 - Geolokasi memerlukan izin browser dan biasanya hanya tersedia pada secure context (`https://` atau `localhost`). Jika akses ditolak, pengguna dapat mencari kota secara manual.

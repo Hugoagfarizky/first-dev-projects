@@ -29,7 +29,7 @@ Kanban Board adalah papan kerja tiga kolom untuk mengelola tugas pribadi sepenuh
 
 Tidak ada framework, build tool, backend, API, layanan berbayar, dependensi baru, atau API key.
 
-## Struktur Proyek
+## Struktur Direktori
 
 ```text
 proyek-06-kanban-board/
@@ -42,6 +42,11 @@ proyek-06-kanban-board/
     ├── tasks.js        # Model tugas, validasi, urutan, filter, dan statistik
     └── ui.js           # Render kartu, kolom, statistik, dialog, dan toast
 ```
+
+## Prasyarat
+
+- Browser modern yang mendukung ES Modules, `<dialog>`, dan fitur CSS yang digunakan.
+- Server HTTP lokal; tidak ada instalasi paket, build step, API key, atau konfigurasi tambahan.
 
 ## Menjalankan
 
@@ -71,7 +76,7 @@ Membuka `index.html` langsung melalui `file://` tidak disarankan karena browser 
 6. Status juga dapat diubah langsung dari pilihan **Status** di dialog detail. Ini adalah alternatif untuk keyboard dan perangkat sentuh.
 7. Tekan `Escape` untuk menutup dialog atau menu. Fokus dikembalikan ke pemicu setelah dialog ditutup.
 
-## Penyimpanan Lokal
+## Data dan Penyimpanan
 
 Data disimpan dengan key:
 
@@ -108,6 +113,8 @@ location.reload();
 
 ## Pengujian
 
+Repository ini tidak menyertakan test runner, skrip unit test, harness pengujian browser, log, atau laporan hasil. Klaim unit test dan pengujian browser pada versi sebelumnya tidak dapat diverifikasi dari repository; karena itu angka hasil tidak dicantumkan. Checklist berikut dapat digunakan untuk verifikasi manual.
+
 ### Checklist skenario
 
 | No | Skenario | Hasil yang diharapkan |
@@ -141,15 +148,9 @@ location.reload();
 | 27 | Viewport 1440, 1024, 820, dan 390 px | Tidak ada overflow horizontal halaman; dialog mobile berada di viewport |
 | 28 | Konsol browser | Tidak ada error atau exception JavaScript |
 
-### Hasil verifikasi implementasi
+### Catatan pengujian
 
-- `node --check` pada `tasks.js`, `storage.js`, `ui.js`, dan `app.js`: lulus.
-- 8 unit test model tugas (validasi, ID, urutan, edit, drag, filter, statistik, normalisasi, data contoh): lulus.
-- 14 skenario browser otomatis dengan 184 pemeriksaan di Chrome headless: lulus.
-- Pemeriksaan mencakup CRUD, konfirmasi, dialog, fokus, pencarian, kombinasi filter, statistik, drag-and-drop, pembatalan drag, persistensi, papan kosong, data rusak, data parsial, kuota, akses penyimpanan, dan viewport responsif.
-- Tidak ada error console maupun exception JavaScript selama pengujian.
-- Viewport yang diuji: 1440×1000, 1024×900, 820×900, dan 390×844.
-- Harness pengujian browser dijalankan dari luar repositori; tidak ada dependensi pengujian yang ditambahkan ke proyek.
+Pengujian tidak dijalankan ulang pada pembaruan dokumentasi ini; tidak ada hasil pengujian yang diklaim. Gunakan checklist di atas untuk memverifikasi perilaku aplikasi secara langsung di browser.
 
 ## Batasan
 
@@ -162,4 +163,4 @@ location.reload();
 - Label berupa teks bebas; belum ada pengelolaan daftar label terpusat.
 - Tenggat tanggal tidak menghasilkan pengingat atau notifikasi, dan dihitung sebagai tanggal lokal.
 - Tampilan dan dialog mengandalkan browser modern yang mendukung `<dialog>`, ES Modules, dan fitur CSS modern. Chrome, Edge, Firefox, dan Safari versi terbaru direkomendasikan.
-- Pengujian aksesibilitas mencakup keyboard, fokus, label ARIA, dan kontras visual dasar, tetapi belum merupakan audit formal dengan pembaca layar.
+- Aksesibilitas mencakup keyboard, fokus, label ARIA, dan kontras visual dasar, tetapi belum merupakan audit formal dengan pembaca layar.

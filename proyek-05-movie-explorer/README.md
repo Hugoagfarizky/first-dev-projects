@@ -1,4 +1,4 @@
-# Movie Explorer
+# Proyek 05 — Movie Explorer
 
 Movie Explorer adalah aplikasi web untuk mencari, menjelajahi, dan menyimpan film favorit. Antarmuka dibuat dengan nuansa sinematik gelap, dengan poster film sebagai elemen visual utama. Seluruh data film berasal dari TMDB API; aplikasi tidak menyimpan daftar film palsu sebagai data bawaan.
 
@@ -28,7 +28,7 @@ Movie Explorer adalah aplikasi web untuk mencari, menjelajahi, dan menyimpan fil
 - `localStorage` untuk favorit
 - Tanpa dependency runtime atau build step
 
-## Struktur Folder
+## Struktur Direktori
 
 ```text
 proyek-05-movie-explorer/
@@ -47,6 +47,14 @@ proyek-05-movie-explorer/
     ├── favorites.js       # penyimpanan favorit dan sinkronisasi
     └── utils.js           # helper format, gambar, filter, sorting, debounce
 ```
+
+## Prasyarat
+
+- Browser modern yang mendukung ES Modules.
+- Koneksi internet untuk mengakses TMDB.
+- API key TMDB v3 untuk data live.
+- Static HTTP server lokal; tidak ada dependency runtime, build step, atau proses instalasi paket.
+- Python, ekstensi Live Server, atau static server lain untuk menjalankan aplikasi.
 
 ## Mendapatkan Akses TMDB API
 
@@ -125,7 +133,7 @@ Semua request melewati `js/api.js`. Modul tersebut menangani:
 
 Untuk pencarian, filter genre dan pengurutan diterapkan pada hasil yang sudah dimuat di browser karena endpoint pencarian TMDB tidak menerima parameter `with_genres`/`sort_by` seperti endpoint discover. Pada tampilan katalog tanpa kata kunci, filter dan pengurutan dikirim ke endpoint `/discover/movie`. Saat mengurutkan berdasarkan rating, aplikasi memakai `vote_count.gte=100` agar hasil tidak didominasi film dengan sedikit suara.
 
-## Penyimpanan Favorit
+## Data dan Penyimpanan
 
 Favorit disimpan di `localStorage` browser dengan key:
 
@@ -137,7 +145,7 @@ Data yang disimpan adalah ringkasan film (ID, judul, poster, tahun, rating, genr
 
 Favorit bersifat lokal untuk browser dan perangkat tersebut. Menghapus data situs di browser juga akan menghapus daftar favorit. Perubahan favorit dari tab lain disinkronkan melalui event `storage`.
 
-## Batasan Keamanan API Key
+## Batasan dan Keamanan API Key
 
 Ini adalah aplikasi frontend tanpa backend. API key yang dipakai di browser **selalu dapat dilihat** oleh pengguna melalui source code, DevTools, atau request network. Menaruhnya di `config.js` dan menambahkan file itu ke `.gitignore` hanya mencegah key ikut ter-commit; cara ini **bukan** mekanisme pengamanan produksi.
 
@@ -145,15 +153,15 @@ Untuk penggunaan produksi, opsi yang lebih aman adalah menambahkan backend/proxy
 
 ## Pengujian
 
-Pengujian pengembangan yang dilakukan:
+Repository ini tidak menyertakan suite pengujian otomatis atau skrip pengujian khusus. Tidak ada log atau laporan hasil untuk pemeriksaan sintaks, data mock, dan browser yang tercatat pada versi sebelumnya, sehingga catatan tersebut tidak dapat diverifikasi dari repository. Pemeriksaan yang dapat dilakukan:
 
-- Pemeriksaan sintaks semua modul JavaScript.
-- Pemeriksaan struktur file, endpoint, konfigurasi, atribusi, dan tidak adanya kredensial.
-- Pengujian parser/normalisasi respons dengan data mock.
-- Pengujian browser menggunakan respons API mock untuk beranda, pencarian, filter, detail, favorit, poster kosong, Load More, dan error state.
-- Pemeriksaan tampilan desktop dan mobile serta console error browser.
+- Memeriksa sintaks semua modul JavaScript.
+- Memeriksa struktur file, endpoint, konfigurasi, atribusi, dan tidak adanya kredensial di file yang di-commit.
+- Menguji parser/normalisasi respons dengan data mock.
+- Menguji tampilan beranda, pencarian, filter, detail, favorit, poster kosong, Load More, dan error state.
+- Memeriksa tampilan desktop dan ponsel serta console browser.
 
-Pengujian integrasi TMDB live hanya dapat dilakukan setelah `config.js` diisi dengan API key yang valid. Tanpa key, aplikasi tidak mengirim request pencarian ke TMDB dan status integrasi live tidak diklaim berhasil.
+Pembaruan dokumentasi ini tidak menjalankan pengujian browser atau integrasi TMDB live. Pengujian integrasi live hanya dapat dilakukan setelah `config.js` diisi dengan API key yang valid. Tanpa key, aplikasi tidak mengirim request pencarian ke TMDB dan status integrasi live tidak diklaim berhasil.
 
 Untuk pengujian manual setelah key tersedia:
 

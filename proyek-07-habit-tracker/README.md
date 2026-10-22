@@ -1,4 +1,4 @@
-# Ritme — Habit Tracker
+# Proyek 07 — Ritme Habit Tracker
 
 Ritme adalah pelacak kebiasaan yang berjalan sepenuhnya di browser. Semua data disimpan secara lokal; tidak ada akun, backend, API key, atau data contoh yang dikirim ke server.
 
@@ -15,6 +15,11 @@ Ritme adalah pelacak kebiasaan yang berjalan sepenuhnya di browser. Semua data d
 - **Antarmuka Indonesia yang responsif dan aksesibel**: navigasi keyboard, dialog dengan pengembalian fokus, label ARIA, serta dukungan `prefers-reduced-motion`.
 
 Aplikasi dimulai tanpa data contoh. Kebiasaan pertama dibuat melalui tombol **Kebiasaan baru**.
+
+## Prasyarat
+
+- Browser modern yang mendukung ES Modules, `<dialog>`, dan `localStorage`.
+- Server HTTP lokal; tidak ada instalasi paket, build step, API key, atau konfigurasi tambahan.
 
 ## Cara Menjalankan
 
@@ -45,7 +50,7 @@ Tidak ada proses build, instalasi paket, API key, atau konfigurasi tambahan.
 
 Mengarsipkan kebiasaan menghentikan jadwal dan check-in baru, tetapi mempertahankan seluruh riwayat. Kebiasaan arsip dapat diaktifkan kembali. Menghapus kebiasaan bersifat permanen dan ikut menghapus check-in milik kebiasaan tersebut.
 
-## Penyimpanan Lokal
+## Data dan Penyimpanan
 
 Data disimpan di `localStorage` dengan kunci `habitTracker.data.v1` dan format:
 
@@ -82,7 +87,7 @@ Data disimpan di `localStorage` dengan kunci `habitTracker.data.v1` dan format:
 - **Data parsial**: rekaman valid tetap ditampilkan dengan peringatan; rekaman tidak valid dilewati. Perubahan berikutnya menyimpan data valid yang terlihat.
 - **Penyimpanan tidak tersedia atau kuota penuh**: perubahan tetap berada di memori selama tab terbuka, dan aplikasi memberi tahu bahwa data belum tersimpan.
 
-## Struktur Berkas
+## Struktur Direktori
 
 ```text
 proyek-07-habit-tracker/
@@ -103,3 +108,26 @@ proyek-07-habit-tracker/
 ## Teknologi
 
 HTML5, CSS3, dan vanilla JavaScript (ES Modules) dengan `localStorage`. Tanpa framework, backend, API key, atau dependensi baru.
+
+## Pengujian
+
+Repository ini tidak menyertakan suite pengujian otomatis. Pemeriksaan manual yang disarankan:
+
+1. Buat kebiasaan harian dan mingguan, lalu periksa jadwal serta kategori.
+2. Lakukan check-in dari dashboard dan kalender; pastikan tanggal yang tidak dijadwalkan tidak dapat dicentang.
+3. Periksa streak, konsistensi tujuh dan tiga puluh hari, serta ringkasan progres.
+4. Arsipkan kebiasaan, aktifkan kembali, lalu hapus dengan konfirmasi.
+5. Cari dan filter berdasarkan nama, kategori, serta status.
+6. Muat ulang halaman dan pastikan data tetap tersimpan.
+7. Uji navigasi keyboard, dialog, dan `prefers-reduced-motion`.
+
+Pembaruan dokumentasi ini tidak menjalankan pengujian browser.
+
+## Batasan
+
+- Data hanya tersimpan di browser dan perangkat yang sama; tidak ada sinkronisasi, akun, atau cadangan cloud.
+- Menghapus data situs atau memakai mode privat dapat menghilangkan data.
+- Tidak ada pengingat, notifikasi, impor, atau ekspor data.
+- Aplikasi dimulai tanpa data contoh; kebiasaan pertama harus dibuat secara manual.
+- Penghapusan kebiasaan bersifat permanen dan ikut menghapus riwayat check-in terkait.
+- Tampilan memerlukan browser modern dan server HTTP lokal karena memakai ES Modules.

@@ -1,4 +1,4 @@
-# Expense Tracker
+# Proyek 03 — Expense Tracker
 
 Expense Tracker adalah aplikasi pencatatan pemasukan dan pengeluaran pribadi yang berjalan sepenuhnya di browser. Tujuannya adalah memberi gambaran arus kas yang sederhana dan mudah dipahami: berapa uang masuk, ke mana uang keluar, dan bagaimana saldo bersih saat ini.
 
@@ -29,7 +29,7 @@ Aplikasi ini dibuat sebagai proyek latihan vibecoding dengan HTML, CSS, dan Java
 - Format mata uang `id-ID` / `IDR`
 - SVG untuk grafik kategori
 
-## Struktur File
+## Struktur Direktori
 
 ```text
 proyek-03-expense-tracker/
@@ -38,6 +38,10 @@ proyek-03-expense-tracker/
 ├── script.js    # Data, validasi, perhitungan, filter, grafik, penyimpanan
 └── README.md
 ```
+
+## Prasyarat
+
+Browser modern yang mendukung JavaScript dan `localStorage`. Tidak ada instalasi, dependency, atau proses build.
 
 ## Cara Menjalankan
 
@@ -48,7 +52,7 @@ Tidak ada instalasi, dependency, atau proses build.
 
 JavaScript harus diizinkan agar aplikasi dapat mencatat dan menyimpan transaksi. Setelah file tersedia secara lokal, aplikasi tidak memerlukan koneksi jaringan dan tidak memerlukan server backend.
 
-## Cara Kerja localStorage
+## Data dan Penyimpanan
 
 - Transaksi disimpan sebagai array JSON pada key **`expenseTracker.transactions.v1`**.
 - Jika key belum pernah ada, aplikasi membuat delapan transaksi contoh dan menyimpannya.
@@ -58,6 +62,20 @@ JavaScript harus diizinkan agar aplikasi dapat mencatat dan menyimpan transaksi.
 - Jika `localStorage` tidak dapat dibaca sama sekali, aplikasi tetap berjalan di memori tetapi sengaja tidak menulis data baru pada sesi tersebut agar data lama tidak tertimpa. Muat ulang halaman untuk mencoba membaca kembali.
 - Jika `localStorage` tidak tersedia atau penuh, aplikasi tetap dapat digunakan di tab saat ini, tetapi perubahan bisa hilang saat halaman dimuat ulang.
 - Tombol **Hapus Data Contoh** hanya menghapus transaksi yang masih ditandai sebagai contoh. Transaksi contoh yang sudah Anda ubah dianggap transaksi pengguna.
+
+## Pengujian
+
+Repository ini tidak menyertakan suite pengujian otomatis. Pemeriksaan manual yang disarankan:
+
+1. Tambah pemasukan dan pengeluaran dengan kategori, tanggal, dan deskripsi.
+2. Coba nominal kosong, nol, negatif, bukan angka, dan melebihi batas.
+3. Ubah lalu hapus satu transaksi melalui dialog konfirmasi.
+4. Kombinasikan pencarian, filter jenis, kategori, dan rentang tanggal.
+5. Periksa grafik donat, transaksi terbaru, dan ringkasan saldo.
+6. Muat ulang halaman dan pastikan data tetap tersimpan.
+7. Uji layout pada lebar desktop dan ponsel.
+
+Pembaruan dokumentasi ini tidak menjalankan pengujian browser.
 
 ## Batasan
 

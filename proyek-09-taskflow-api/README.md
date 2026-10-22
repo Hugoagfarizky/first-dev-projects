@@ -1,4 +1,4 @@
-# TaskFlow API
+# Proyek 09 — TaskFlow API
 
 TaskFlow API adalah aplikasi manajemen tugas dengan frontend vanilla JavaScript yang terhubung langsung ke REST API Express dan database SQLite. Semua tugas dibaca dan ditulis melalui API; frontend tidak memakai `localStorage` sebagai sumber data atau fallback.
 
@@ -44,22 +44,22 @@ Proyek ini menunjukkan alur aplikasi full-stack lokal yang nyata, bukan simulasi
 | Komponen | Versi |
 | --- | --- |
 | Node.js minimum | `>=22.13.0` |
-| Node.js yang diuji | `24.21.0` |
-| npm yang diuji | `11.19.0` |
+| Node.js yang direkomendasikan | 24 LTS |
+| npm | Versi bawaan Node.js |
 | Express | `5.3.0` |
 | better-sqlite3 | `13.0.3` |
 | SQLite (melalui better-sqlite3) | `3.53.4` |
 | Frontend | HTML5, CSS3, vanilla JavaScript ES Modules |
 | Pengujian | Node.js built-in test runner |
-| Browser yang diuji | Google Chrome `155.0.8059.85` |
+| Browser target | Chrome, Edge, Firefox, dan Safari modern |
 
 ### Mengapa better-sqlite3
 
 `better-sqlite3` dipilih karena menyediakan API SQLite sinkron yang sederhana, prepared statements, transaksi, dan dukungan WAL tanpa server database terpisah. Versi `13.0.3` mensyaratkan Node.js `>=22`, sesuai dengan Node LTS yang digunakan.
 
-Ini adalah native addon. Instalasi normalnya memakai binary prebuilt untuk platform dan versi Node yang didukung. Jika binary tidak tersedia untuk lingkungan tertentu, npm mungkin membutuhkan compiler C++ dan Python. Pada lingkungan pengujian Windows ini, `npm install` berhasil tanpa langkah build tambahan. `npm audit` melaporkan `0` vulnerability saat proyek dibuat.
+Ini adalah native addon. Instalasi normalnya memakai binary prebuilt untuk platform dan versi Node yang didukung. Jika binary tidak tersedia untuk lingkungan tertentu, npm mungkin membutuhkan compiler C++ dan Python. Jalankan `npm audit` secara berkala untuk memeriksa kerentanan dependency.
 
-## Struktur proyek
+## Struktur Direktori
 
 ```text
 proyek-09-taskflow-api/
@@ -103,11 +103,11 @@ proyek-09-taskflow-api/
 
 Prasyarat:
 
-- Node.js `22.13.0` atau lebih baru. Node.js 24 LTS direkomendasikan dan digunakan saat pengujian.
+- Node.js `22.13.0` atau lebih baru. Node.js 24 LTS direkomendasikan.
 - npm.
 - Build tools C++ hanya jika binary prebuilt `better-sqlite3` tidak tersedia untuk platform tersebut.
 
-Dari folder proyek:
+Dari root repository:
 
 ```bash
 cd proyek-09-taskflow-api
@@ -451,15 +451,11 @@ npm run test:api
 
 Pengujian memakai Node.js built-in test runner dan database SQLite sementara di direktori temp OS. Database pengguna di `data/` tidak disentuh.
 
-### Hasil pengujian yang dijalankan
+### Cakupan pengujian
 
-| Suite | Jumlah | Hasil |
-| --- | --- | --- |
-| Unit validation (`tests/tasks.test.js`) | 12 | 12 lulus, 0 gagal |
-| API/integration dengan SQLite nyata (`tests/api.test.js`) | 22 | 22 lulus, 0 gagal |
-| Total otomatis | 34 | 34 lulus, 0 gagal |
+Suite otomatis tersedia di `tests/tasks.test.js` dan `tests/api.test.js`. Berdasarkan deklarasi di file test, `tasks.test.js` berisi 12 test dan `api.test.js` berisi 22 test, dengan total 34 test. Jumlah ini dapat diverifikasi secara statis dari source test, tetapi status lulus tidak dapat diverifikasi tanpa log atau laporan eksekusi.
 
-Cakupan otomatis meliputi:
+Cakupannya meliputi:
 
 - Normalisasi judul, batas panjang, status, prioritas, tanggal kalender, query, ID, field asing, dan payload PATCH kosong.
 - Health endpoint, CRUD lengkap, `201`, `204`, `400`, `404`, `413`, dan `500`.
@@ -471,24 +467,7 @@ Cakupan otomatis meliputi:
 - Konsistensi envelope error dan tidak bocornya stack trace atau SQL.
 - Penyajian hanya dari `public/`, bukan source server atau file database.
 
-### Pengujian browser
-
-Pengujian browser dijalankan dengan Google Chrome `155.0.8059.85` melalui Chrome DevTools Protocol terhadap server Express dan SQLite nyata. Harness browser bersifat sementara dan tidak disertakan dalam repository ini. Hasil pengujian: **116 pemeriksaan lulus, 0 gagal**.
-
-Cakupan browser:
-
-- Tambah, edit, ubah status, hapus dengan konfirmasi, dan pembatalan hapus.
-- Pencarian, filter status/prioritas, kombinasi filter, dan reset.
-- Pengurutan prioritas naik/turun dan pagination dua halaman.
-- Reload halaman dan persistensi data.
-- Server dimatikan, error state, kegagalan simpan saat offline, restart server, dan pemulihan lewat tombol coba lagi.
-- Fokus dialog, Escape, Tab di dalam modal, dan pengembalian fokus.
-- Validasi judul kosong serta pesan error form.
-- Loading state dengan latensi jaringan buatan.
-- Responsivitas 1440, 1024, 820, 390, dan 320 px tanpa horizontal overflow.
-- `prefers-reduced-motion`.
-- Judul berisi HTML/`<img onerror>` dirender sebagai teks dan tidak mengeksekusi script.
-- Tidak ada console error, uncaught exception, HTTP error tak terduga, atau request gagal tak terduga.
+Pembaruan dokumentasi ini tidak menjalankan `npm test`; tidak ada log atau laporan hasil eksekusi yang disertakan, sehingga status lulus tidak diklaim. Harness pengujian browser juga tidak disertakan, dan hasil pengujian browser sebelumnya tidak dapat diverifikasi dari repository. Gunakan checklist manual di akhir dokumen untuk verifikasi di browser.
 
 ## Penanganan error
 

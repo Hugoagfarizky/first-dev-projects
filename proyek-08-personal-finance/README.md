@@ -1,4 +1,4 @@
-# Neraca — Personal Finance Dashboard
+# Proyek 08 — Neraca Personal Finance Dashboard
 
 Neraca adalah dashboard keuangan pribadi yang berjalan sepenuhnya di browser. Aplikasi mencatat pemasukan dan pengeluaran, menampilkan ringkasan bulanan, membandingkan bulan berjalan dengan bulan sebelumnya, memvisualisasikan arus kas, serta membantu menyusun anggaran belanja per kategori.
 
@@ -28,11 +28,10 @@ Semua data disimpan di `localStorage` pada browser yang dipakai. Tidak ada akun,
 - Vanilla JavaScript dengan ES Modules
 - `localStorage` untuk persistensi
 - SVG inline untuk ikon dan favicon
-- Node.js bawaan hanya untuk pemeriksaan sintaks dan pengujian logika di luar aplikasi
 
 Tidak ada framework, build tool, backend, database eksternal, dependensi runtime, layanan berbayar, atau API key.
 
-## Struktur Proyek
+## Struktur Direktori
 
 ```text
 proyek-08-personal-finance/
@@ -53,6 +52,12 @@ proyek-08-personal-finance/
 ```
 
 Logika bisnis dipisahkan dari DOM. Modul transaksi, anggaran, analitik, penyimpanan, dan CSV dapat diuji tanpa browser; `ui.js` dan `app.js` menangani interaksi serta tampilan.
+
+## Prasyarat
+
+- Browser modern yang mendukung ES Modules, `<dialog>`, `Intl`, dan fitur CSS yang digunakan.
+- Server HTTP lokal atau ekstensi Live Server.
+- Tidak ada instalasi paket, build step, API key, atau konfigurasi tambahan.
 
 ## Menjalankan
 
@@ -189,7 +194,7 @@ Nilai cadangan berisi `savedAt` dan string `raw` asli. Data mentah juga dapat di
 - Bila tidak ada transaksi pada hasil filter, aplikasi menampilkan pesan dan **tidak membuat berkas kosong**.
 - CSV hanya untuk ekspor. Aplikasi belum menyediakan impor CSV.
 
-## Batasan `localStorage`
+## Batasan
 
 - Data hanya tersimpan di browser dan profil pengguna saat ini. Data tidak tersinkron antar-tab, perangkat, browser, atau mode penyamaran.
 - Menghapus data situs, membersihkan penyimpanan browser, atau memakai mode privat dapat menghilangkan data. Tidak ada cadangan cloud otomatis.
@@ -202,7 +207,11 @@ Nilai cadangan berisi `savedAt` dan string `raw` asli. Data mentah juga dapat di
 - Belum ada pengelolaan kategori khusus; daftar kategori bersifat tetap.
 - Tampilan memerlukan browser modern yang mendukung ES Modules, `<dialog>`, `Intl`, dan fitur CSS modern.
 
-## Checklist Pengujian Manual
+## Pengujian
+
+Repository ini tidak menyertakan test runner, skrip unit test, harness pengujian browser, log, atau laporan hasil. Klaim unit test dan pengujian browser pada versi sebelumnya tidak dapat diverifikasi dari repository; karena itu angka hasil tidak dicantumkan. Checklist berikut dapat digunakan untuk verifikasi manual.
+
+### Checklist Pengujian Manual
 
 | No | Skenario | Hasil yang diharapkan |
 | --- | --- | --- |
@@ -247,14 +256,9 @@ Nilai cadangan berisi `savedAt` dan string `raw` asli. Data mentah juga dapat di
 | 39 | Uji lebar 1440, 1024, 820, 390, dan 320 px | Tidak ada overflow horizontal; tabel dapat digulir di dalam panelnya |
 | 40 | Periksa konsol browser | Tidak ada error JavaScript selama alur utama |
 
-## Hasil Verifikasi Implementasi
+### Catatan pengujian
 
-- Semua modul JavaScript lulus `node --check`.
-- Unit test logika: **18 test, 18 lulus, 0 gagal**. Mencakup validasi nominal, format rupiah, model transaksi, filter/pengurutan, ringkasan, perbandingan bulan, tren, anggaran, normalisasi data, penyimpanan berversi, dan CSV.
-- Skenario browser otomatis di Chromium: **227 pemeriksaan lulus**. Mencakup CRUD, validasi, dialog, fokus, filter, pencarian, pengurutan, perpindahan bulan, grafik, anggaran, unduhan CSV, persistensi, data rusak, data parsial, kuota penuh, penyimpanan tidak tersedia, dan reduced motion.
-- Viewport yang diuji: **1440×1000, 1024×900, 820×900, 390×844, dan 320×844**. Tidak ditemukan overflow horizontal tingkat halaman maupun error konsol.
-- Harness pengujian dijalankan dari luar repositori. Tidak ada dependensi pengujian yang ditambahkan ke proyek.
-- Checklist manual di atas tetap disediakan untuk verifikasi perilaku nyata di browser dan pembaca layar.
+Pengujian tidak dijalankan ulang pada pembaruan dokumentasi ini; tidak ada hasil pengujian yang diklaim. Gunakan checklist di atas untuk memverifikasi perilaku aplikasi secara langsung di browser.
 
 ## Aksesibilitas
 
@@ -265,4 +269,4 @@ Nilai cadangan berisi `savedAt` dan string `raw` asli. Data mentah juga dapat di
 - Gaya `:focus-visible` dibuat jelas dan kontras.
 - Animasi dinonaktifkan atau dikurangi saat `prefers-reduced-motion: reduce` aktif.
 
-Pengujian aksesibilitas mencakup keyboard, fokus, label, dan kontras visual dasar, tetapi belum merupakan audit formal dengan pembaca layar sungguhan.
+Aksesibilitas mencakup keyboard, fokus, label, dan kontras visual dasar, tetapi belum merupakan audit formal dengan pembaca layar sungguhan.
