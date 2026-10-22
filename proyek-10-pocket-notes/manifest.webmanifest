@@ -1,0 +1,30 @@
+{
+  "name": "Pocket Notes — Catatan Pribadi",
+  "short_name": "Pocket Notes",
+  "description": "Aplikasi catatan pribadi dengan penyimpanan IndexedDB dan dukungan offline melalui Service Worker.",
+  "id": "./",
+  "lang": "id",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f4efe6",
+  "theme_color": "#2f5a48",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

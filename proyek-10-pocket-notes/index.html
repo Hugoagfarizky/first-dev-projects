@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pocket Notes — Catatan pribadi</title>
+    <meta
+      name="description"
+      content="Pocket Notes adalah aplikasi catatan pribadi yang menyimpan data di IndexedDB dan dapat dibuka kembali secara offline melalui Service Worker."
+    />
+    <meta name="theme-color" content="#2f5a48" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Lewati ke daftar catatan</a>
+
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="brand">
+          <img
+            class="brand__mark"
+            src="assets/icon.svg"
+            width="44"
+            height="44"
+            alt=""
+            aria-hidden="true"
+          />
+          <div class="brand__text">
+            <p class="brand__eyebrow">Catatan pribadi</p>
+            <h1 class="brand__title">Pocket Notes</h1>
+          </div>
+        </div>
+
+        <div class="app-header__actions">
+          <button type="button" class="button button--quiet button--small" id="install-button" hidden>
+            Pasang aplikasi
+          </button>
+          <p class="status-pill" id="storage-status" data-state="loading" role="status">
+            Memuat catatan…
+          </p>
+          <p
+            class="status-pill"
+            id="offline-status"
+            data-state="checking"
+            role="status"
+            aria-live="polite"
+          >
+            Memeriksa offline…
+          </p>
+        </div>
+      </header>
+
+      <div class="banner banner--danger" id="db-banner" role="alert" hidden>
+        <p id="db-banner-message"></p>
+        <button type="button" class="button button--small button--quiet" id="db-retry">
+          Coba lagi
+        </button>
+      </div>
+
+      <p class="visually-hidden" id="update-status" role="status" aria-live="polite"></p>
+      <div class="banner banner--info" id="update-banner" hidden>
+        <p>Versi baru Pocket Notes sudah siap digunakan.</p>
+        <button type="button" class="button button--small button--quiet" id="update-reload">
+          Muat ulang
+        </button>
+      </div>
+
+      <main class="app-main" id="main">
+        <section class="toolbar" aria-labelledby="notes-heading">
+          <div class="toolbar__top">
+            <div class="toolbar__heading">
+              <h2 class="section-title" id="notes-heading" tabindex="-1">Catatan</h2>
+              <p class="notes-count" id="notes-count">Memuat catatan…</p>
+              <p class="visually-hidden" id="results-status" role="status" aria-live="polite"></p>
+            </div>
+            <button type="button" class="button button--primary" id="new-note">
+              Catatan baru
+            </button>
+          </div>
+
+          <div class="toolbar__controls">
+            <div class="search-field">
+              <label class="visually-hidden" for="search-input">Cari catatan</label>
+              <input
+                class="search-field__input"
+                id="search-input"
+                type="search"
+                placeholder="Cari judul atau isi catatan"
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </div>
+
+            <div class="filter-group" role="group" aria-label="Filter catatan">
+              <button
+                type="button"
+                class="filter-button"
+                data-filter="all"
+                aria-pressed="true"
+              >
+                Semua
+              </button>
+              <button
+                type="button"
+                class="filter-button"
+                data-filter="pinned"
+                aria-pressed="false"
+              >
+                Disematkan
+              </button>
+            </div>
+          </div>
+          <p class="visually-hidden" id="search-hint">
+            Hasil daftar catatan diperbarui saat pencarian atau filter diubah.
+          </p>
+        </section>
+
+        <section class="notes-region" aria-labelledby="notes-heading" aria-describedby="search-hint">
+          <div class="notes-grid" id="notes-list"></div>
+
+          <div class="empty-state" id="empty-state" hidden>
+            <h3 class="empty-state__title" id="empty-title" tabindex="-1"></h3>
+            <p class="empty-state__body" id="empty-body"></p>
+            <button type="button" class="button button--primary" id="empty-action" hidden></button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <p>
+          Catatan disimpan di browser ini melalui IndexedDB. Data tidak tersinkron ke perangkat
+          lain dan dapat hilang jika data situs dihapus.
+        </p>
+      </footer>
+    </div>
+
+    <dialog class="dialog" id="note-dialog" aria-labelledby="note-dialog-title">
+      <form class="note-form" id="note-form" novalidate>
+        <div class="dialog__header">
+          <h2 class="dialog__title" id="note-dialog-title">Catatan baru</h2>
+          <button type="button" class="icon-button" id="note-close" aria-label="Tutup dialog">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+
+        <input type="hidden" id="note-id" />
+
+        <div class="field">
+          <label class="field__label" for="note-title">Judul</label>
+          <input
+            class="field__input"
+            id="note-title"
+            name="title"
+            type="text"
+            maxlength="120"
+            autocomplete="off"
+            aria-required="true"
+            aria-describedby="note-title-error"
+          />
+          <p class="field-error" id="note-title-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="note-body">Isi catatan</label>
+          <textarea
+            class="field__input field__input--area"
+            id="note-body"
+            name="body"
+            rows="10"
+            maxlength="8000"
+            aria-describedby="note-body-error"
+          ></textarea>
+          <p class="field-error" id="note-body-error" role="alert"></p>
+        </div>
+
+        <p class="form-error" id="note-form-error" role="alert" tabindex="-1" hidden></p>
+
+        <div class="dialog__actions">
+          <p class="char-count" id="note-char-count">0 / 8000</p>
+          <button type="button" class="button button--quiet" id="note-cancel">Batal</button>
+          <button type="submit" class="button button--primary" id="note-submit">
+            Simpan catatan
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog
+      class="dialog dialog--small"
+      id="delete-dialog"
+      aria-labelledby="delete-title"
+      aria-describedby="delete-message"
+    >
+      <h2 class="dialog__title" id="delete-title">Hapus catatan?</h2>
+      <p class="dialog__text" id="delete-message">
+        Catatan yang dihapus tidak dapat dikembalikan.
+      </p>
+      <p class="delete-note-title" id="delete-note-title"></p>
+      <p class="form-error" id="delete-error" role="alert" hidden></p>
+      <div class="dialog__actions">
+        <button type="button" class="button button--quiet" id="delete-cancel">Batal</button>
+        <button type="button" class="button button--danger" id="delete-confirm">Hapus</button>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

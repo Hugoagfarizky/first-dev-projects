@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Pocket Notes">
+  <rect width="512" height="512" fill="#2f5a48" />
+  <rect x="166" y="150" width="180" height="212" rx="22" fill="#f7f1e4" />
+  <rect x="186" y="172" width="140" height="168" rx="10" fill="none" stroke="#dccfb9" stroke-width="5" />
+  <path d="M208 216h96M208 248h96M208 280h64" stroke="#8a9b8f" stroke-width="11" stroke-linecap="round" />
+  <path d="M292 150h34v70l-17-14-17 14z" fill="#d9a15b" />
+</svg>
