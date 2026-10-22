@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050713" />
+    <meta
+      name="description"
+      content="Astro Dodge adalah game arcade survival bertema luar angkasa yang dibuat dengan HTML5 Canvas dan JavaScript vanilla."
+    />
+    <title>Astro Dodge — Browser Arcade</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="page__header">
+        <p class="eyebrow">Proyek 11 · Browser Arcade</p>
+        <h1>Astro Dodge</h1>
+        <p class="lede">
+          Bertahanlah di antara hujan asteroid. Geser pesawat, hindari tabrakan, dan kejar rekor
+          baru selama mungkin.
+        </p>
+      </header>
+
+      <main class="game-shell" aria-labelledby="game-title">
+        <h2 class="visually-hidden" id="game-title">Arena permainan Astro Dodge</h2>
+
+        <div class="hud" aria-label="Informasi permainan">
+          <div class="stat">
+            <span class="stat__label">Skor</span>
+            <strong class="stat__value" id="score">0</strong>
+          </div>
+          <div class="stat">
+            <span class="stat__label">Rekor</span>
+            <strong class="stat__value" id="high-score">0</strong>
+          </div>
+          <p class="state-label" id="state-label" data-state="menu">
+            <span class="state-label__dot" aria-hidden="true"></span>
+            <span id="state-text">Menu awal</span>
+          </p>
+          <button class="button button--quiet button--small" id="pause-button" type="button" hidden>
+            Jeda
+          </button>
+        </div>
+
+        <div class="stage" id="game-stage">
+          <canvas
+            id="game-canvas"
+            width="960"
+            height="600"
+            tabindex="0"
+            aria-label="Arena permainan Astro Dodge"
+            aria-describedby="controls-hint"
+          >
+            Browser Anda tidak mendukung elemen Canvas.
+          </canvas>
+
+          <div class="overlay" id="menu-overlay" role="group" aria-labelledby="menu-title">
+            <p class="overlay__kicker">Misi bertahan hidup</p>
+            <h2 id="menu-title">Siap menghindari hujan asteroid?</h2>
+            <p class="overlay__copy">
+              Skor bertambah selama kamu bertahan. Asteroid akan datang makin cepat dan makin
+              sering.
+            </p>
+            <button class="button button--primary" id="start-button" type="button">
+              Mulai permainan
+            </button>
+            <p class="overlay__hint">Panah kiri/kanan atau A/D · P atau Escape untuk jeda</p>
+          </div>
+
+          <div
+            class="overlay"
+            id="pause-overlay"
+            role="group"
+            aria-labelledby="pause-title"
+            hidden
+          >
+            <p class="overlay__kicker">Misi dijeda</p>
+            <h2 id="pause-title">Waktu berhenti sebentar</h2>
+            <p class="overlay__copy">Skor tidak bertambah selama permainan dijeda.</p>
+            <button class="button button--primary" id="resume-button" type="button">
+              Lanjutkan
+            </button>
+          </div>
+
+          <div
+            class="overlay overlay--danger"
+            id="gameover-overlay"
+            role="group"
+            aria-labelledby="gameover-title"
+            hidden
+          >
+            <p class="overlay__kicker">Misi berakhir</p>
+            <h2 id="gameover-title">Game over</h2>
+            <p class="overlay__score">Skor akhir <strong id="final-score">0</strong></p>
+            <p class="overlay__copy" id="record-message">Rekormu belum berubah.</p>
+            <button class="button button--primary" id="restart-button" type="button">
+              Main lagi
+            </button>
+          </div>
+        </div>
+
+        <div class="game-footer">
+          <p id="controls-hint" class="controls-hint">
+            Kontrol: panah kiri/kanan atau A/D untuk bergerak · P atau Escape untuk jeda. Di
+            perangkat sentuh, gunakan tombol Kiri dan Kanan.
+          </p>
+          <div class="touch-controls" aria-label="Kontrol sentuh pesawat">
+            <button
+              class="touch-button"
+              id="touch-left"
+              type="button"
+              aria-label="Gerakkan pesawat ke kiri"
+            >
+              <span aria-hidden="true">◀</span>
+              <span>Kiri</span>
+            </button>
+            <button
+              class="touch-button"
+              id="touch-right"
+              type="button"
+              aria-label="Gerakkan pesawat ke kanan"
+            >
+              <span>Kanan</span>
+              <span aria-hidden="true">▶</span>
+            </button>
+          </div>
+        </div>
+
+        <p class="visually-hidden" id="live-status" role="status" aria-live="polite"></p>
+        <noscript>
+          <p class="noscript">
+            Astro Dodge memerlukan JavaScript untuk menjalankan permainan. Aktifkan JavaScript
+            lalu muat ulang halaman.
+          </p>
+        </noscript>
+      </main>
+
+      <footer class="page__footer">
+        <p>Dibuat dengan HTML5 Canvas, CSS, dan JavaScript vanilla. Tanpa aset eksternal.</p>
+      </footer>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
