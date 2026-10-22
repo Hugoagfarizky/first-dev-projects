@@ -1,24 +1,24 @@
 # vibecoding-journey
 
-Kumpulan proyek belajar vibecoding, dari halaman web statis, aplikasi browser, dan game arcade Canvas, hingga PWA offline-first serta aplikasi full-stack dengan Express dan SQLite.
+Kumpulan proyek belajar vibecoding, dari halaman web statis, aplikasi browser, game arcade Canvas, dan visualisasi audio real-time, hingga PWA offline-first serta aplikasi full-stack dengan Express dan SQLite.
 
 ## Tentang Repository
 
-Repository ini mendokumentasikan perjalanan belajar vibecoding melalui sebelas proyek kecil. Setiap proyek disimpan di foldernya sendiri dan dikembangkan secara bertahap, mulai dari HTML, CSS, dan JavaScript dasar sampai integrasi API, penyimpanan lokal, REST API, database SQLite, PWA offline-first, serta game arcade 2D dengan HTML5 Canvas.
+Repository ini mendokumentasikan perjalanan belajar vibecoding melalui dua belas proyek kecil. Setiap proyek disimpan di foldernya sendiri dan dikembangkan secara bertahap, mulai dari HTML, CSS, dan JavaScript dasar sampai integrasi API, penyimpanan lokal, REST API, database SQLite, PWA offline-first, game arcade 2D dengan HTML5 Canvas, serta pemutar audio lokal dengan visualisasi real-time menggunakan Web Audio API dan Canvas.
 
-README ini berfungsi sebagai pengantar dan indeks. Instruksi teknis yang lengkap tersedia di README Proyek 01–11.
+README ini berfungsi sebagai pengantar dan indeks. Instruksi teknis yang lengkap tersedia di README Proyek 01–12.
 
 ## Prasyarat
 
 | Kebutuhan | Digunakan untuk |
 | --- | --- |
-| Browser modern | Semua proyek, termasuk Proyek 10 dan 11 |
-| Python 3 atau static server lain | Proyek 04–08, 10, dan 11; wajib untuk 05–08, 10, dan 11, disarankan untuk 04 |
+| Browser modern | Semua proyek, termasuk Proyek 10, 11, dan 12 |
+| Python 3 atau static server lain | Proyek 04–08, 10, 11, dan 12; wajib untuk 05–08, 10, 11, dan 12, disarankan untuk 04 |
 | Koneksi internet | Proyek 04 dan 05; instalasi awal Proyek 09 |
 | TMDB API key | Proyek 05 |
 | Node.js `>=22.13.0` dan npm | Proyek 09 |
 
-Jika tidak menggunakan Python, static server lain seperti Live Server juga dapat dipakai untuk proyek yang memerlukannya. Proyek 10 tidak memerlukan instalasi dependency, API key, atau backend; cukup browser modern dan static HTTP server lokal. Proyek 11 tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules.
+Jika tidak menggunakan Python, static server lain seperti Live Server juga dapat dipakai untuk proyek yang memerlukannya. Proyek 10 tidak memerlukan instalasi dependency, API key, atau backend; cukup browser modern dan static HTTP server lokal. Proyek 11 tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules. Proyek 12 juga tidak memerlukan dependency npm, backend, API key, atau koneksi internet untuk memuat aset aplikasi; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules dan Web Audio API. Format audio yang dapat diputar mengikuti dukungan browser.
 
 ## Daftar Proyek
 
@@ -35,6 +35,7 @@ Jika tidak menggunakan Python, static server lain seperti Live Server juga dapat
 | 09 | [TaskFlow API](proyek-09-taskflow-api/) | `proyek-09-taskflow-api/` | REST API menggunakan Node.js, Express, dan SQLite | [README](proyek-09-taskflow-api/README.md) |
 | 10 | [Pocket Notes — PWA Catatan Pribadi](proyek-10-pocket-notes/) | `proyek-10-pocket-notes/` | Aplikasi catatan offline-first menggunakan IndexedDB, Service Worker, dan Web App Manifest | [README](proyek-10-pocket-notes/README.md) |
 | 11 | [Astro Dodge](proyek-11-astro-dodge/) | `proyek-11-astro-dodge/` | Game arcade 2D dengan HTML5 Canvas, game loop, kontrol keyboard dan sentuh, collision detection, serta sistem skor | [README](proyek-11-astro-dodge/README.md) |
+| 12 | [Soundwave Studio — Real-Time Audio Visualizer](proyek-12-soundwave-studio/) | `proyek-12-soundwave-studio/` | Pemutar audio lokal dan visualisasi real-time menggunakan Web Audio API, AnalyserNode, dan Canvas | [README](proyek-12-soundwave-studio/README.md) |
 
 Proyek 01 merupakan titik awal berupa halaman statis; fitur dan cara menjalankannya dijelaskan di [README Proyek 01](proyek-01-halo/README.md).
 
@@ -50,9 +51,11 @@ Proyek 01–03 tidak memerlukan instalasi, dependency, atau proses build. Buka f
 
 Proyek 02 dan 03 menyimpan data di `localStorage` browser.
 
-### Proyek 04–08 dan 10: server HTTP lokal
+### Proyek 04–08, 10, dan 12: server HTTP lokal
 
 Proyek 04 tetap dapat dibuka langsung, tetapi fitur geolokasi biasanya memerlukan `localhost` atau HTTPS. Proyek 05–08 memakai JavaScript ES Modules, sehingga harus dijalankan melalui server HTTP dan tidak disarankan dibuka lewat `file://`. Proyek 10 juga memakai ES Modules dan Service Worker, sehingga harus dijalankan melalui server HTTP pada `localhost` atau HTTPS dan tidak boleh dibuka lewat `file://`.
+
+Proyek 12 memakai ES Modules dan Web Audio API, sehingga juga harus dijalankan melalui server HTTP. Pilih file audio dari perangkat melalui file picker; audio diproses di browser dan tidak diunggah ke server. Format audio yang dapat diputar mengikuti dukungan browser.
 
 Dari root repository:
 
@@ -69,6 +72,7 @@ http://localhost:8000/proyek-06-kanban-board/
 http://localhost:8000/proyek-07-habit-tracker/
 http://localhost:8000/proyek-08-personal-finance/
 http://localhost:8000/proyek-10-pocket-notes/
+http://localhost:8000/proyek-12-soundwave-studio/
 ```
 
 Status **Siap offline** hanya berlaku setelah app shell berhasil disimpan di cache Service Worker. Catatan disimpan secara lokal melalui IndexedDB, tanpa sinkronisasi cloud atau antarperangkat.
@@ -176,16 +180,27 @@ vibecoding-journey/
 │       ├── db.js
 │       ├── notes.js
 │       └── ui.js
-└── proyek-11-astro-dodge/
+├── proyek-11-astro-dodge/
+│   ├── README.md
+│   ├── index.html
+│   ├── style.css
+│   └── js/
+│       ├── app.js
+│       ├── game.js
+│       ├── player.js
+│       ├── asteroid.js
+│       └── collision.js
+└── proyek-12-soundwave-studio/
     ├── README.md
     ├── index.html
     ├── style.css
+    ├── assets/
+    │   └── icon.svg
     └── js/
         ├── app.js
-        ├── game.js
-        ├── player.js
-        ├── asteroid.js
-        └── collision.js
+        ├── audio-engine.js
+        ├── player-ui.js
+        └── visualizer.js
 ```
 
 File lokal seperti `config.js`, `data/`, `node_modules/`, dan database SQLite tidak ditampilkan karena diabaikan Git.
@@ -195,6 +210,7 @@ File lokal seperti `config.js`, `data/`, `node_modules/`, dan database SQLite ti
 - **Otomatis:** Proyek 09 memiliki pengujian di `tests/` dan dapat dijalankan dengan `npm test` dari folder proyek. Hasil pengujian tidak dijalankan ulang dalam pembaruan README ini.
 - **Terdokumentasi di README proyek, harness tidak disertakan:** Proyek 10 memiliki hasil pemeriksaan browser terdahulu yang didokumentasikan di README proyek. Harness pengujian tidak disertakan dalam repository dan tidak dijalankan ulang dalam tahap dokumentasi ini.
 - **Terdokumentasi di README proyek, harness tidak disertakan:** Proyek 11 memiliki hasil pengujian browser terdahulu yang didokumentasikan di README proyek, termasuk 41 pemeriksaan pada implementasi sebelumnya. Harness tidak disertakan dalam repository dan tidak dijalankan ulang dalam tahap dokumentasi ini.
+- **Terdokumentasi di README proyek, harness tidak disertakan:** Proyek 12 memiliki hasil 85 pemeriksaan browser terdahulu yang didokumentasikan di README proyek. Harness pengujian tidak disertakan dalam repository dan tidak dijalankan ulang dalam tahap dokumentasi ini.
 - **Tidak dapat diverifikasi dari repository:** Proyek 05, 06, dan 08 tidak memiliki artifact pengujian terdahulu yang dapat diverifikasi hanya dari repository.
 - **Manual:** Proyek 01–04 dan 07 tidak menyediakan perintah pengujian otomatis dalam repository. Gunakan checklist atau pengujian manual di README proyek jika tersedia.
 - Jangan menganggap semua proyek memiliki pengujian otomatis.
@@ -204,9 +220,10 @@ File lokal seperti `config.js`, `data/`, `node_modules/`, dan database SQLite ti
 - Jangan meng-commit `.env`, `.env.*`, API key, `config.js`, database lokal, atau file konfigurasi lain yang berisi kredensial. `.env`, `.env.*`, `config.js`, dan database lokal sudah diabaikan Git, tetapi tetap periksa sebelum melakukan commit.
 - **Movie Explorer (05):** API key TMDB disimpan di `config.js` lokal. Karena aplikasi berjalan di frontend, key dapat terlihat di browser; ini bukan mekanisme pengamanan produksi. Untuk produksi, gunakan backend atau proxy yang menyimpan kredensial.
 - **TaskFlow API (09):** belum memiliki autentikasi, otorisasi, rate limiting, CSRF, atau HTTPS. Server secara default hanya mengikat `127.0.0.1`; gunakan secara lokal dan jangan mengeksposnya ke internet.
-- **Aplikasi dengan `localStorage` (02, 03, 05–08, 11):** data tersimpan per browser dan profil, tidak tersinkron antarperangkat, serta dapat hilang jika data situs dibersihkan. Proyek 11 hanya menyimpan rekor tertinggi di `localStorage`.
+- **Aplikasi dengan `localStorage` (02, 03, 05–08, 11, 12):** data tersimpan per browser dan profil, tidak tersinkron antarperangkat, serta dapat hilang jika data situs dibersihkan. Proyek 11 hanya menyimpan rekor tertinggi di `localStorage`; Proyek 12 hanya menyimpan preferensi mode visualisasi dan volume, bukan file audio.
 - **Weather Dashboard (04):** geolokasi memerlukan izin browser dan biasanya hanya tersedia pada `https://` atau `localhost`.
 - **Pocket Notes (10):** catatan disimpan di IndexedDB browser pada perangkat pengguna dan tidak tersinkronisasi otomatis ke cloud atau perangkat lain; menghapus data situs/browser dapat menghilangkan catatan. Dukungan offline bergantung pada keberhasilan cache Service Worker. Alur instalasi PWA end-to-end belum diverifikasi, jadi jangan menganggap aplikasi sudah terpasang.
+- **Soundwave Studio (12):** audio diputar di browser menggunakan file lokal yang dipilih pengguna dan tidak diunggah atau disimpan ke backend. `localStorage` hanya menyimpan preferensi mode visualisasi dan volume. Dukungan format serta fitur audio bergantung pada browser dan codec yang tersedia. Pengujian audio melalui speaker/headphone, browser selain Chrome, dan perangkat fisik belum dilakukan; belum ada audit privasi atau kompatibilitas formal.
 
 ## Atribusi
 
@@ -219,4 +236,4 @@ Informasi sumber data tersedia di README Proyek 04 dan 05.
 
 ## Catatan Pembelajaran
 
-Repository ini disusun secara bertahap: dimulai dari halaman statis, dilanjutkan dengan aplikasi browser dan penyimpanan lokal, lalu integrasi API dan aplikasi full-stack dengan REST API serta database. Proyek 10 memperkenalkan PWA offline-first, IndexedDB, dan Service Worker. Proyek 11 menambahkan HTML5 Canvas, game loop `requestAnimationFrame`, pengelolaan waktu dan simulasi, collision detection, kontrol keyboard dan sentuh, serta state permainan, pause, dan restart. README utama ini sengaja dibuat sebagai indeks agar detail teknis tetap terpusat di dokumentasi masing-masing proyek.
+Repository ini disusun secara bertahap: dimulai dari halaman statis, dilanjutkan dengan aplikasi browser dan penyimpanan lokal, lalu integrasi API dan aplikasi full-stack dengan REST API serta database. Proyek 10 memperkenalkan PWA offline-first, IndexedDB, dan Service Worker. Proyek 11 menambahkan HTML5 Canvas, game loop `requestAnimationFrame`, pengelolaan waktu dan simulasi, collision detection, kontrol keyboard dan sentuh, serta state permainan, pause, dan restart. Proyek 12 menambahkan Web Audio API dan `AudioContext`, `AnalyserNode` untuk data frekuensi dan waveform, visualisasi real-time dengan Canvas, lifecycle audio, pengelolaan object URL, serta kontrol playback, seek, volume, dan mute. README utama ini sengaja dibuat sebagai indeks agar detail teknis tetap terpusat di dokumentasi masing-masing proyek.

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Soundwave Studio</title>
+  <defs>
+    <linearGradient id="wave" x1="8" y1="12" x2="56" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67f1ff" />
+      <stop offset="1" stop-color="#aa8cff" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#070a13" />
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="none" stroke="#26314f" />
+  <path
+    d="M12 32h5m5-12v24m7-31v38m7-27v16m7-21v26m7-14v2"
+    fill="none"
+    stroke="url(#wave)"
+    stroke-linecap="round"
+    stroke-width="4"
+  />
+</svg>
