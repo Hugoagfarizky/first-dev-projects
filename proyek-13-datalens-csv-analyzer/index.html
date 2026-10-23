@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta
+      name="description"
+      content="DataLens mengimpor, mengeksplorasi, menganalisis, memvisualisasikan, dan mengekspor CSV sepenuhnya di browser."
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <title>DataLens — CSV Data Explorer</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="js/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#import" aria-label="DataLens, kembali ke bagian impor">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="32" height="32">
+              <circle cx="14" cy="14" r="8" fill="none" stroke="currentColor" stroke-width="2.6" />
+              <path d="M20 20 27 27" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" />
+              <path d="M10 16v-3M14 16v-6M18 16v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </span>
+          <span class="brand-text">
+            <strong>DataLens</strong>
+            <span>CSV Data Explorer</span>
+          </span>
+        </a>
+
+        <nav class="site-nav" aria-label="Navigasi bagian">
+          <a href="#import" class="is-active" aria-current="location">Impor</a>
+          <a href="#overview">Ringkasan</a>
+          <a href="#visualization">Visualisasi</a>
+          <a href="#data-table-section">Tabel</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero section" id="import" aria-labelledby="import-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Proyek 13 · Analisis data lokal</p>
+          <h1 id="import-title">Temukan cerita di balik CSV.</h1>
+          <p class="hero-lead">
+            Impor, periksa, urutkan, dan visualisasikan data tanpa mengunggahnya ke mana pun.
+            DataLens bekerja sepenuhnya di browser Anda.
+          </p>
+          <div class="privacy-note">
+            <span class="privacy-icon" aria-hidden="true">●</span>
+            <span>File diproses secara lokal. Tidak ada unggahan, analytics, atau koneksi data eksternal.</span>
+          </div>
+        </div>
+
+        <div class="import-layout">
+          <div class="import-panel" id="import-panel">
+            <div class="dropzone" id="dropzone">
+              <span class="upload-mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32" width="32" height="32">
+                  <path d="M16 21V6m0 0-6 6m6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M7 21v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                </svg>
+              </span>
+              <div>
+                <h2>Letakkan file CSV di sini</h2>
+                <p id="import-hint">atau pilih file dari perangkat. Mendukung koma, titik koma, dan tab.</p>
+              </div>
+              <button
+                class="button button-primary"
+                id="choose-file"
+                type="button"
+                aria-controls="file-input"
+                aria-describedby="import-limits"
+              >
+                Pilih file CSV
+              </button>
+              <input
+                id="file-input"
+                type="file"
+                accept=".csv,.tsv,.txt,text/csv,text/plain,text/tab-separated-values"
+                aria-label="Pilih file CSV"
+                aria-describedby="import-hint import-limits"
+                hidden
+              />
+              <p class="field-note" id="import-limits">Maksimal 10 MB · UTF-8 · Minimal dua kolom dan satu baris data</p>
+            </div>
+
+            <div class="import-options">
+              <label class="select-field compact" for="delimiter-select">
+                <span>Pemisah CSV</span>
+                <select id="delimiter-select" aria-describedby="delimiter-hint">
+                  <option value="" selected>Deteksi otomatis</option>
+                  <option value=",">Koma (,)</option>
+                  <option value=";">Titik koma (;)</option>
+                  <option value="&#9;">Tab</option>
+                </select>
+              </label>
+              <button class="button button-quiet" id="reparse-active" type="button" disabled>
+                Terapkan ulang
+              </button>
+              <p class="field-note import-option-note" id="delimiter-hint">
+                Pilihan ini dipakai saat impor berikutnya. Perubahan setelah impor tidak langsung mengubah dataset aktif.
+              </p>
+            </div>
+
+            <div class="sample-row">
+              <button class="button button-secondary" id="load-sample" type="button">
+                Muat data contoh
+              </button>
+              <span>Belum punya file? Gunakan 24 baris data penjualan contoh.</span>
+            </div>
+          </div>
+
+          <aside class="file-card" aria-labelledby="file-card-title">
+            <div class="file-card-topline">
+              <span class="card-kicker">Dataset aktif</span>
+              <span class="source-badge" id="source-badge" hidden>Contoh</span>
+            </div>
+            <h2 class="file-name" id="file-card-title">Belum ada file</h2>
+            <p class="file-subtitle" id="file-subtitle">Impor CSV untuk melihat ringkasan file di sini.</p>
+
+            <dl class="file-facts">
+              <div>
+                <dt>Ukuran</dt>
+                <dd id="file-size">—</dd>
+              </div>
+              <div>
+                <dt>Baris data</dt>
+                <dd id="file-rows">—</dd>
+              </div>
+              <div>
+                <dt>Kolom</dt>
+                <dd id="file-columns">—</dd>
+              </div>
+              <div>
+                <dt>Pemisah</dt>
+                <dd id="file-delimiter">—</dd>
+              </div>
+            </dl>
+
+            <p class="file-card-note">Data tetap berada di memori tab ini dan tidak disimpan otomatis.</p>
+          </aside>
+        </div>
+
+        <div class="notice notice-error" id="error-panel" role="alert" hidden>
+          <div class="notice-content">
+            <strong id="error-title">Impor gagal</strong>
+            <p id="error-message"></p>
+            <ul id="error-details" hidden></ul>
+          </div>
+          <button class="icon-button" id="error-close" type="button" aria-label="Tutup pesan kesalahan">×</button>
+        </div>
+
+        <div class="notice notice-warning" id="warning-panel" role="status" hidden>
+          <div class="notice-content">
+            <strong>Catatan impor</strong>
+            <ul id="warning-details"></ul>
+          </div>
+          <button class="icon-button" id="warning-close" type="button" aria-label="Tutup catatan impor">×</button>
+        </div>
+
+        <p class="sr-only" id="app-status" role="status" aria-live="polite" aria-atomic="true"></p>
+      </section>
+
+      <section class="section" id="overview" aria-labelledby="overview-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">01 · Ringkasan</p>
+            <h2 id="overview-title">Bentuk dataset dalam satu pandangan.</h2>
+          </div>
+          <p class="section-intro">
+            Angka di bawah dihitung dari seluruh dataset yang sedang aktif, bukan dari halaman tabel
+            yang sedang terlihat.
+          </p>
+        </div>
+
+        <div class="metric-grid" aria-label="Statistik dataset">
+          <article class="metric-card">
+            <span class="metric-label">Total baris data</span>
+            <strong class="metric-value" id="stat-rows">—</strong>
+            <span class="metric-note" id="stat-rows-note">Belum ada dataset</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">Total kolom</span>
+            <strong class="metric-value" id="stat-columns">—</strong>
+            <span class="metric-note" id="stat-columns-note">Header tidak dihitung sebagai baris</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">Sel kosong</span>
+            <strong class="metric-value" id="stat-empty">—</strong>
+            <span class="metric-note" id="stat-empty-note">Dihitung dari seluruh sel data</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">Kolom numerik</span>
+            <strong class="metric-value" id="stat-numeric">—</strong>
+            <span class="metric-note" id="stat-numeric-note">Minimal 60% nilai terisi berupa angka</span>
+          </article>
+        </div>
+
+        <div class="numeric-panel" aria-labelledby="numeric-title">
+          <div class="numeric-head">
+            <div>
+              <h3 id="numeric-title">Statistik kolom numerik</h3>
+              <p>Pilih kolom untuk melihat sebaran nilai yang valid.</p>
+            </div>
+            <label class="select-field" for="numeric-column">
+              <span>Kolom numerik</span>
+              <select id="numeric-column" disabled>
+                <option value="">Belum ada data</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="numeric-stats">
+            <div class="numeric-stat">
+              <span>Minimum</span>
+              <strong id="stat-min">—</strong>
+            </div>
+            <div class="numeric-stat">
+              <span>Maksimum</span>
+              <strong id="stat-max">—</strong>
+            </div>
+            <div class="numeric-stat">
+              <span>Rata-rata</span>
+              <strong id="stat-mean">—</strong>
+            </div>
+            <div class="numeric-stat">
+              <span>Median</span>
+              <strong id="stat-median">—</strong>
+            </div>
+          </div>
+
+          <p class="numeric-note" id="numeric-note">
+            Sel kosong dan nilai non-numerik tidak dihitung dalam statistik ini.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="visualization" aria-labelledby="visualization-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">02 · Visualisasi</p>
+            <h2 id="visualization-title">Lihat pola, bukan sekadar baris.</h2>
+          </div>
+          <p class="section-intro">
+            Grafik dihitung ulang dari dataset aktif setiap kali Anda memilih kolom atau memuat file baru.
+          </p>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-toolbar">
+            <div>
+              <h3 id="chart-title">Belum ada grafik</h3>
+              <p id="chart-subtitle">Impor data untuk membuat visualisasi pertama.</p>
+            </div>
+            <label class="select-field" for="chart-column">
+              <span>Kolom grafik</span>
+              <select id="chart-column" disabled>
+                <option value="">Belum ada data</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="chart-stage" id="chart-stage">
+            <svg
+              class="chart-svg"
+              id="chart-svg"
+              viewBox="0 0 720 370"
+              role="img"
+              aria-label="Grafik data CSV"
+              hidden
+            ></svg>
+            <div class="empty-state chart-empty" id="chart-empty">
+              <strong>Visualisasi menunggu data.</strong>
+              <span>Impor CSV atau muat data contoh untuk melihat grafik aktual.</span>
+            </div>
+          </div>
+
+          <p class="chart-note" id="chart-note">
+            Kolom numerik ditampilkan sebagai histogram; kolom teks sebagai kategori terbanyak.
+          </p>
+          <p class="sr-only" id="chart-a11y" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="section" id="data-table-section" aria-labelledby="table-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">03 · Tabel data</p>
+            <h2 id="table-title">Telusuri setiap baris dengan tenang.</h2>
+          </div>
+          <p class="section-intro">
+            Pencarian berlaku ke semua kolom. Ekspor mengikuti hasil pencarian dan urutan tabel yang
+            sedang aktif.
+          </p>
+        </div>
+
+        <div class="table-card">
+          <div class="table-toolbar">
+            <label class="search-field" for="table-search">
+              <span>Cari di semua kolom</span>
+              <input
+                id="table-search"
+                type="search"
+                placeholder="Contoh: Jakarta, audio, 2026"
+                autocomplete="off"
+                disabled
+              />
+            </label>
+
+            <div class="table-controls">
+              <label class="select-field compact" for="page-size">
+                <span>Baris per halaman</span>
+                <select id="page-size" disabled>
+                  <option value="10" selected>10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </label>
+
+              <div class="export-control">
+                <button
+                  class="button button-primary"
+                  id="export-button"
+                  type="button"
+                  aria-describedby="export-scope"
+                  disabled
+                >
+                  Ekspor CSV
+                </button>
+                <span class="export-scope" id="export-scope">Belum ada data untuk diekspor.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="empty-state table-empty" id="table-empty">
+            <strong>Belum ada data valid.</strong>
+            <span>Impor CSV atau muat data contoh untuk mulai menjelajah tabel.</span>
+          </div>
+
+          <div class="table-scroll">
+            <table id="data-table" hidden>
+              <caption class="sr-only">
+                Data CSV aktif. Gunakan tombol pada header untuk mengurutkan kolom.
+              </caption>
+              <thead id="data-table-head"></thead>
+              <tbody id="data-table-body"></tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <p id="result-count" aria-live="polite">Belum ada data.</p>
+            <div class="pagination" aria-label="Navigasi halaman tabel">
+              <button class="button button-quiet" id="prev-page" type="button" disabled>← Sebelumnya</button>
+              <span id="page-info">Halaman 1 dari 1</span>
+              <button class="button button-quiet" id="next-page" type="button" disabled>Berikutnya →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <strong>DataLens</strong> · CSV tetap di perangkat Anda. Tidak ada backend, analytics, atau
+        penyimpanan otomatis.
+      </p>
+      <a href="README.md">Baca dokumentasi proyek</a>
+    </footer>
+
+    <noscript>
+      <p class="noscript-message">
+        DataLens memerlukan JavaScript untuk membaca dan menganalisis CSV di browser Anda.
+      </p>
+    </noscript>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="DataLens">
+  <rect width="64" height="64" rx="16" fill="#17241e"/>
+  <circle cx="27" cy="27" r="13" fill="none" stroke="#8fe0cd" stroke-width="4"/>
+  <path d="M37 37 50 50" fill="none" stroke="#8fe0cd" stroke-width="4" stroke-linecap="round"/>
+  <path d="M20 31v-5M27 31v-11M34 31v-7" fill="none" stroke="#f4f7f3" stroke-width="3" stroke-linecap="round"/>
+</svg>

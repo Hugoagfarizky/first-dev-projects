@@ -1,0 +1,25 @@
+order_id,date,region,category,product,units,unit_price,revenue,rating,notes
+SO-1001,2026-01-03,Jakarta,Office,"Desk lamp, matte black",2,24.50,49.00,4.5,"Repeat customer"
+SO-1002,2026-01-04,Bandung,Audio,Wireless headphones,1,89.90,89.90,4.8,"Gift wrap requested"
+SO-1003,2026-01-05,Surabaya,Office,"Monitor stand 27""",1,42.00,42.00,,
+SO-1004,2026-01-07,Jakarta,Accessories,"USB-C hub, 7-port",3,31.50,94.50,4.6,"Bulk order"
+SO-1005,2026-01-08,Yogyakarta,Home,"Smart plug, 2-pack",2,18.75,37.50,4.1,
+SO-1006,2026-01-09,Medan,Audio,Bluetooth speaker,1,64.00,64.00,4.4,"Outdoor, waterproof"
+SO-1007,2026-01-10,Bali,Home,"Desk organizer, bamboo",4,12.25,49.00,4.7,Gift
+SO-1008,2026-01-12,Jakarta,Office,"Ergonomic mouse, silent",5,21.40,107.00,4.3,"Team purchase"
+SO-1009,2026-01-12,Bandung,Accessories,"Laptop sleeve 14""",2,27.90,55.80,4.0,
+SO-1010,2026-01-13,Surabaya,Audio,"Studio headphones, wired",1,119.00,119.00,4.9,"Customer quote: ""excellent"""
+SO-1011,2026-01-14,Jakarta,Home,"LED strip, 5 m",3,15.60,46.80,4.2,
+SO-1012,2026-01-15,Yogyakarta,Office,"Keyboard, tenkeyless",2,58.00,116.00,4.6,"Backorder cleared"
+SO-1013,2026-01-16,Medan,Accessories,"Travel adapter, universal",4,19.25,77.00,3.9,
+SO-1014,2026-01-17,Bali,Home,"Ceramic planter, small",6,8.50,51.00,4.5,Fragile
+SO-1015,2026-01-18,Jakarta,Audio,True wireless earbuds,2,74.50,149.00,4.8,
+SO-1016,2026-01-19,Bandung,Office,"Laptop stand, aluminum",1,36.00,36.00,4.3,
+SO-1017,2026-01-20,Surabaya,Home,"Cable organizer, 10-pack",5,6.80,34.00,4.0,
+SO-1018,2026-01-21,Yogyakarta,Accessories,"Phone grip, matte",8,4.75,38.00,3.8,
+SO-1019,2026-01-22,Medan,Home,"Air purifier, compact",1,132.00,132.00,4.7,"Demo unit"
+SO-1020,2026-01-23,Bali,Audio,Portable DAC,1,96.00,96.00,4.5,
+SO-1021,2026-01-24,Jakarta,Office,"Webcam, 1080p",2,54.90,109.80,4.1,"Invoice sent"
+SO-1022,2026-01-25,Bandung,Home,"Smart bulb, warm white",3,17.50,52.50,4.4,
+SO-1023,2026-01-26,Surabaya,Accessories,"Charging cable, 2 m",10,5.90,59.00,4.2,
+SO-1024,2026-01-27,Yogyakarta,Office,"Monitor arm, single",1,67.00,67.00,4.6,"Installation included"
