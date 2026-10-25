@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Flowboard — Kanban Task Manager</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Lewati ke papan</a>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <img class="brand-icon" src="assets/icon.svg" width="48" height="48" alt="">
+        <div>
+          <p class="eyebrow">Kanban task manager</p>
+          <h1>Flowboard</h1>
+          <p class="brand-copy">Atur alur kerja, fokus pada prioritas, dan simpan semuanya di browser ini.</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <p class="storage-chip" id="storage-status" data-state="loading" role="status" aria-live="polite">
+          Memeriksa penyimpanan…
+        </p>
+        <div class="action-group" aria-label="Riwayat dan berkas">
+          <button class="button button-quiet" id="undo-button" type="button" disabled aria-keyshortcuts="Control+Z">
+            Undo
+          </button>
+          <button class="button button-quiet" id="redo-button" type="button" disabled aria-keyshortcuts="Control+Shift+Z">
+            Redo
+          </button>
+          <button class="button button-quiet" id="export-button" type="button">Ekspor JSON</button>
+          <button class="button button-quiet" id="import-button" type="button">Impor JSON</button>
+          <input id="import-input" type="file" accept=".json,application/json" hidden>
+        </div>
+        <button class="button button-primary" id="new-task-button" type="button">Tambah tugas</button>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="toolbar" aria-label="Pencarian dan filter">
+        <div class="field field-search">
+          <label for="search-input">Cari tugas</label>
+          <input id="search-input" type="search" placeholder="Judul, deskripsi, atau tag…" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="priority-filter">Prioritas</label>
+          <select id="priority-filter">
+            <option value="all">Semua prioritas</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="due-filter">Tenggat</label>
+          <select id="due-filter">
+            <option value="all">Semua tenggat</option>
+            <option value="overdue">Terlambat</option>
+            <option value="none">Tanpa tenggat</option>
+          </select>
+        </div>
+        <button class="button button-quiet" id="reset-filters" type="button" disabled>Reset filter</button>
+      </section>
+
+      <section class="board-status" aria-label="Status papan">
+        <p id="results-count" class="results-count" aria-live="polite">0 tugas di papan.</p>
+        <p class="board-stats">
+          <span id="total-count">0</span> total
+          <span class="stats-divider" aria-hidden="true">·</span>
+          <span id="overdue-count">0</span> terlambat
+        </p>
+        <p id="history-status" class="history-status">Riwayat kosong</p>
+        <p id="filter-notice" class="filter-notice" hidden>
+          Papan menampilkan hasil filter. Drag dinonaktifkan agar urutan tidak ambigu; gunakan kontrol status pada kartu untuk memindahkan tugas.
+        </p>
+      </section>
+
+      <div class="board" id="board">
+        <section class="board-column" data-status="todo" aria-labelledby="heading-todo">
+          <header class="column-header">
+            <div>
+              <h2 id="heading-todo">To Do</h2>
+              <p class="column-count" id="count-todo" aria-label="0 tugas">0</p>
+            </div>
+            <button class="icon-button" type="button" data-action="add" data-status="todo" aria-label="Tambah tugas ke To Do">+</button>
+          </header>
+          <ul class="task-list" id="list-todo" data-status="todo" aria-labelledby="heading-todo"></ul>
+        </section>
+
+        <section class="board-column" data-status="in-progress" aria-labelledby="heading-in-progress">
+          <header class="column-header">
+            <div>
+              <h2 id="heading-in-progress">In Progress</h2>
+              <p class="column-count" id="count-in-progress" aria-label="0 tugas">0</p>
+            </div>
+            <button class="icon-button" type="button" data-action="add" data-status="in-progress" aria-label="Tambah tugas ke In Progress">+</button>
+          </header>
+          <ul class="task-list" id="list-in-progress" data-status="in-progress" aria-labelledby="heading-in-progress"></ul>
+        </section>
+
+        <section class="board-column" data-status="review" aria-labelledby="heading-review">
+          <header class="column-header">
+            <div>
+              <h2 id="heading-review">Review</h2>
+              <p class="column-count" id="count-review" aria-label="0 tugas">0</p>
+            </div>
+            <button class="icon-button" type="button" data-action="add" data-status="review" aria-label="Tambah tugas ke Review">+</button>
+          </header>
+          <ul class="task-list" id="list-review" data-status="review" aria-labelledby="heading-review"></ul>
+        </section>
+
+        <section class="board-column" data-status="done" aria-labelledby="heading-done">
+          <header class="column-header">
+            <div>
+              <h2 id="heading-done">Done</h2>
+              <p class="column-count" id="count-done" aria-label="0 tugas">0</p>
+            </div>
+            <button class="icon-button" type="button" data-action="add" data-status="done" aria-label="Tambah tugas ke Done">+</button>
+          </header>
+          <ul class="task-list" id="list-done" data-status="done" aria-labelledby="heading-done"></ul>
+        </section>
+      </div>
+
+      <aside class="tips" aria-labelledby="tips-heading">
+        <h2 id="tips-heading">Cara cepat</h2>
+        <p>Seret kartu untuk memindahkan atau mengurutkan. Di layar sentuh atau dengan keyboard, gunakan menu status pada kartu. Tekan <kbd>Ctrl</kbd>+<kbd>Z</kbd> untuk undo dan <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> untuk redo.</p>
+      </aside>
+    </main>
+
+    <footer class="app-footer">
+      <p>Flowboard menyimpan data hanya di <code>localStorage</code> browser ini. Tidak ada backend, analytics, atau unggahan data.</p>
+      <p>Batas: 500 tugas, judul 120 karakter, deskripsi 2.000 karakter, 8 tag per tugas, dan impor JSON maksimal 1 MiB.</p>
+    </footer>
+  </div>
+
+  <dialog class="dialog" id="task-dialog" aria-labelledby="task-dialog-title">
+    <form class="dialog-form" id="task-form" novalidate>
+      <div class="dialog-header">
+        <div>
+          <p class="eyebrow">Form tugas</p>
+          <h2 id="task-dialog-title">Tambah tugas</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="task-dialog" aria-label="Tutup form">×</button>
+      </div>
+
+      <input id="task-id" type="hidden">
+
+      <div class="field">
+        <label for="task-title">Judul <span aria-hidden="true">*</span></label>
+        <input id="task-title" name="title" type="text" maxlength="120" required autocomplete="off" aria-describedby="title-help title-error">
+        <p class="field-help" id="title-help">Wajib diisi, maksimal 120 karakter.</p>
+        <p class="field-error" id="title-error" role="alert"></p>
+      </div>
+
+      <div class="field">
+        <label for="task-description">Deskripsi</label>
+        <textarea id="task-description" name="description" rows="5" maxlength="2000" aria-describedby="description-help"></textarea>
+        <p class="field-help" id="description-help">Opsional, maksimal 2.000 karakter.</p>
+      </div>
+
+      <div class="field">
+        <label for="task-tags">Tag</label>
+        <input id="task-tags" name="tags" type="text" maxlength="300" autocomplete="off" aria-describedby="tags-help">
+        <p class="field-help" id="tags-help">Pisahkan dengan koma. Maksimal 8 tag, masing-masing 32 karakter.</p>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="task-priority">Prioritas</label>
+          <select id="task-priority" name="priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="task-status">Status</label>
+          <select id="task-status" name="status">
+            <option value="todo">To Do</option>
+            <option value="in-progress">In Progress</option>
+            <option value="review">Review</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="task-due-date">Tenggat</label>
+          <input id="task-due-date" name="dueDate" type="date">
+        </div>
+      </div>
+
+      <p class="form-error" id="task-form-error" role="alert" hidden></p>
+
+      <div class="dialog-actions">
+        <button class="button button-quiet" type="button" data-close-dialog="task-dialog">Batal</button>
+        <button class="button button-primary" id="save-task-button" type="submit">Simpan tugas</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="detail-dialog" aria-labelledby="detail-title">
+    <div class="dialog-header">
+      <div>
+        <p class="eyebrow">Detail tugas</p>
+        <h2 id="detail-title">Detail</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog="detail-dialog" aria-label="Tutup detail">×</button>
+    </div>
+    <div class="detail-body">
+      <p class="detail-description" id="detail-description"></p>
+      <dl class="detail-grid">
+        <div><dt>Status</dt><dd id="detail-status"></dd></div>
+        <div><dt>Prioritas</dt><dd id="detail-priority"></dd></div>
+        <div><dt>Tenggat</dt><dd id="detail-due"></dd></div>
+        <div><dt>Tag</dt><dd id="detail-tags"></dd></div>
+        <div><dt>Dibuat</dt><dd id="detail-created"></dd></div>
+        <div><dt>Diperbarui</dt><dd id="detail-updated"></dd></div>
+      </dl>
+    </div>
+    <div class="dialog-actions">
+      <button class="button button-quiet" type="button" data-close-dialog="detail-dialog">Tutup</button>
+      <button class="button button-primary" id="edit-from-detail" type="button">Edit tugas</button>
+    </div>
+  </dialog>
+
+  <dialog class="dialog dialog-compact" id="delete-dialog" aria-labelledby="delete-title">
+    <div class="dialog-header">
+      <div>
+        <p class="eyebrow">Konfirmasi</p>
+        <h2 id="delete-title">Hapus tugas?</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog="delete-dialog" aria-label="Tutup konfirmasi">×</button>
+    </div>
+    <p>“<strong id="delete-task-title"></strong>” akan dihapus dari papan. Tindakan ini dapat dibatalkan dengan Undo selama riwayat masih tersedia.</p>
+    <div class="dialog-actions">
+      <button class="button button-quiet" type="button" data-close-dialog="delete-dialog">Batal</button>
+      <button class="button button-danger" id="confirm-delete-button" type="button">Hapus tugas</button>
+    </div>
+  </dialog>
+
+  <dialog class="dialog" id="import-dialog" aria-labelledby="import-title">
+    <div class="dialog-header">
+      <div>
+        <p class="eyebrow">Impor papan</p>
+        <h2 id="import-title">Ganti seluruh papan?</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog="import-dialog" aria-label="Tutup konfirmasi impor">×</button>
+    </div>
+    <p>File <strong id="import-filename"></strong> berisi <strong id="import-task-count"></strong> tugas. Jika dilanjutkan, seluruh tugas dan urutan pada papan saat ini akan diganti. Tindakan ini dapat dibatalkan dengan Undo.</p>
+    <p class="import-note" id="import-note"></p>
+    <div class="dialog-actions">
+      <button class="button button-quiet" type="button" data-close-dialog="import-dialog">Batal</button>
+      <button class="button button-primary" id="confirm-import-button" type="button">Ganti papan</button>
+    </div>
+  </dialog>
+
+  <div class="toast-stack">
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <div class="toast toast-error" id="error-toast" role="alert" hidden></div>
+  </div>
+  <p class="sr-only" id="live-region" role="status" aria-live="polite"></p>
+</body>
+</html>
