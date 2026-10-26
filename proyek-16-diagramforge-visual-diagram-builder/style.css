@@ -1,0 +1,260 @@
+:root {
+  --bg: #f3f6fa;
+  --surface: #ffffff;
+  --border: #c9d6e3;
+  --text: #172033;
+  --muted: #52607a;
+  --accent: #1f4b99;
+  --focus: #0a5c57;
+  --canvas-bg: #f8fafc;
+  --grid: #d9e2ec;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.app-subtitle {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.app-status {
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: #eef4fb;
+  color: var(--accent);
+  font-size: 0.95rem;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 1rem;
+  height: calc(100vh - 73px);
+  min-height: 320px;
+  padding: 1rem;
+}
+
+.toolbar {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+}
+
+.tool-button {
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tool-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tool-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.tool-button[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.canvas-panel {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: var(--canvas-bg);
+  padding-top: 3.25rem;
+}
+
+.canvas-panel {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: var(--canvas-bg);
+}
+
+.diagram-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  touch-action: none;
+  cursor: default;
+}
+
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.empty-state[hidden] {
+  display: none;
+}
+
+.empty-state h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.15rem;
+}
+
+.empty-state p {
+  margin: 0;
+  max-width: 34rem;
+}
+
+.inspector {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  overflow: auto;
+}
+
+.inspector h2 {
+  margin-top: 0;
+}
+
+.inspector-note {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.inspector label {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.9rem;
+  font-weight: 600;
+}
+
+.inspector input[type="text"],
+.inspector input[type="color"] {
+  width: 100%;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  font: inherit;
+}
+
+.inspector input[type="color"] {
+  min-height: 2.4rem;
+  padding: 0.2rem;
+}
+
+.diagram-node.is-selected .diagram-node-shape,
+.diagram-node.is-selected ellipse,
+.diagram-node.is-selected rect,
+.diagram-node.is-selected polygon {
+  stroke-width: 3.5;
+  filter: drop-shadow(0 0 0.35rem rgba(31, 75, 153, 0.45));
+}
+
+.diagram-node.is-connect-source ellipse,
+.diagram-node.is-connect-source rect,
+.diagram-node.is-connect-source polygon {
+  stroke: #0a5c57;
+  stroke-width: 3.5;
+}
+
+.diagram-edge.is-selected {
+  stroke: #0a5c57;
+  stroke-width: 3.5;
+}
+
+.diagram-node:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: calc(100vh - 90px);
+  }
+
+  .canvas-panel {
+    min-height: 58vh;
+  }
+
+  .inspector {
+    max-height: 28vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}

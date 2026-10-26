@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>DiagramForge — Visual Diagram Builder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <h1>DiagramForge</h1>
+      <p class="app-subtitle">Visual Diagram Builder</p>
+    </div>
+    <p id="app-status" class="app-status" role="status" aria-live="polite">Memuat diagram...</p>
+  </header>
+
+  <main class="workspace">
+    <section class="canvas-panel" aria-label="Canvas diagram">
+      <div class="toolbar" aria-label="Alat editor diagram">
+        <button type="button" id="add-startEnd" class="tool-button">Tambah Start/End</button>
+        <button type="button" id="add-process" class="tool-button">Tambah Process</button>
+        <button type="button" id="add-decision" class="tool-button">Tambah Decision</button>
+        <button type="button" id="add-inputOutput" class="tool-button">Tambah Input/Output</button>
+        <button type="button" id="connect-mode" class="tool-button" aria-pressed="false">Mode konektor</button>
+        <button type="button" id="delete-selection" class="tool-button">Hapus</button>
+        <button type="button" id="new-diagram" class="tool-button">Diagram baru</button>
+        <button type="button" id="import-json" class="tool-button">Impor JSON</button>
+        <button type="button" id="export-json" class="tool-button">Ekspor JSON</button>
+        <button type="button" id="export-svg" class="tool-button">Ekspor SVG</button>
+        <button type="button" id="export-png" class="tool-button">Ekspor PNG</button>
+        <button type="button" id="undo" class="tool-button">Undo</button>
+        <button type="button" id="redo" class="tool-button">Redo</button>
+        <button type="button" id="zoom-in" class="tool-button">Zoom +</button>
+        <button type="button" id="zoom-out" class="tool-button">Zoom -</button>
+        <button type="button" id="fit-view" class="tool-button">Fit</button>
+        <button type="button" id="reset-zoom" class="tool-button">Reset Zoom</button>
+        <button type="button" id="pan-mode" class="tool-button" aria-pressed="false">Pan</button>
+      </div>
+      <svg id="diagram-canvas" class="diagram-canvas" tabindex="-1" viewBox="0 0 1600 900" role="img" aria-label="Canvas diagram DiagramForge"></svg>
+      <div id="empty-state" class="empty-state" role="status">
+        <h2>Diagram masih kosong</h2>
+        <p>Gunakan toolbar untuk menambahkan node, lalu hubungkan node dengan mode konektor.</p>
+      </div>
+      <input type="file" id="import-file" accept="application/json,.json" hidden>
+    </section>
+
+    <aside class="inspector" id="inspector" aria-label="Properti diagram">
+      <h2>Diagram</h2>
+      <p id="diagram-info">0 node, 0 edge</p>
+      <p class="inspector-note">Pilih node atau edge untuk mengedit propertinya.</p>
+    </aside>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
