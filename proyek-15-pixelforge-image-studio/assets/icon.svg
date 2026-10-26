@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="PixelForge">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5ce3c3"/>
+      <stop offset="1" stop-color="#ffd166"/>
+    </linearGradient>
+  </defs>
+  <rect x="5" y="5" width="54" height="54" rx="16" fill="#121e23" stroke="url(#g)" stroke-width="3"/>
+  <path d="M18 45V19h9l8 14 8-14h3v26h-6V31l-6 11h-4l-6-11v14z" fill="#eef7f5"/>
+  <rect x="43" y="19" width="3" height="26" fill="#5ce3c3"/>
+</svg>

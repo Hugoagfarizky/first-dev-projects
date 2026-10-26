@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a1114">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>PixelForge — Local Image Studio</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Lewati ke workspace</a>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <img class="brand-icon" src="assets/icon.svg" width="52" height="52" alt="">
+        <div class="brand-text">
+          <p class="eyebrow">Local image studio</p>
+          <h1>PixelForge</h1>
+          <p class="brand-copy">Edit, bandingkan, dan unduh gambar tanpa mengunggahnya ke mana pun.</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <p class="status-chip" id="app-status" data-tone="info" role="status" aria-live="polite">Belum ada gambar</p>
+        <button class="button button-primary" id="import-button" type="button">Impor gambar</button>
+        <button class="button button-secondary" id="export-button" type="button" disabled>Ekspor</button>
+        <input id="file-input" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+      </div>
+    </header>
+
+    <main class="studio-layout" id="main">
+      <aside class="sidebar" aria-label="Panel pengaturan gambar">
+        <section class="panel" aria-labelledby="source-heading">
+          <div class="panel-heading">
+            <h2 id="source-heading">Sumber</h2>
+            <span class="badge" id="image-badge">Kosong</span>
+          </div>
+          <p class="muted" id="source-empty">Impor PNG, JPEG, atau WebP hingga 15 MiB. File tetap berada di perangkat ini.</p>
+          <dl class="meta-list" id="image-meta" hidden>
+            <div><dt>Nama</dt><dd id="meta-name">—</dd></div>
+            <div><dt>Format</dt><dd id="meta-type">—</dd></div>
+            <div><dt>Dimensi asli</dt><dd id="meta-dimensions">—</dd></div>
+            <div><dt>Ukuran file</dt><dd id="meta-size">—</dd></div>
+            <div><dt>Dimensi hasil</dt><dd id="meta-output">—</dd></div>
+          </dl>
+          <button class="button button-quiet button-block" id="replace-button" type="button" hidden>Ganti gambar</button>
+        </section>
+
+        <section class="panel" aria-labelledby="adjust-heading">
+          <div class="panel-heading">
+            <h2 id="adjust-heading">Penyesuaian</h2>
+            <button class="text-button" id="reset-filters" type="button" disabled>Reset filter</button>
+          </div>
+          <div class="filter-list">
+            <div class="filter-control">
+              <div class="control-label">
+                <label for="filter-brightness">Brightness</label>
+                <output id="value-brightness" for="filter-brightness">100%</output>
+              </div>
+              <input type="range" id="filter-brightness" data-filter="brightness" min="0" max="200" step="1" value="100">
+            </div>
+            <div class="filter-control">
+              <div class="control-label">
+                <label for="filter-contrast">Contrast</label>
+                <output id="value-contrast" for="filter-contrast">100%</output>
+              </div>
+              <input type="range" id="filter-contrast" data-filter="contrast" min="0" max="200" step="1" value="100">
+            </div>
+            <div class="filter-control">
+              <div class="control-label">
+                <label for="filter-saturation">Saturation</label>
+                <output id="value-saturation" for="filter-saturation">100%</output>
+              </div>
+              <input type="range" id="filter-saturation" data-filter="saturation" min="0" max="200" step="1" value="100">
+            </div>
+            <div class="filter-control">
+              <div class="control-label">
+                <label for="filter-grayscale">Grayscale</label>
+                <output id="value-grayscale" for="filter-grayscale">0%</output>
+              </div>
+              <input type="range" id="filter-grayscale" data-filter="grayscale" min="0" max="100" step="1" value="0">
+            </div>
+            <div class="filter-control">
+              <div class="control-label">
+                <label for="filter-sepia">Sepia</label>
+                <output id="value-sepia" for="filter-sepia">0%</output>
+              </div>
+              <input type="range" id="filter-sepia" data-filter="sepia" min="0" max="100" step="1" value="0">
+            </div>
+            <div class="filter-control">
+              <div class="control-label">
+                <label for="filter-blur">Blur</label>
+                <output id="value-blur" for="filter-blur">0px</output>
+              </div>
+              <input type="range" id="filter-blur" data-filter="blur" min="0" max="10" step="0.1" value="0">
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="transform-heading">
+          <div class="panel-heading">
+            <h2 id="transform-heading">Transformasi</h2>
+          </div>
+          <div class="transform-grid">
+            <button class="button button-quiet" type="button" data-transform="rotate-left" disabled>
+              <span aria-hidden="true">↺</span> Putar kiri
+            </button>
+            <button class="button button-quiet" type="button" data-transform="rotate-right" disabled>
+              <span aria-hidden="true">↻</span> Putar kanan
+            </button>
+            <button class="button button-quiet" type="button" data-transform="flip-x" disabled>
+              <span aria-hidden="true">⇄</span> Flip horizontal
+            </button>
+            <button class="button button-quiet" type="button" data-transform="flip-y" disabled>
+              <span aria-hidden="true">⇅</span> Flip vertikal
+            </button>
+          </div>
+          <p class="hint">Rotasi 90° menukar lebar dan tinggi hasil ekspor. Flip tidak mengubah ukuran.</p>
+        </section>
+
+        <section class="panel" aria-labelledby="export-settings-heading">
+          <div class="panel-heading">
+            <h2 id="export-settings-heading">Pengaturan ekspor</h2>
+          </div>
+          <div class="field">
+            <label for="format-select">Format output</label>
+            <select id="format-select">
+              <option value="png">PNG</option>
+              <option value="jpeg">JPEG</option>
+            </select>
+          </div>
+          <div class="field" id="jpeg-quality-control" hidden>
+            <div class="control-label">
+              <label for="jpeg-quality">Kualitas JPEG</label>
+              <output id="jpeg-quality-value" for="jpeg-quality">92%</output>
+            </div>
+            <input type="range" id="jpeg-quality" min="10" max="100" step="1" value="92">
+          </div>
+          <p class="hint" id="export-note">PNG mempertahankan transparansi dan cocok untuk hasil tanpa kehilangan kualitas.</p>
+          <p class="export-dimensions" id="export-dimensions">Impor gambar untuk melihat dimensi hasil.</p>
+        </section>
+      </aside>
+
+      <section class="workspace" id="workspace" aria-labelledby="workspace-heading">
+        <h2 class="sr-only" id="workspace-heading">Workspace gambar</h2>
+
+        <div class="workspace-toolbar">
+          <div class="tool-group" aria-label="Riwayat dan reset">
+            <button class="button button-quiet button-compact" id="undo-button" type="button" disabled aria-keyshortcuts="Control+Z">Undo</button>
+            <button class="button button-quiet button-compact" id="redo-button" type="button" disabled aria-keyshortcuts="Control+Shift+Z">Redo</button>
+            <button class="button button-quiet button-compact" id="reset-button" type="button" disabled>Reset semua</button>
+          </div>
+
+          <div class="tool-group compare-group" aria-label="Perbandingan before after">
+            <button class="button button-compare" id="before-button" type="button" aria-pressed="false" disabled>Lihat asli</button>
+            <span class="compare-status" id="compare-status">Menampilkan hasil edit</span>
+          </div>
+
+          <div class="tool-group zoom-group" aria-label="Zoom tampilan">
+            <button class="icon-button" id="zoom-out" type="button" aria-label="Perkecil tampilan">−</button>
+            <span class="zoom-value" id="zoom-value">Fit</span>
+            <button class="icon-button" id="zoom-in" type="button" aria-label="Perbesar tampilan">+</button>
+            <button class="text-button" id="zoom-fit" type="button">Fit</button>
+          </div>
+        </div>
+
+        <div class="workspace-stage" id="workspace-stage">
+          <div class="empty-state" id="empty-state">
+            <img class="empty-icon" src="assets/icon.svg" width="84" height="84" alt="">
+            <h3>Letakkan gambar untuk mulai</h3>
+            <p>Seret file ke area ini atau pilih dari perangkat. PNG, JPEG, dan WebP didukung.</p>
+            <button class="button button-primary" id="empty-import-button" type="button">Pilih gambar</button>
+            <p class="hint">Batas 15 MiB, 24 megapiksel, dan sisi maksimum 12.000 piksel. Semua proses berjalan di browser.</p>
+          </div>
+
+          <div class="canvas-shell is-fit" id="canvas-shell" hidden>
+            <div class="canvas-scroll" id="canvas-scroll">
+              <div class="canvas-frame" id="canvas-frame">
+                <canvas id="preview-canvas" width="0" height="0" aria-label="Pratinjau gambar hasil edit"></canvas>
+              </div>
+            </div>
+            <p class="canvas-caption" id="canvas-caption"></p>
+          </div>
+
+          <div class="processing-overlay" id="processing-overlay" hidden>
+            <span class="spinner" aria-hidden="true"></span>
+            <span id="processing-text">Memproses gambar…</span>
+          </div>
+
+          <div class="drop-indicator" id="drop-indicator" hidden>Lepaskan gambar untuk mengganti</div>
+        </div>
+
+        <div class="workspace-footer">
+          <p class="workspace-note" id="preview-size">Impor gambar untuk memulai.</p>
+          <p class="workspace-note" id="last-action">Riwayat edit masih kosong.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>PixelForge memproses gambar sepenuhnya di browser ini. Tidak ada unggahan, analytics, atau penyimpanan gambar otomatis.</p>
+      <p>Riwayat edit hanya berada di memori tab. Mengganti gambar memulai sesi baru dan melepaskan bitmap lama.</p>
+    </footer>
+  </div>
+
+  <div class="error-region" id="error-region" role="alert" aria-live="assertive" hidden>
+    <p id="error-message"></p>
+    <button class="error-dismiss" id="error-dismiss" type="button" aria-label="Tutup pesan error">Tutup</button>
+  </div>
+</body>
+</html>
