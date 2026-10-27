@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>TradeLab — Stock Trading Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <h1>TradeLab</h1>
+      <p class="app-subtitle">Simulator trading saham edukatif</p>
+    </div>
+    <p id="app-status" class="app-status" role="status" aria-live="polite">Memuat data pasar sintetis...</p>
+  </header>
+
+  <main class="workspace">
+    <section class="panel market-panel" aria-labelledby="market-title">
+      <div class="panel-header">
+        <h2 id="market-title">Pasar</h2>
+        <div class="filters">
+          <label for="search-stock">Cari saham</label>
+          <input id="search-stock" type="search" placeholder="Simbol atau nama" autocomplete="off">
+
+          <label for="sector-filter">Sektor</label>
+          <select id="sector-filter">
+            <option value="Semua">Semua sektor</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrap" role="region" aria-label="Daftar saham" tabindex="0">
+        <table class="stock-table">
+          <thead>
+            <tr>
+              <th scope="col">Simbol</th>
+              <th scope="col">Nama</th>
+              <th scope="col">Sektor</th>
+              <th scope="col">Harga</th>
+              <th scope="col">Perubahan</th>
+            </tr>
+          </thead>
+          <tbody id="stock-table-body"></tbody>
+        </table>
+      </div>
+      <p id="market-empty" class="empty-state" hidden>Tidak ada saham yang cocok dengan pencarian atau filter.</p>
+    </section>
+
+    <section class="panel detail-panel" aria-labelledby="detail-title">
+      <h2 id="detail-title">Detail saham</h2>
+      <div id="stock-detail"></div>
+    </section>
+
+    <nav class="tabs" aria-label="Navigasi utama">
+      <button type="button" id="tab-market" class="tab-button" aria-selected="true">Pasar</button>
+      <button type="button" id="tab-portfolio" class="tab-button" aria-selected="false">Portofolio</button>
+      <button type="button" id="tab-history" class="tab-button" aria-selected="false">Riwayat</button>
+    </nav>
+
+    <section id="view-market" class="view is-active" aria-labelledby="market-title"></section>
+
+    <section id="view-portfolio" class="view" aria-labelledby="portfolio-title" hidden>
+      <h2 id="portfolio-title">Portofolio</h2>
+      <div id="storage-status" class="status-banner" role="status" aria-live="polite"></div>
+      <div id="portfolio-summary" class="summary-grid"></div>
+
+      <form id="trade-form" class="trade-form" aria-labelledby="trade-title">
+        <h3 id="trade-title">Transaksi</h3>
+        <label for="trade-symbol">Saham
+          <select id="trade-symbol"></select>
+        </label>
+        <label for="trade-quantity">Jumlah
+          <input id="trade-quantity" type="number" min="1" step="1" inputmode="numeric" required>
+        </label>
+        <label for="trade-price">Harga
+          <input id="trade-price" type="text" readonly>
+        </label>
+        <div class="trade-actions">
+          <button type="button" id="buy-button">Beli</button>
+          <button type="button" id="sell-button">Jual</button>
+        </div>
+        <p id="trade-message" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+
+      <h3>Posisi</h3>
+      <div class="table-wrap" role="region" aria-label="Daftar posisi" tabindex="0">
+        <table class="position-table">
+          <thead>
+            <tr>
+              <th scope="col">Simbol</th>
+              <th scope="col">Jumlah</th>
+              <th scope="col">Harga rata-rata</th>
+              <th scope="col">Harga pasar</th>
+              <th scope="col">Nilai pasar</th>
+              <th scope="col">Laba/rugi</th>
+            </tr>
+          </thead>
+          <tbody id="position-table-body"></tbody>
+        </table>
+      </div>
+
+      <h3>Watchlist</h3>
+      <div class="watchlist-controls">
+        <select id="watchlist-symbol"></select>
+        <button type="button" id="watchlist-add">Tambah watchlist</button>
+      </div>
+      <ul id="watchlist-list" class="watchlist-list"></ul>
+
+      <button type="button" id="reset-portfolio">Reset portofolio</button>
+    </section>
+
+    <section id="view-history" class="view" aria-labelledby="history-title" hidden>
+      <h2 id="history-title">Riwayat</h2>
+      <div class="table-wrap" role="region" aria-label="Riwayat transaksi" tabindex="0">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th scope="col">Waktu</th>
+              <th scope="col">Tipe</th>
+              <th scope="col">Simbol</th>
+              <th scope="col">Jumlah</th>
+              <th scope="col">Harga</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body"></tbody>
+        </table>
+      </div>
+      <p id="history-empty" class="empty-state" hidden>Belum ada transaksi.</p>
+    </section>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
