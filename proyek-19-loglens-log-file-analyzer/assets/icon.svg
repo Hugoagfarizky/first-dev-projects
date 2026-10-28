@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">LogLens</title>
+  <desc id="desc">Ikon lensa pembesar dengan baris log di dalamnya</desc>
+  <defs>
+    <linearGradient id="bg" x1="8" y1="4" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#142039"/>
+      <stop offset="1" stop-color="#08101f"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="18" y1="16" x2="45" y2="43" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#99f6e4"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bg)" stroke="#2f4366" stroke-width="2"/>
+  <circle cx="30" cy="28" r="13" fill="rgba(45,212,191,0.08)" stroke="url(#lens)" stroke-width="3"/>
+  <path d="M39.5 38.5 51 50" fill="none" stroke="url(#lens)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M23 23h14M23 28h10M23 33h7" fill="none" stroke="#d9fff9" stroke-width="2" stroke-linecap="round"/>
+</svg>

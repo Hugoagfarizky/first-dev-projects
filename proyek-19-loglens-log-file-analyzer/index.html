@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="referrer" content="no-referrer">
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';"
+  >
+  <title>LogLens — Local Log File Analyzer</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
+  <header class="app-header">
+    <div class="brand">
+      <img class="brand-icon" src="assets/icon.svg" alt="" width="48" height="48">
+      <div>
+        <p class="eyebrow">Local log analysis</p>
+        <h1>LogLens</h1>
+      </div>
+    </div>
+    <div class="header-meta" aria-label="Status aplikasi">
+      <span class="badge badge-local"><span class="status-dot" aria-hidden="true"></span>Local only</span>
+      <span class="phase-pill">Phase 3 · Local analysis</span>
+    </div>
+  </header>
+
+  <main id="main-content" class="app-main">
+    <section class="intro" aria-labelledby="intro-title">
+      <div>
+        <p class="eyebrow">Baca log tanpa mengirimnya ke mana pun</p>
+        <h2 id="intro-title">Temukan sinyal di antara ribuan baris log.</h2>
+        <p class="intro-copy">
+          Muat file log lokal, cari teks secara literal, filter level dan rentang waktu,
+          lalu ekspor hasil filter. Semua pemrosesan tetap berada di browser ini.
+        </p>
+      </div>
+      <div class="privacy-card">
+        <span class="privacy-icon" aria-hidden="true">✓</span>
+        <div>
+          <strong>Tidak ada upload</strong>
+          <p>File diproses di browser. Tidak ada jaringan, telemetri, atau penyimpanan isi log.</p>
+        </div>
+      </div>
+    </section>
+
+    <p class="app-status" data-app-status role="status" aria-live="polite" aria-atomic="true">
+      Memuat antarmuka LogLens…
+    </p>
+
+    <div class="workspace-grid">
+      <section class="panel file-panel" aria-labelledby="file-title">
+        <div class="panel-heading">
+          <h2 id="file-title">File log</h2>
+          <span class="phase-tag">Streaming lokal</span>
+        </div>
+        <div class="dropzone" data-dropzone aria-describedby="file-help">
+          <img class="dropzone-icon" src="assets/icon.svg" alt="" width="64" height="64">
+          <h3>Muat file log lokal</h3>
+          <p id="file-help">
+            Tarik dan lepas file di area ini, atau gunakan tombol pemilih file.
+            Maksimum 20 MiB, 200.000 baris, dan 64 KiB byte UTF-8 per baris.
+          </p>
+          <div class="file-actions">
+            <button class="button" type="button" data-choose-file>Pilih file log</button>
+            <button class="button button-secondary" type="button" data-clear-dataset disabled>Hapus dataset</button>
+            <button class="button button-danger" type="button" data-cancel-load hidden>Batalkan</button>
+          </div>
+          <input
+            class="visually-hidden"
+            type="file"
+            accept=".log,.txt,.jsonl,text/plain,application/json,application/x-ndjson"
+            data-file-input
+            aria-label="Pilih file log lokal"
+            tabindex="-1"
+          >
+          <p class="hint">Format: plain/raw, structured text, dan JSON Lines. File tidak disimpan setelah halaman ditutup.</p>
+
+          <dl class="file-meta" aria-label="Metadata file">
+            <div>
+              <dt>Nama file</dt>
+              <dd data-file-name>Belum ada file</dd>
+            </div>
+            <div>
+              <dt>Ukuran</dt>
+              <dd data-file-size>—</dd>
+            </div>
+            <div>
+              <dt>Baris</dt>
+              <dd data-file-lines>—</dd>
+            </div>
+            <div>
+              <dt>Baris dipotong</dt>
+              <dd data-file-truncated>—</dd>
+            </div>
+          </dl>
+
+          <div class="progress-wrap" data-progress-wrap hidden>
+            <progress data-load-progress max="100" value="0" aria-label="Progress pembacaan file"></progress>
+            <p data-progress-text>0 B · 0 baris</p>
+          </div>
+
+          <p class="load-error" data-load-error role="alert" hidden></p>
+        </div>
+      </section>
+
+      <section class="panel stats-panel" data-stats-panel="full" aria-labelledby="full-stats-title">
+        <div class="panel-heading">
+          <h2 id="full-stats-title">Statistik dataset</h2>
+          <span class="phase-tag">Semua baris</span>
+        </div>
+        <dl class="stat-grid">
+          <div class="stat-card">
+            <dt>Total baris</dt>
+            <dd data-stat-total>—</dd>
+          </div>
+          <div class="stat-card">
+            <dt>Baris kosong</dt>
+            <dd data-stat-blank>—</dd>
+          </div>
+          <div class="stat-card">
+            <dt>Tanpa timestamp</dt>
+            <dd data-stat-no-time>—</dd>
+          </div>
+          <div class="stat-card stat-info">
+            <dt>Timestamp awal</dt>
+            <dd class="stat-time" data-stat-first>—</dd>
+          </div>
+          <div class="stat-card stat-info">
+            <dt>Timestamp akhir</dt>
+            <dd class="stat-time" data-stat-last>—</dd>
+          </div>
+        </dl>
+        <p class="hint">Statistik dataset penuh tetap stabil saat filter berubah.</p>
+        <h3 class="level-heading">Per level</h3>
+        <div class="level-counts" data-stat-levels></div>
+      </section>
+
+      <section class="panel stats-panel" data-stats-panel="filtered" aria-labelledby="filtered-stats-title">
+        <div class="panel-heading">
+          <h2 id="filtered-stats-title">Statistik hasil filter</h2>
+          <span class="phase-tag">Hasil cocok</span>
+        </div>
+        <dl class="stat-grid">
+          <div class="stat-card">
+            <dt>Record cocok</dt>
+            <dd data-stat-total>—</dd>
+          </div>
+          <div class="stat-card">
+            <dt>Baris kosong</dt>
+            <dd data-stat-blank>—</dd>
+          </div>
+          <div class="stat-card">
+            <dt>Tanpa timestamp</dt>
+            <dd data-stat-no-time>—</dd>
+          </div>
+          <div class="stat-card stat-info">
+            <dt>Timestamp awal</dt>
+            <dd class="stat-time" data-stat-first>—</dd>
+          </div>
+          <div class="stat-card stat-info">
+            <dt>Timestamp akhir</dt>
+            <dd class="stat-time" data-stat-last>—</dd>
+          </div>
+        </dl>
+        <p class="hint" data-filtered-note>Belum ada data untuk difilter.</p>
+        <h3 class="level-heading">Per level</h3>
+        <div class="level-counts" data-stat-levels></div>
+      </section>
+    </div>
+
+    <section class="panel toolbar-panel" aria-labelledby="filter-title">
+      <div class="panel-heading">
+        <h2 id="filter-title">Filter dan ekspor</h2>
+        <span class="phase-tag">Filter aktif setelah file dimuat</span>
+      </div>
+      <div class="toolbar-grid">
+        <label class="field">
+          <span>Pencarian teks</span>
+          <input
+            type="search"
+            placeholder="Cari raw atau message…"
+            data-search-input
+            autocomplete="off"
+            spellcheck="false"
+            disabled
+          >
+        </label>
+        <fieldset class="field level-field" data-level-fieldset disabled>
+          <legend>Level</legend>
+          <div class="level-options" data-level-filters aria-label="Pilih level log"></div>
+        </fieldset>
+        <label class="field">
+          <span>Dari waktu (lokal)</span>
+          <input type="datetime-local" step="1" data-from-time aria-describedby="time-range-error" disabled>
+        </label>
+        <label class="field">
+          <span>Sampai waktu (lokal)</span>
+          <input type="datetime-local" step="1" data-to-time aria-describedby="time-range-error" disabled>
+        </label>
+        <div class="toolbar-actions">
+          <button class="button button-secondary" type="button" data-reset-filters disabled>Reset filter</button>
+          <button class="button" type="button" data-export disabled>Ekspor semua hasil</button>
+        </div>
+      </div>
+      <p class="time-range-error" id="time-range-error" data-time-range-error role="alert" aria-atomic="true" hidden></p>
+      <p class="hint" id="time-filter-hint">Batas waktu inklusif. Baris tanpa timestamp tetap terlihat saat filter waktu tidak aktif. Jika tidak ada level yang dicentang, filter level dianggap tidak aktif.</p>
+      <p class="export-warning" role="note">
+        Peringatan: file ekspor dapat mengandung data sensitif. Download hanya dibuat setelah Anda menekan tombol ekspor.
+      </p>
+    </section>
+
+    <section class="panel table-panel" aria-labelledby="results-title">
+      <div class="panel-heading">
+        <h2 id="results-title">Baris log</h2>
+        <span class="phase-tag" data-page-tag>0 baris</span>
+      </div>
+      <div class="results-toolbar">
+        <p class="results-summary" data-results-summary role="status" aria-live="polite">
+          Belum ada log yang dimuat.
+        </p>
+        <div class="match-controls" aria-label="Navigasi hasil pencarian">
+          <button class="button button-small button-secondary" type="button" data-prev-match disabled>Match sebelumnya</button>
+          <span class="match-position" data-match-position aria-live="polite">0 / 0</span>
+          <button class="button button-small button-secondary" type="button" data-next-match disabled>Match berikutnya</button>
+        </div>
+      </div>
+      <p class="match-warning" data-match-warning role="status" hidden></p>
+      <div class="table-wrap">
+        <table>
+          <caption class="visually-hidden">
+            Baris log hasil filter. Baris, waktu, level, dan pesan ditampilkan sebagai teks.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Baris</th>
+              <th scope="col">Waktu</th>
+              <th scope="col">Level</th>
+              <th scope="col">Pesan</th>
+            </tr>
+          </thead>
+          <tbody data-log-rows>
+            <tr>
+              <td colspan="4">
+                <div class="table-empty">
+                  <strong>Belum ada log yang dimuat.</strong>
+                  <p>Pilih atau jatuhkan file log lokal untuk mulai.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <button class="button button-small button-secondary" type="button" data-prev-page disabled>Halaman sebelumnya</button>
+        <span data-page-status>Halaman 0 dari 0</span>
+        <button class="button button-small button-secondary" type="button" data-next-page disabled>Halaman berikutnya</button>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      <p>Semua pemrosesan berjalan lokal di browser. Tidak ada upload, telemetri, atau layanan eksternal.</p>
+      <p class="footer-meta">LogLens · Phase 3 local analysis</p>
+    </footer>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
