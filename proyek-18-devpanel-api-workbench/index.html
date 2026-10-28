@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http: https:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>DevPanel API Workbench</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>DevPanel API Workbench</h1>
+    <p id="app-status" class="app-status" role="status" aria-live="polite">Siap. Tekan Send untuk mengirim request.</p>
+  </header>
+
+  <nav class="tabs" aria-label="Navigasi utama">
+    <button type="button" id="tab-request" class="tab-button" aria-selected="true">Request</button>
+    <button type="button" id="tab-history" class="tab-button" aria-selected="false">History</button>
+    <button type="button" id="tab-collections" class="tab-button" aria-selected="false">Collections</button>
+  </nav>
+
+  <main class="workspace">
+    <section id="view-request" class="view is-active">
+      <form id="request-form" class="request-form">
+        <label>Method
+          <select id="request-method">
+            <option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option>
+          </select>
+        </label>
+        <label>URL
+          <input id="request-url" type="url" placeholder="https://example.com/api" autocomplete="off">
+        </label>
+        <label>Timeout (ms)
+          <input id="request-timeout" type="number" min="1" step="1" value="10000">
+        </label>
+
+        <h2>Query parameters</h2>
+        <table id="query-table"><tbody id="query-body"></tbody></table>
+        <button type="button" id="add-query">Tambah query</button>
+
+        <h2>Headers</h2>
+        <table id="header-table"><tbody id="header-body"></tbody></table>
+        <button type="button" id="add-header">Tambah header</button>
+
+        <h2>JSON body</h2>
+        <textarea id="request-body" rows="8" placeholder='{"key":"value"}'></textarea>
+
+        <div class="actions">
+          <button type="button" id="send-button">Send</button>
+          <button type="button" id="cancel-button">Cancel</button>
+        </div>
+        <p id="validation-message" class="message" role="status" aria-live="polite"></p>
+      </form>
+
+      <section class="response-panel">
+        <h2>Response</h2>
+        <div id="response-container"></div>
+      </section>
+    </section>
+
+    <section id="view-history" class="view" hidden>
+      <h2>History</h2>
+      <button type="button" id="clear-history">Hapus semua history</button>
+      <div id="history-container"></div>
+    </section>
+
+    <section id="view-collections" class="view" hidden>
+      <h2>Collections</h2>
+      <div class="collection-actions">
+        <input id="collection-name" type="text" placeholder="Nama collection">
+        <button type="button" id="save-collection">Simpan collection</button>
+        <button type="button" id="export-collections">Export JSON</button>
+        <input id="import-collections" type="file" accept="application/json">
+      </div>
+      <div id="collection-container"></div>
+    </section>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
