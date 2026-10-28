@@ -35,8 +35,22 @@ function renderHeaderRows() {
   });
 }
 
+function updateResponseState(status) {
+  if (!elements.responseState) return;
+  if (status.sending) {
+    elements.responseState.textContent = 'Sending';
+  } else if (status.error) {
+    elements.responseState.textContent = 'Error';
+  } else if (status.response) {
+    elements.responseState.textContent = `${status.response.status}`;
+  } else {
+    elements.responseState.textContent = 'Idle';
+  }
+}
+
 function renderResponsePanel() {
   const status = controller.getStatus();
+  updateResponseState(status);
   renderResponseView(status);
 }
 
@@ -57,9 +71,10 @@ function renderResponseView(status) {
     container.appendChild(error);
     return;
   }
-  if (!status.response) {
+  if (!status.response && !status.sending && !status.error) {
     const empty = document.createElement('p');
-    empty.textContent = 'Belum ada respons.';
+    empty.className = 'empty-state response-empty';
+    empty.textContent = 'Belum ada respons. Kirim request untuk melihat status, header, dan body.';
     container.appendChild(empty);
     return;
   }
@@ -102,6 +117,13 @@ function renderHistory() {
   if (!container) return;
   container.replaceChildren();
   const status = controller.getStatus();
+  if (status.history.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'empty-state';
+    empty.textContent = 'Belum ada history.';
+    container.appendChild(empty);
+    return;
+  }
   for (const item of status.history) {
     const article = document.createElement('article');
     const title = document.createElement('strong');
@@ -133,33 +155,72 @@ function renderCollections() {
   if (!container) return;
   container.replaceChildren();
   const status = controller.getStatus();
+  if (status.collections.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'empty-state';
+    empty.textContent = 'Belum ada collection.';
+    container.appendChild(empty);
+    return;
+  }
+
   for (const collection of status.collections) {
     const article = document.createElement('article');
-    const title = document.createElement('strong');
+    article.className = 'collection-card';
+
+    const header = document.createElement('div');
+    header.className = 'collection-header';
+    const title = document.createElement('h3');
+    title.className = 'collection-title';
     title.textContent = collection.name;
-    article.appendChild(title);
-    for (const [index, request] of collection.requests.entries()) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'secondary';
-      button.textContent = `${request.method} ${request.url}`;
-      button.addEventListener('click', () => {
-        controller.loadCollectionRequest(collection.id, index);
-        syncFormFromRequest();
-        setActiveView('request');
-        renderAll();
-      });
-      article.appendChild(button);
-    }
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
-    deleteButton.className = 'secondary';
+    deleteButton.className = 'button button-danger button-compact';
     deleteButton.textContent = 'Hapus collection';
     deleteButton.addEventListener('click', () => {
       controller.deleteCollection(collection.id);
       renderAll();
     });
-    article.appendChild(deleteButton);
+    header.append(title, deleteButton);
+    article.appendChild(header);
+
+    if (collection.requests.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-state';
+      empty.textContent = 'Collection ini belum memiliki request.';
+      article.appendChild(empty);
+    } else {
+      const list = document.createElement('div');
+      list.className = 'collection-request-list';
+      for (const [index, request] of collection.requests.entries()) {
+        const row = document.createElement('div');
+        row.className = 'collection-request';
+
+        const method = document.createElement('span');
+        method.className = `method-badge method-${String(request.method).toLowerCase()}`;
+        method.textContent = request.method;
+
+        const url = document.createElement('span');
+        url.className = 'collection-url';
+        url.textContent = request.url;
+        url.title = request.url;
+
+        const openButton = document.createElement('button');
+        openButton.type = 'button';
+        openButton.className = 'button button-quiet button-compact';
+        openButton.textContent = 'Buka';
+        openButton.addEventListener('click', () => {
+          controller.loadCollectionRequest(collection.id, index);
+          syncFormFromRequest();
+          setActiveView('request');
+          renderAll();
+        });
+
+        row.append(method, url, openButton);
+        list.appendChild(row);
+      }
+      article.appendChild(list);
+    }
+
     container.appendChild(article);
   }
 }
@@ -204,14 +265,35 @@ function renderAll() {
   }
 }
 
+const VIEW_META = {
+  request: {
+    title: 'Request Console',
+    description: 'Kirim, inspeksi, dan debug request API secara lokal.',
+  },
+  history: {
+    title: 'History',
+    description: 'Riwayat request yang tersimpan di browser ini.',
+  },
+  collections: {
+    title: 'Collections',
+    description: 'Kumpulan request tersimpan dan import/export JSON.',
+  },
+};
+
 function setActiveView(viewName) {
   state.activeView = viewName;
   for (const [name, element] of Object.entries(elements.views)) {
     if (element) element.hidden = name !== viewName;
   }
   for (const button of elements.tabs) {
-    button.setAttribute('aria-selected', String(button.dataset.view === viewName));
+    const active = button.dataset.view === viewName;
+    button.setAttribute('aria-selected', String(active));
+    button.setAttribute('aria-current', active ? 'page' : 'false');
   }
+
+  const meta = VIEW_META[viewName] || VIEW_META.request;
+  if (elements.viewTitle) elements.viewTitle.textContent = meta.title;
+  if (elements.viewDescription) elements.viewDescription.textContent = meta.description;
   renderAll();
 }
 
@@ -224,6 +306,9 @@ function initializeElements() {
   elements.queryBody = document.getElementById('query-body');
   elements.headerBody = document.getElementById('header-body');
   elements.responseContainer = document.getElementById('response-container');
+  elements.responseState = document.getElementById('response-state');
+  elements.viewTitle = document.getElementById('view-title');
+  elements.viewDescription = document.getElementById('view-description');
   elements.historyContainer = document.getElementById('history-container');
   elements.collectionContainer = document.getElementById('collection-container');
   elements.validationMessage = document.getElementById('validation-message');
@@ -319,6 +404,23 @@ function initializeEvents() {
     button.dataset.view = button.id.replace('tab-', '');
     button.addEventListener('click', () => setActiveView(button.dataset.view));
   }
+
+  const sectionTabs = Array.from(document.querySelectorAll('.section-tab'));
+  const sectionPanels = Array.from(document.querySelectorAll('.section-panel'));
+  const activateSection = (name) => {
+    for (const tab of sectionTabs) {
+      const active = tab.dataset.section === name;
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-selected', String(active));
+    }
+    for (const panel of sectionPanels) {
+      panel.hidden = panel.dataset.sectionPanel !== name;
+    }
+  };
+  for (const tab of sectionTabs) {
+    tab.addEventListener('click', () => activateSection(tab.dataset.section));
+  }
+  activateSection('params');
 }
 
 async function initializeApp() {

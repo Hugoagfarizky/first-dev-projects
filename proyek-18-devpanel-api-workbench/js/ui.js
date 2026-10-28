@@ -43,6 +43,7 @@ export function renderKeyValueTable(container, rows, options = {}) {
     const actionCell = document.createElement('td');
     const removeButton = document.createElement('button');
     removeButton.type = 'button';
+    removeButton.className = 'button button-danger button-compact';
     removeButton.textContent = 'Hapus';
     removeButton.addEventListener('click', () => options.onRemove?.(row.id));
     actionCell.appendChild(removeButton);
@@ -63,7 +64,8 @@ export function renderResponse(container, inspected) {
   container.replaceChildren();
   if (!inspected) {
     const empty = document.createElement('p');
-    empty.textContent = 'Belum ada respons.';
+    empty.className = 'empty-state response-empty';
+    empty.textContent = 'Belum ada respons. Kirim request untuk melihat status, header, dan body.';
     container.appendChild(empty);
     return;
   }
