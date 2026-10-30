@@ -1,0 +1,686 @@
+:root {
+  --bg: #07111f;
+  --panel: #101f35;
+  --panel-2: #172842;
+  --text: #e6edf7;
+  --muted: #93a4bf;
+  --muted-strong: #c7d2e3;
+  --accent: #5b8cff;
+  --accent-strong: #9db8ff;
+  --accent-soft: rgba(91, 140, 255, 0.16);
+  --cyan: #4fd1c5;
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --border: rgba(148, 163, 184, 0.18);
+  --border-strong: rgba(148, 163, 184, 0.32);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --font-mono: "Cascadia Code", "Consolas", "SFMono-Regular", monospace;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(91, 140, 255, 0.16), transparent 34%),
+    radial-gradient(circle at top right, rgba(79, 209, 197, 0.10), transparent 28%),
+    var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1.25rem;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.topbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.25rem;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 1.7rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+}
+
+.app-status {
+  margin: 0;
+  color: var(--muted);
+  min-height: 1.25rem;
+  text-align: right;
+}
+
+.app-status[data-state="error"] {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  min-width: 0;
+}
+
+.input-panel,
+.result-panel {
+  min-width: 0;
+  background: rgba(16, 31, 53, 0.86);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+.input-panel h2,
+.result-panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+}
+
+.repository-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.field span {
+  font-weight: 600;
+}
+
+input,
+select {
+  width: 100%;
+  min-width: 0;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+select {
+  cursor: pointer;
+}
+
+select:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid transparent;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(91, 140, 255, 0.18);
+}
+
+input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.button {
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 0.62rem 0.95rem;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--panel-2);
+  transition: transform 120ms ease, background 140ms ease, border-color 140ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.button-primary {
+  background: linear-gradient(135deg, var(--accent), #7b61ff);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.button-secondary {
+  background: var(--panel-2);
+  border-color: var(--border-strong);
+}
+
+.button[hidden] {
+  display: none !important;
+}
+
+.message {
+  min-height: 1.25rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin: 0.5rem 0 0;
+}
+
+.message.error {
+  color: var(--danger);
+}
+
+.message.warning {
+  color: var(--warning);
+}
+
+.result-container {
+  min-width: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.empty-state {
+  margin: 0;
+  color: var(--muted);
+  padding: 1rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.repository-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(7, 17, 31, 0.42);
+  min-width: 0;
+}
+
+.repository-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  overflow-wrap: anywhere;
+}
+
+.repository-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.repository-meta span {
+  padding: 0.32rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted-strong);
+  font-size: 0.82rem;
+}
+
+.rate-limit {
+  color: var(--muted);
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    padding: 0.85rem;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .app-status {
+    text-align: left;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+}
+/* Phase 2 additions */
+.repository-summary {
+  min-width: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.repository-card h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  overflow-wrap: anywhere;
+}
+
+.repository-card p {
+  margin: 0;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.branch-panel {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(16, 31, 53, 0.86);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.commit-panel,
+.detail-panel {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(16, 31, 53, 0.86);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.commit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+  max-height: 24rem;
+  overflow: auto;
+}
+
+.commit-button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto auto auto minmax(0, 1fr);
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(7, 17, 31, 0.45);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.commit-button:hover {
+  background: rgba(23, 40, 66, 0.85);
+}
+
+.commit-button:focus-visible,
+.file-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.commit-button.is-selected {
+  border-color: rgba(91, 140, 255, 0.55);
+  background: var(--accent-soft);
+}
+
+.commit-button code {
+  font-family: var(--font-mono);
+  color: var(--accent-strong);
+}
+
+.commit-button span {
+  color: var(--muted-strong);
+  font-size: 0.84rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commit-message {
+  color: var(--text);
+}
+
+.commit-detail h4 {
+  margin: 0.75rem 0 0.35rem;
+  font-size: 0.95rem;
+  color: var(--muted-strong);
+}
+
+.commit-detail h4:first-child {
+  margin-top: 0;
+  font-family: var(--font-mono);
+  color: var(--accent-strong);
+  overflow-wrap: anywhere;
+}
+
+.commit-stats {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.changed-files {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.changed-files li {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(7, 17, 31, 0.45);
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.file-status {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--muted-strong);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.file-name {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+}
+
+.file-counts {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.patch {
+  margin: 0;
+  max-height: 16rem;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #06101f;
+  color: #dbeafe;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  padding: 0.7rem;
+}
+
+.patch-line {
+  display: block;
+  padding: 0 0.35rem;
+  border-left: 3px solid transparent;
+}
+
+.patch-line-addition {
+  color: #bbf7d0;
+  background: rgba(52, 211, 153, 0.12);
+  border-left-color: var(--success);
+}
+
+.patch-line-deletion {
+  color: #fecaca;
+  background: rgba(248, 113, 113, 0.12);
+  border-left-color: var(--danger);
+}
+
+.patch-line-context {
+  color: #dbeafe;
+}
+
+.patch-line-hunk {
+  color: var(--accent-strong);
+  background: rgba(91, 140, 255, 0.1);
+}
+
+.patch-line-meta {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+@media (max-width: 860px) {
+  .commit-button {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .commit-button span:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+/* Phase 3 commit graph */
+.graph-panel {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(16, 31, 53, 0.86);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.graph-summary {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.graph-container {
+  min-width: 0;
+  max-height: 34rem;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(7, 17, 31, 0.45);
+  padding: 0.5rem;
+  scroll-padding: 0.5rem;
+}
+
+.commit-graph-svg {
+  display: block;
+  height: auto;
+}
+
+.graph-edge {
+  stroke: rgba(148, 163, 184, 0.45);
+  stroke-width: 2;
+}
+
+.graph-node {
+  cursor: pointer;
+  outline: none;
+}
+
+.graph-node:focus .graph-node-circle,
+.graph-node:focus-visible .graph-node-circle {
+  stroke: var(--accent-strong);
+  stroke-width: 3;
+}
+
+.graph-node-circle {
+  fill: var(--panel-2);
+  stroke: rgba(148, 163, 184, 0.45);
+  stroke-width: 2;
+}
+
+.graph-node.is-selected .graph-node-circle {
+  fill: var(--accent-soft);
+  stroke: var(--accent-strong);
+  stroke-width: 3;
+}
+
+.graph-node.is-merge .graph-node-circle {
+  fill: rgba(79, 209, 197, 0.18);
+  stroke: var(--cyan);
+}
+
+.graph-node-label {
+  fill: var(--text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.graph-node-message {
+  fill: var(--muted);
+  font-size: 10px;
+}
+
+.graph-missing-parent {
+  fill: var(--warning);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Phase 4 additions */
+.comparison-panel {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(16, 31, 53, 0.86);
+  display: grid;
+  gap: 0.85rem;
+}
+
+.comparison-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.comparison-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.comparison-subpanel {
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(7, 17, 31, 0.42);
+  display: grid;
+  gap: 0.65rem;
+}
+
+.comparison-subpanel h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted-strong);
+}
+
+.comparison-summary {
+  min-width: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.file-button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: center;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(7, 17, 31, 0.45);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.file-button.is-selected {
+  border-color: rgba(91, 140, 255, 0.55);
+  background: var(--accent-soft);
+}
+
+.file-button .file-status {
+  justify-self: start;
+}
+
+.file-button .file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-button .file-counts {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 900px) {
+  .comparison-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-columns {
+    grid-template-columns: 1fr;
+  }
+}

@@ -4,22 +4,22 @@ Kumpulan proyek belajar vibecoding, dari halaman web statis, aplikasi browser, a
 
 ## Tentang Repository
 
-Repository ini mendokumentasikan perjalanan belajar vibecoding melalui sembilan belas proyek kecil. Setiap proyek disimpan di foldernya sendiri dan dikembangkan secara bertahap, mulai dari HTML, CSS, dan JavaScript dasar sampai integrasi API, penyimpanan lokal, REST API, database SQLite, PWA offline-first, game arcade 2D dengan HTML5 Canvas, pemutar audio lokal dengan visualisasi real-time menggunakan Web Audio API dan Canvas, eksplorasi dan analisis CSV di browser, serta aplikasi Kanban dengan drag-and-drop, undo/redo, penyimpanan lokal berversi, dan impor/ekspor JSON.
+Repository ini mendokumentasikan perjalanan belajar vibecoding melalui dua puluh proyek kecil. Setiap proyek disimpan di foldernya sendiri dan dikembangkan secara bertahap, mulai dari HTML, CSS, dan JavaScript dasar sampai integrasi API, penyimpanan lokal, REST API, database SQLite, PWA offline-first, game arcade 2D dengan HTML5 Canvas, pemutar audio lokal dengan visualisasi real-time menggunakan Web Audio API dan Canvas, eksplorasi dan analisis CSV di browser, serta aplikasi Kanban dengan drag-and-drop, undo/redo, penyimpanan lokal berversi, dan impor/ekspor JSON.
 
-README ini berfungsi sebagai pengantar dan indeks. Instruksi teknis yang lengkap tersedia di README Proyek 01–19.
+README ini berfungsi sebagai pengantar dan indeks. Instruksi teknis yang lengkap tersedia di README Proyek 01–20.
 
 ## Prasyarat
 
 | Kebutuhan | Digunakan untuk |
 | --- | --- |
-| Browser modern | Semua proyek, termasuk Proyek 10–19 |
-| Python 3 atau static server lain | Proyek 04–08 dan 10–19; wajib untuk 05–08 dan 10–19, disarankan untuk 04 |
-| Koneksi internet | Proyek 04 dan 05; instalasi awal Proyek 09 |
+| Browser modern | Semua proyek, termasuk Proyek 10–20 |
+| Python 3 atau static server lain | Proyek 04–08 dan 10–20; wajib untuk 05–08 dan 10–20, disarankan untuk 04 |
+| Koneksi internet | Proyek 04, 05, dan 20; instalasi awal Proyek 09 |
 | TMDB API key | Proyek 05 |
 | Node.js `>=22.13.0` dan npm | Proyek 09 |
-| Node.js 24 atau versi yang mendukung `node:test` dan ES Modules | Unit test Proyek 13–19; tidak memerlukan npm |
+| Node.js 24 atau versi yang mendukung `node:test` dan ES Modules | Unit test Proyek 13–20; tidak memerlukan npm |
 
-Jika tidak menggunakan Python, static server lain seperti Live Server juga dapat dipakai untuk proyek yang memerlukannya. Proyek 10 tidak memerlukan instalasi dependency, API key, atau backend; cukup browser modern dan static HTTP server lokal. Proyek 11 tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules. Proyek 12 juga tidak memerlukan dependency npm, backend, API key, atau koneksi internet untuk memuat aset aplikasi; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules dan Web Audio API. Format audio yang dapat diputar mengikuti dukungan browser. Proyek 13 tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules dan memuat data contoh melalui `fetch`. Unit test Proyek 13 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules. Proyek 14 juga tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules. Unit test Proyek 14 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm. Proyek 15 juga tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules dan Canvas API. Gambar diproses di browser dan tidak diunggah. Unit test Proyek 15 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm. Proyek 16 juga tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules, SVG, dan Canvas API. Diagram disimpan di `localStorage` browser dan tidak diunggah. Unit test Proyek 16 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm.
+Jika tidak menggunakan Python, static server lain seperti Live Server juga dapat dipakai untuk proyek yang memerlukannya. Proyek 10 tidak memerlukan instalasi dependency, API key, atau backend; cukup browser modern dan static HTTP server lokal. Proyek 11 tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules. Proyek 12 juga tidak memerlukan dependency npm, backend, API key, atau koneksi internet untuk memuat aset aplikasi; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules dan Web Audio API. Format audio yang dapat diputar mengikuti dukungan browser. Proyek 13 tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules dan memuat data contoh melalui `fetch`. Unit test Proyek 13 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules. Proyek 14 juga tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules. Unit test Proyek 14 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm. Proyek 15 juga tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules dan Canvas API. Gambar diproses di browser dan tidak diunggah. Unit test Proyek 15 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm. Proyek 16 juga tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules, SVG, dan Canvas API. Diagram disimpan di `localStorage` browser dan tidak diunggah. Unit test Proyek 16 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm. Proyek 20 tidak memerlukan dependency npm, API key, atau backend; gunakan browser modern dan static HTTP server lokal karena implementasinya memakai ES Modules dan GitHub REST API publik. Aplikasi hanya melakukan request GET read-only ke `https://api.github.com`, dan tanpa autentikasi GitHub membatasi sekitar 60 request per jam per IP. Unit test Proyek 20 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm.
 
 ## Daftar Proyek
 
@@ -44,6 +44,7 @@ Jika tidak menggunakan Python, static server lain seperti Live Server juga dapat
 | 17 | [TradeLab: Stock Trading Simulator](proyek-17-tradelab-stock-trading-simulator/) | `proyek-17-tradelab-stock-trading-simulator/` | Dashboard simulasi trading saham berbasis browser: data harga sintetis deterministik, pencarian dan filter sektor, detail saham, grafik 30 hari, beli/jual, portofolio, riwayat transaksi, watchlist, dan autosave | [README](proyek-17-tradelab-stock-trading-simulator/README.md) |
 | 18 | [DevPanel API Workbench](proyek-18-devpanel-api-workbench/) | `proyek-18-devpanel-api-workbench/` | Alat developer browser untuk membangun dan memvalidasi request HTTP: validasi method/URL/timeout/query/header/body, HTTP client Fetch, history, collections, import/export JSON, dan UI dark workspace | [README](proyek-18-devpanel-api-workbench/README.md) |
 | 19 | [LogLens: Local Log File Analyzer](proyek-19-loglens-log-file-analyzer/) | `proyek-19-loglens-log-file-analyzer/` | Pembaca dan analyzer log lokal: streaming, pencarian, filter level/waktu, statistik, pagination, ekspor `.log`, serta hardening Unicode, ekspor, timestamp, dan UX | [README](proyek-19-loglens-log-file-analyzer/README.md) |
+| 20 | [GitScope: Git Repository Visualizer](proyek-20-gitscope-git-repository-visualizer/) | `proyek-20-gitscope-git-repository-visualizer/` | Aplikasi visualisasi repositori GitHub publik berbasis HTML, CSS, JavaScript ES Modules, dan GitHub REST API: metadata, branch, commit history, commit graph, branch comparison, dan diff | [README](proyek-20-gitscope-git-repository-visualizer/README.md) |
 
 Proyek 01 merupakan titik awal berupa halaman statis; fitur dan cara menjalankannya dijelaskan di [README Proyek 01](proyek-01-halo/README.md).
 
@@ -129,9 +130,9 @@ Lalu buka:
 http://localhost:8000/proyek-11-astro-dodge/
 ```
 
-### Proyek 17–19
+### Proyek 17–20
 
-Proyek 17, 18, dan 19 memakai ES Modules dan harus dijalankan melalui static HTTP server lokal.
+Proyek 17–20 memakai ES Modules dan harus dijalankan melalui static HTTP server lokal.
 
 Dari root repository:
 
@@ -145,9 +146,10 @@ Lalu buka:
 http://localhost:8000/proyek-17-tradelab-stock-trading-simulator/
 http://localhost:8000/proyek-18-devpanel-api-workbench/
 http://localhost:8000/proyek-19-loglens-log-file-analyzer/
+http://localhost:8000/proyek-20-gitscope-git-repository-visualizer/
 ```
 
-Proyek 17, 18, dan 19 tidak memerlukan dependency npm, API key, atau backend. Unit test Proyek 17, 18, dan 19 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm.
+Proyek 17–20 tidak memerlukan dependency npm, API key, atau backend. Unit test Proyek 17–20 memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm. Proyek 20 memerlukan koneksi internet ke `https://api.github.com`; tanpa autentikasi, GitHub membatasi sekitar 60 request per jam per IP.
 
 ## Struktur Repository
 
@@ -375,7 +377,33 @@ first-dev-projects/
 │       ├── request-model.test.mjs
 │       ├── response-inspector.test.mjs
 │       └── storage.test.mjs
-└── proyek-19-loglens-log-file-analyzer/
+├── proyek-19-loglens-log-file-analyzer/
+│   ├── README.md
+│   ├── index.html
+│   ├── style.css
+│   ├── assets/
+│   │   └── icon.svg
+│   ├── js/
+│   │   ├── app-controller.js
+│   │   ├── app.js
+│   │   ├── exporter.js
+│   │   ├── file-reader.js
+│   │   ├── log-model.js
+│   │   ├── log-parser.js
+│   │   ├── query-engine.js
+│   │   ├── statistics.js
+│   │   ├── timestamp-parser.js
+│   │   └── ui.js
+│   └── tests/
+│       ├── app-controller.test.mjs
+│       ├── exporter.test.mjs
+│       ├── file-reader.test.mjs
+│       ├── log-parser.test.mjs
+│       ├── query-engine.test.mjs
+│       ├── statistics.test.mjs
+│       ├── timestamp-parser.test.mjs
+│       └── ui-contract.test.mjs
+└── proyek-20-gitscope-git-repository-visualizer/
     ├── README.md
     ├── index.html
     ├── style.css
@@ -384,23 +412,32 @@ first-dev-projects/
     ├── js/
     │   ├── app-controller.js
     │   ├── app.js
-    │   ├── exporter.js
-    │   ├── file-reader.js
-    │   ├── log-model.js
-    │   ├── log-parser.js
-    │   ├── query-engine.js
-    │   ├── statistics.js
-    │   ├── timestamp-parser.js
-    │   └── ui.js
+    │   ├── branch-model.js
+    │   ├── commit-graph-renderer.js
+    │   ├── commit-graph.js
+    │   ├── commit-normalizer.js
+    │   ├── compare-model.js
+    │   ├── formatters.js
+    │   ├── github-api-client.js
+    │   ├── patch-viewer.js
+    │   ├── repo-model.js
+    │   ├── ui.js
+    │   └── url-validator.js
     └── tests/
         ├── app-controller.test.mjs
-        ├── exporter.test.mjs
-        ├── file-reader.test.mjs
-        ├── log-parser.test.mjs
-        ├── query-engine.test.mjs
-        ├── statistics.test.mjs
-        ├── timestamp-parser.test.mjs
-        └── ui-contract.test.mjs
+        ├── branch-model.test.mjs
+        ├── commit-graph.test.mjs
+        ├── commit-normalizer.test.mjs
+        ├── compare-model.test.mjs
+        ├── comparison.test.mjs
+        ├── formatters.test.mjs
+        ├── github-api-client.test.mjs
+        ├── patch-viewer.test.mjs
+        ├── qa-regression.test.mjs
+        ├── repo-model.test.mjs
+        ├── repository-explorer.test.mjs
+        └── url-validator.test.mjs
+```
 
 
 File lokal seperti `config.js`, `node_modules/`, dan database SQLite tidak ditampilkan karena diabaikan Git.
@@ -415,6 +452,8 @@ File lokal seperti `config.js`, `node_modules/`, dan database SQLite tidak ditam
 - **Otomatis:** Proyek 17 memiliki 100 unit test di `tests/` dan dapat dijalankan ulang dari folder proyek dengan `node --test tests/*.test.mjs`. Unit test memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm.
 - **Otomatis:** Proyek 18 memiliki 73 unit test di `tests/` dan dapat dijalankan ulang dari folder proyek dengan `node --test tests/*.test.mjs`. Unit test memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm.
 - **Otomatis:** Proyek 19 memiliki 139 unit test di `tests/` dan dapat dijalankan ulang dari folder proyek dengan `node --test tests/*.test.mjs`. Unit test memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm.
+- **Otomatis:** Proyek 20 memiliki 95 unit test di `tests/` dan dapat dijalankan ulang dari folder proyek dengan `node --test tests/*.test.mjs`. Hasil terbaru: 95/95 lulus. Unit test memerlukan Node.js 24 atau versi yang mendukung `node:test` dan ES Modules, tanpa npm.
+- **Browser sementara, harness tidak disertakan:** Proyek 20 diuji dengan Chrome headless untuk skenario mock, real GitHub API, keyboard/focus, responsif, dan aksesibilitas. Hasil terbaru lulus tanpa console error atau uncaught exception. Harness berada di luar repository dan tidak dapat dijalankan setelah clone; hasil ini bukan jaminan bebas bug.
 - **Browser sementara, harness tidak disertakan:** Proyek 14 mencatat 63/63 pemeriksaan pada harness browser dasar dan 59/59 pada regresi khusus audit. Harness browser dasar mencatat 0 console error, uncaught exception, failed resource, dan respons HTTP 4xx/5xx; harness regresi audit mencatat 0 console error dan uncaught exception. Kedua harness berada di luar repository dan tidak dapat dijalankan setelah clone. Hasil ini merupakan hasil pengujian yang dilaporkan pada run terbaru, bukan jaminan bebas bug.
 - **Keterbatasan pengujian Proyek 14:** belum ada pengujian screen reader nyata; Firefox dan Safari belum diuji; drag memakai event sintetis sehingga mouse fisik dan sentuhan nyata belum diuji; kegagalan storage disimulasikan dan kuota yang benar-benar penuh belum diuji; sinkronisasi antar-tab belum didukung; riwayat undo/redo hanya berada di memori dan hilang setelah reload atau tab ditutup.
 - **Browser sementara, harness tidak disertakan:** Proyek 13 mencatat 132/132 pemeriksaan pada harness browser lama dan 34/34 pada regresi pasca-audit. Impor browser desktop Chrome headless mencapai 10.171.147 byte (9,70 MiB), 136.308 baris data, dan sekitar 479 ms pada satu pengukuran; console error dan kegagalan resource tercatat 0. Harness berada di folder sementara, tidak disertakan dalam repository, dan tidak dapat dijalankan setelah clone. Hasil ini bukan jaminan bebas bug atau benchmark universal; browser selain Chrome, screen reader nyata, perangkat fisik, dan kompatibilitas spreadsheet belum diuji.
@@ -462,6 +501,7 @@ node --test tests/*.test.mjs
 - **TradeLab (17):** data pasar sintetis diproses di browser; tidak ada backend, database, analytics, telemetri, CDN, atau font eksternal. Portofolio, riwayat, dan watchlist disimpan di `localStorage` browser; autosave menggunakan debounce dan status sesi memori.
 - **DevPanel (18):** request HTTP dikirim langsung dari browser ke endpoint yang dimasukkan pengguna; tidak ada backend, database, analytics, telemetri, CDN, dependency eksternal, atau penyimpanan cloud. Kredensial disanitasi pada history dan collections. CSP membatasi `connect-src 'self' http: https:` karena aplikasi perlu mengirim request ke endpoint HTTP/HTTPS yang dipilih pengguna; Kebijakan ini sesuai kebutuhan fungsi aplikasi, tetapi pengguna tetap harus memastikan endpoint dan kredensial yang dikirim dapat dipercaya. Harness browser tidak disertakan dalam repository.
 - **LogLens (19):** file log diproses sepenuhnya di browser; tidak ada upload, telemetri, backend, `localStorage`, `sessionStorage`, IndexedDB, atau penyimpanan log persisten. CSP memakai `connect-src 'none'`. Nama file ekspor disanitasi dan dibatasi 255 byte UTF-8/255 UTF-16 code units.
+- **GitScope (20):** aplikasi read-only yang hanya mengirim GET ke `https://api.github.com`; tidak ada token, backend, database, analytics, telemetri, CDN, atau penyimpanan kredensial. CSP membatasi `connect-src` ke `https://api.github.com`, data dinamis dirender sebagai teks aman, dan tautan eksternal disanitasi ke HTTPS `github.com`. Tanpa autentikasi, GitHub membatasi sekitar 60 request per jam per IP.
 
 ## Atribusi
 
@@ -474,4 +514,4 @@ Informasi sumber data tersedia di README Proyek 04 dan 05.
 
 ## Catatan Pembelajaran
 
-Repository ini disusun secara bertahap: dimulai dari halaman statis, dilanjutkan dengan aplikasi browser dan penyimpanan lokal, lalu integrasi API dan aplikasi full-stack dengan REST API serta database. Proyek 10 memperkenalkan PWA offline-first, IndexedDB, dan Service Worker. Proyek 11 menambahkan HTML5 Canvas, game loop `requestAnimationFrame`, pengelolaan waktu dan simulasi, collision detection, kontrol keyboard dan sentuh, serta state permainan, pause, dan restart. Proyek 12 menambahkan Web Audio API dan `AudioContext`, `AnalyserNode` untuk data frekuensi dan waveform, visualisasi real-time dengan Canvas, lifecycle audio, pengelolaan object URL, serta kontrol playback, seek, volume, dan mute. Proyek 13 menambahkan File API untuk impor CSV lokal, parser stateful, analisis statistik, tabel dengan pencarian/pengurutan/pagination, grafik SVG, serta ekspor Blob dengan mitigasi formula best-effort. Proyek 14 menambahkan papan Kanban empat kolom, drag-and-drop dengan alternatif kontrol status native, snapshot undo/redo 50 aksi di memori, penyimpanan `localStorage` berversi, serta impor/ekspor JSON transaksional dengan kanonikalisasi dan allowlist. Proyek 15 menambahkan editor gambar lokal dengan Canvas, filter, rotasi/flip, undo/redo dengan batas 50 snapshot, Before/After non-destruktif, validasi import berbasis file/dimensi/piksel, preflight metadata format, dan ekspor PNG/JPEG. Proyek 16 menambahkan editor diagram visual berbasis SVG dengan node, konektor, drag, undo/redo, zoom/pan, fit-to-view, autosave, validasi storage/impor, dan ekspor JSON/SVG/PNG. Proyek 17 menambahkan dashboard simulasi trading saham dengan data pasar sintetis deterministik, pencarian/filter, detail saham, grafik harga, beli/jual, portofolio, riwayat transaksi, watchlist, dan autosave. Proyek 18 menambahkan alat developer untuk membangun dan memvalidasi request HTTP dengan model request, HTTP client Fetch, history, collections, import/export JSON, dan UI dark workspace. Proyek 19 menambahkan pembaca dan analyzer log lokal dengan streaming, pencarian, filter level/waktu, statistik, pagination, ekspor `.log`, serta hardening Unicode, ekspor, timestamp, dan UX. README utama ini sengaja dibuat sebagai indeks agar detail teknis tetap terpusat di dokumentasi masing-masing proyek.
+Repository ini disusun secara bertahap: dimulai dari halaman statis, dilanjutkan dengan aplikasi browser dan penyimpanan lokal, lalu integrasi API dan aplikasi full-stack dengan REST API serta database. Proyek 10 memperkenalkan PWA offline-first, IndexedDB, dan Service Worker. Proyek 11 menambahkan HTML5 Canvas, game loop `requestAnimationFrame`, pengelolaan waktu dan simulasi, collision detection, kontrol keyboard dan sentuh, serta state permainan, pause, dan restart. Proyek 12 menambahkan Web Audio API dan `AudioContext`, `AnalyserNode` untuk data frekuensi dan waveform, visualisasi real-time dengan Canvas, lifecycle audio, pengelolaan object URL, serta kontrol playback, seek, volume, dan mute. Proyek 13 menambahkan File API untuk impor CSV lokal, parser stateful, analisis statistik, tabel dengan pencarian/pengurutan/pagination, grafik SVG, serta ekspor Blob dengan mitigasi formula best-effort. Proyek 14 menambahkan papan Kanban empat kolom, drag-and-drop dengan alternatif kontrol status native, snapshot undo/redo 50 aksi di memori, penyimpanan `localStorage` berversi, serta impor/ekspor JSON transaksional dengan kanonikalisasi dan allowlist. Proyek 15 menambahkan editor gambar lokal dengan Canvas, filter, rotasi/flip, undo/redo dengan batas 50 snapshot, Before/After non-destruktif, validasi import berbasis file/dimensi/piksel, preflight metadata format, dan ekspor PNG/JPEG. Proyek 16 menambahkan editor diagram visual berbasis SVG dengan node, konektor, drag, undo/redo, zoom/pan, fit-to-view, autosave, validasi storage/impor, dan ekspor JSON/SVG/PNG. Proyek 17 menambahkan dashboard simulasi trading saham dengan data pasar sintetis deterministik, pencarian/filter, detail saham, grafik harga, beli/jual, portofolio, riwayat transaksi, watchlist, dan autosave. Proyek 18 menambahkan alat developer untuk membangun dan memvalidasi request HTTP dengan model request, HTTP client Fetch, history, collections, import/export JSON, dan UI dark workspace. Proyek 19 menambahkan pembaca dan analyzer log lokal dengan streaming, pencarian, filter level/waktu, statistik, pagination, ekspor `.log`, serta hardening Unicode, ekspor, timestamp, dan UX. Proyek 20 menambahkan visualisasi repositori GitHub publik dengan GitHub REST API read-only, repository explorer, branch dan commit timeline, detail commit, commit ancestry graph berbasis parent SHA, branch comparison, serta diff viewer. README utama ini sengaja dibuat sebagai indeks agar detail teknis tetap terpusat di dokumentasi masing-masing proyek.
