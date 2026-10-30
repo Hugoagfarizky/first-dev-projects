@@ -46,6 +46,10 @@ function collectElements() {
   elements.comparisonFileList = document.getElementById('comparison-file-list');
   elements.comparisonDiff = document.getElementById('comparison-diff');
   elements.commitDetail = document.getElementById('commit-detail');
+  elements.comparisonFilesTab = document.getElementById('comparison-files-tab');
+  elements.comparisonDiffTab = document.getElementById('comparison-diff-tab');
+  elements.comparisonFilesPanel = document.getElementById('comparison-files-panel');
+  elements.comparisonDiffPanel = document.getElementById('comparison-diff-panel');
 }
 
 let controller = null;
@@ -163,12 +167,48 @@ function renderPatch(container, patch) {
 
   const pre = document.createElement('pre');
   pre.className = 'patch';
+  let oldLine = 0;
+  let newLine = 0;
+  let inHunk = false;
+
   for (const line of parsed.lines) {
-    const span = document.createElement('span');
-    span.className = `patch-line patch-line-${line.type}`;
-    span.dataset.lineType = line.type;
-    span.textContent = line.text === '' ? ' ' : line.text;
-    pre.appendChild(span);
+    const hunkMatch = line.text.match(/^@@ -(\\d+)(?:,\\d+)? \\+(\\d+)(?:,\\d+)? @@/);
+    if (hunkMatch) {
+      oldLine = Number(hunkMatch[1]);
+      newLine = Number(hunkMatch[2]);
+      inHunk = true;
+    }
+
+    const row = document.createElement('span');
+    row.className = `patch-line patch-line-${line.type}`;
+    row.dataset.lineType = line.type;
+
+    const number = document.createElement('span');
+    number.className = 'patch-line-number';
+    number.setAttribute('aria-hidden', 'true');
+
+    const text = document.createElement('span');
+    text.className = 'patch-line-text';
+
+    if (line.type === 'addition') {
+      number.textContent = String(newLine);
+      newLine += 1;
+    } else if (line.type === 'deletion') {
+      number.textContent = String(oldLine);
+      oldLine += 1;
+    } else if (line.type === 'context' && inHunk) {
+      number.textContent = String(newLine);
+      oldLine += 1;
+      newLine += 1;
+    } else if (line.type === 'hunk') {
+      number.textContent = '';
+    } else {
+      number.textContent = '';
+    }
+
+    text.textContent = line.text === '' ? ' ' : line.text;
+    row.append(number, text);
+    pre.appendChild(row);
   }
   container.appendChild(pre);
 
@@ -507,6 +547,17 @@ function renderCommitDetail(state) {
 
 let selectedComparisonFile = null;
 
+function setComparisonTab(tab) {
+  const filesActive = tab === 'files';
+  elements.comparisonFilesTab?.classList.toggle('is-active', filesActive);
+  elements.comparisonDiffTab?.classList.toggle('is-active', !filesActive);
+  elements.comparisonFilesTab?.setAttribute('aria-selected', String(filesActive));
+  elements.comparisonDiffTab?.setAttribute('aria-selected', String(!filesActive));
+  if (elements.comparisonFilesPanel) elements.comparisonFilesPanel.hidden = !filesActive;
+  if (elements.comparisonDiffPanel) elements.comparisonDiffPanel.hidden = filesActive;
+}
+
+
 function firstLine(value) {
   return String(value ?? '').split(/\r?\n/, 1)[0] || '';
 }
@@ -680,6 +731,7 @@ function renderComparison(state) {
       }
       button.addEventListener('click', () => {
         selectedComparisonFile = file.filename;
+        setComparisonTab('diff');
         const focusKey = button.dataset.focusKey;
         renderComparison(controller.getState());
         restoreFocusKey(focusKey);
@@ -875,6 +927,7 @@ function initializeEvents() {
 
   elements.compareButton?.addEventListener('click', () => {
     selectedComparisonFile = null;
+    setComparisonTab('files');
     controller.compareReferences(
       elements.comparisonBase?.value || '',
       elements.comparisonHead?.value || '',
@@ -893,6 +946,33 @@ function initializeEvents() {
     controller.reset();
     elements.urlInput.value = '';
   });
+
+  elements.comparisonFilesTab?.addEventListener('click', () => setComparisonTab('files'));
+  elements.comparisonDiffTab?.addEventListener('click', () => setComparisonTab('diff'));
+
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  for (const link of document.querySelectorAll('.nav-item')) {
+    link.addEventListener('click', () => {
+      for (const item of document.querySelectorAll('.nav-item')) item.classList.remove('is-active');
+      link.classList.add('is-active');
+      if (sidebarToggle) sidebarToggle.checked = false;
+    });
+  }
+
+  const navSections = [...document.querySelectorAll('main .panel, #overview')];
+  if (typeof IntersectionObserver !== 'undefined' && navSections.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      const id = "#" + visible.target.id;
+      for (const link of document.querySelectorAll('.nav-item')) {
+        link.classList.toggle('is-active', link.getAttribute('href') === id);
+      }
+    }, { rootMargin: '-25% 0px -60% 0px', threshold: [0, 0.2, 0.5] });
+    navSections.forEach((section) => observer.observe(section));
+  }
 
   controller.subscribe((state) => {
     renderState(state);

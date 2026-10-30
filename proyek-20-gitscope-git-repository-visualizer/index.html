@@ -8,69 +8,182 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div>
-        <h1>GitScope</h1>
-        <p class="subtitle">Eksplorasi read-only repositori GitHub publik.</p>
-      </div>
-      <p id="app-status" class="app-status" role="status" aria-live="polite">Siap. Masukkan URL repositori GitHub publik.</p>
-    </header>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-git" viewBox="0 0 24 24">
+      <path d="M12 2.5 3.5 11a1.4 1.4 0 0 0 0 2l7.5 7.5a1.4 1.4 0 0 0 2 0L21.5 12a1.4 1.4 0 0 0 0-2L14 2.5a1.4 1.4 0 0 0-2 0Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+      <circle cx="9" cy="9" r="1.2" fill="currentColor"></circle>
+      <circle cx="15" cy="15" r="1.2" fill="currentColor"></circle>
+      <path d="M9 9v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+      <path d="m16 16 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+    </symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24">
+      <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+    </symbol>
+    <symbol id="icon-overview" viewBox="0 0 24 24">
+      <rect x="4" y="4" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
+      <rect x="13" y="4" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
+      <rect x="4" y="13" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
+      <rect x="13" y="13" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
+    </symbol>
+    <symbol id="icon-commits" viewBox="0 0 24 24">
+      <circle cx="7" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+      <circle cx="7" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+      <path d="M7 9.2v5.6M13 7h7M13 17h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+    </symbol>
+    <symbol id="icon-graph" viewBox="0 0 24 24">
+      <circle cx="6" cy="6" r="2" fill="currentColor"></circle>
+      <circle cx="18" cy="12" r="2" fill="currentColor"></circle>
+      <circle cx="6" cy="18" r="2" fill="currentColor"></circle>
+      <path d="M8 7.2 16 11M8 16.8 16 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+    </symbol>
+    <symbol id="icon-compare" viewBox="0 0 24 24">
+      <path d="M8 7 3 12l5 5M16 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+      <path d="M8.5 12h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+    </symbol>
+    <symbol id="icon-detail" viewBox="0 0 24 24">
+      <path d="M5 5h14v14H5z" fill="none" stroke="currentColor" stroke-width="1.8" rx="2"></path>
+      <path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+    </symbol>
+  </svg>
 
-    <main class="workspace">
-      <section class="input-panel" aria-labelledby="input-title">
-        <h2 id="input-title">Repository URL</h2>
+  <input class="sidebar-toggle" type="checkbox" id="sidebar-toggle" aria-label="Buka atau tutup navigasi samping">
+  <label class="menu-button" for="sidebar-toggle" aria-label="Buka navigasi">
+    <svg><use href="#icon-menu"></use></svg>
+  </label>
+  <label class="sidebar-backdrop" for="sidebar-toggle" aria-hidden="true"></label>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="brand">
+        <span class="brand-mark">
+          <svg><use href="#icon-git"></use></svg>
+        </span>
+        <div>
+          <strong>GitScope</strong>
+          <span>Repository Visualizer</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h2 class="sidebar-heading">Repository aktif</h2>
+        <div id="repository-summary" class="repository-summary sidebar-repository"></div>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Fitur aplikasi">
+        <a class="nav-item is-active" href="#overview">
+          <svg><use href="#icon-overview"></use></svg>
+          <span>Overview</span>
+        </a>
+        <a class="nav-item" href="#commits">
+          <svg><use href="#icon-commits"></use></svg>
+          <span>Commits</span>
+        </a>
+        <a class="nav-item" href="#graph">
+          <svg><use href="#icon-graph"></use></svg>
+          <span>Commit Graph</span>
+        </a>
+        <a class="nav-item" href="#comparison">
+          <svg><use href="#icon-compare"></use></svg>
+          <span>Branch Comparison</span>
+        </a>
+        <a class="nav-item" href="#details">
+          <svg><use href="#icon-detail"></use></svg>
+          <span>Commit Details</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="status-badge status-public">Public</span>
+        <p>Read-only GitHub API</p>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-brand">
+          <span class="brand-mark brand-mark-small">
+            <svg><use href="#icon-git"></use></svg>
+          </span>
+          <div>
+            <strong>GitScope</strong>
+            <span>Developer workspace</span>
+          </div>
+        </div>
+
         <form id="repository-form" class="repository-form" novalidate>
-          <label class="field">
+          <label class="field field-inline">
             <span>URL repositori GitHub</span>
-            <input id="repository-url" type="url" autocomplete="off" spellcheck="false" placeholder="https://github.com/owner/repo" aria-describedby="validation-message" required>
+            <div class="input-with-icon">
+              <svg><use href="#icon-search"></use></svg>
+              <input id="repository-url" type="url" autocomplete="off" spellcheck="false" placeholder="https://github.com/owner/repo" aria-describedby="validation-message" required>
+            </div>
           </label>
           <div class="actions">
-            <button type="submit" id="check-button" class="button button-primary">Periksa repositori</button>
+            <button type="submit" id="check-button" class="button button-primary">Periksa</button>
             <button type="button" id="cancel-button" class="button button-secondary" hidden>Batal</button>
             <button type="button" id="reset-button" class="button button-secondary">Reset</button>
           </div>
+          <p id="validation-message" class="message"></p>
         </form>
-        <p id="validation-message" class="message"></p>
-      </section>
 
-      <section class="result-panel" aria-labelledby="result-title">
-        <h2 id="result-title">Hasil pemeriksaan</h2>
-        <div id="repository-summary" class="repository-summary"></div>
-        <div id="rate-limit" class="rate-limit"></div>
+        <div class="topbar-status">
+          <span class="api-badge">GitHub API</span>
+          <p id="app-status" class="app-status" role="status" aria-live="polite">Siap. Masukkan URL repositori GitHub publik.</p>
+        </div>
+      </header>
 
-        <div id="branch-panel" class="branch-panel" hidden>
+      <main class="workspace">
+        <section id="overview" class="page-header">
+          <div>
+            <p class="eyebrow">Dashboard</p>
+            <h1>Repository Explorer</h1>
+            <p class="page-subtitle">Eksplorasi read-only repositori GitHub publik: metadata, commit timeline, graph ancestry, dan perbandingan branch.</p>
+          </div>
+          <div id="rate-limit" class="rate-limit"></div>
+        </section>
+
+        <section id="branch-panel" class="panel branch-panel" hidden>
+          <div class="panel-header">
+            <h2>Branch</h2>
+            <button type="button" id="load-more-branches" class="button button-secondary" hidden>Muat branch berikutnya</button>
+          </div>
           <label class="field">
-            <span>Branch</span>
+            <span>Branch aktif</span>
             <select id="branch-select"></select>
           </label>
-          <button type="button" id="load-more-branches" class="button button-secondary" hidden>Muat branch berikutnya</button>
           <p id="branch-status" class="message" role="status" aria-live="polite"></p>
-        </div>
+        </section>
 
-        <section class="commit-panel" aria-labelledby="commit-title">
+        <section id="commits" class="panel commit-panel">
           <div class="panel-header">
-            <h3 id="commit-title">Commit timeline</h3>
+            <h2>Commit timeline</h2>
             <button type="button" id="load-more-commits" class="button button-secondary" hidden>Muat commit berikutnya</button>
           </div>
           <p id="commit-status" class="message" role="status" aria-live="polite"></p>
           <ul id="commit-list" class="commit-list"></ul>
         </section>
 
-        <section class="graph-panel" aria-labelledby="graph-title">
+        <section id="graph" class="panel graph-panel">
           <div class="panel-header">
-            <h3 id="graph-title">Commit graph</h3>
+            <h2>Commit graph</h2>
             <span id="graph-summary" class="graph-summary"></span>
           </div>
           <div id="commit-graph" class="graph-container" role="region" aria-label="Grafik ancestry commit"></div>
           <p id="graph-status" class="message" role="status" aria-live="polite"></p>
         </section>
 
-        <section class="comparison-panel" aria-labelledby="comparison-title">
+        <section id="comparison" class="panel comparison-panel">
           <div class="panel-header">
-            <h3 id="comparison-title">Branch comparison</h3>
-            <button type="button" id="compare-button" class="button button-primary">Compare</button>
+            <div>
+              <h2>Branch Comparison</h2>
+              <p class="panel-subtitle">Bandingkan dua referensi dan tinjau commit serta file yang berubah.</p>
+            </div>
+            <button type="button" id="compare-button" class="button button-primary">Bandingkan</button>
           </div>
+
           <div class="comparison-controls">
             <label class="field">
               <span>Base</span>
@@ -81,31 +194,39 @@
               <select id="comparison-head"></select>
             </label>
           </div>
+
           <p id="comparison-status" class="message" role="status" aria-live="polite"></p>
           <div id="comparison-summary" class="comparison-summary"></div>
-          <div class="comparison-columns">
-            <section class="comparison-subpanel" aria-labelledby="comparison-commits-title">
-              <h4 id="comparison-commits-title">Commits</h4>
+
+          <div class="comparison-layout">
+            <section class="comparison-subpanel comparison-timeline-panel" aria-labelledby="comparison-commits-title">
+              <h3 id="comparison-commits-title">Commit timeline</h3>
               <ul id="comparison-commit-list" class="commit-list"></ul>
               <button type="button" id="load-more-comparison" class="button button-secondary" hidden>Muat commit berikutnya</button>
             </section>
-            <section class="comparison-subpanel" aria-labelledby="comparison-files-title">
-              <h4 id="comparison-files-title">Changed files</h4>
-              <ul id="comparison-file-list" class="changed-files"></ul>
+
+            <section class="comparison-subpanel comparison-detail-panel" aria-labelledby="comparison-detail-title">
+              <h3 id="comparison-detail-title">File changes &amp; diff</h3>
+              <div class="tabs" role="tablist" aria-label="Tampilan perbandingan">
+                <button type="button" id="comparison-files-tab" class="tab is-active" role="tab" aria-selected="true" aria-controls="comparison-files-panel">File Changes</button>
+                <button type="button" id="comparison-diff-tab" class="tab" role="tab" aria-selected="false" aria-controls="comparison-diff-panel">Diff Viewer</button>
+              </div>
+              <div id="comparison-files-panel" class="tab-panel">
+                <ul id="comparison-file-list" class="changed-files"></ul>
+              </div>
+              <div id="comparison-diff-panel" class="tab-panel" hidden>
+                <div id="comparison-diff" class="commit-detail diff-viewer"></div>
+              </div>
             </section>
           </div>
-          <section class="comparison-subpanel" aria-labelledby="comparison-diff-title">
-            <h4 id="comparison-diff-title">Diff</h4>
-            <div id="comparison-diff" class="commit-detail"></div>
-          </section>
         </section>
 
-        <section class="detail-panel" aria-labelledby="detail-title">
-          <h3 id="detail-title">Detail commit</h3>
+        <section id="details" class="panel detail-panel">
+          <h2>Detail commit</h2>
           <div id="commit-detail" class="commit-detail"></div>
         </section>
-      </section>
-    </main>
+      </main>
+    </div>
   </div>
 
   <script type="module" src="js/app.js"></script>
